@@ -1,0 +1,45 @@
+{
+  "version": "v3.12.3",
+  "name": "DIAOracleWrapper",
+  "bytecode": "0301404001000002014022d35dd91db7ce010d0ece007a494d470d132162d4a0e6c231170117005616012bce02320d7b16001318314c061600130a2c130a3a4a01160002",
+  "codeHash": "584f33bc31ccd04e3695cbf3d5b27e72dfd87a33b2ca95622f1060b44c7e5f64",
+  "fieldsSig": {
+    "names": [
+      "diaOracleAddress",
+      "marketId",
+      "heartbeatInterval"
+    ],
+    "types": [
+      "Address",
+      "ByteVec",
+      "U256"
+    ],
+    "isMutable": [
+      false,
+      false,
+      false
+    ]
+  },
+  "eventsSig": [],
+  "functions": [
+    {
+      "name": "price",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "U256"
+      ]
+    }
+  ],
+  "constants": [
+    {
+      "name": "DECIMALS",
+      "value": {
+        "type": "U256",
+        "value": "24"
+      }
+    }
+  ],
+  "enums": []
+}
