@@ -1,0 +1,33 @@
+{
+  "fullNodeVersion": "v3.12.3",
+  "compilerOptionsUsed": {
+    "ignoreUnusedConstantsWarnings": false,
+    "ignoreUnusedVariablesWarnings": false,
+    "ignoreUnusedFieldsWarnings": false,
+    "ignoreUnusedPrivateFunctionsWarnings": false,
+    "ignoreUpdateFieldsCheckWarnings": false,
+    "ignoreCheckExternalCallerWarnings": false,
+    "ignoreUnusedFunctionReturnWarnings": false,
+    "skipAbstractContractCheck": false
+  },
+  "infos": {
+    "DIAOracleWrapper": {
+      "sourceFile": "diaoracle.ral",
+      "sourceCodeHash": "54cc8e2dd2801a13c5c54b5985c320b8d61fc3f60b6a22c8df00b69f6f3c8981",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "584f33bc31ccd04e3695cbf3d5b27e72dfd87a33b2ca95622f1060b44c7e5f64"
+    },
+    "IDia": {
+      "sourceFile": "diaoracle.ral",
+      "sourceCodeHash": "54cc8e2dd2801a13c5c54b5985c320b8d61fc3f60b6a22c8df00b69f6f3c8981",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "IOracle": {
+      "sourceFile": "diaoracle.ral",
+      "sourceCodeHash": "54cc8e2dd2801a13c5c54b5985c320b8d61fc3f60b6a22c8df00b69f6f3c8981",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    }
+  }
+}

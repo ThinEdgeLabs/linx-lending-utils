@@ -1,0 +1,18 @@
+Interface IDia {
+    pub fn getValue(pair: ByteVec) -> (U256, U256)
+}
+
+Interface IOracle {
+    pub fn price() -> U256 // Returns price scaled to 10^18
+}
+
+Contract DIAOracleWrapper(diaOracleAddress: Address, marketId: ByteVec, heartbeatInterval: U256) implements IOracle {
+    const DECIMALS = 10^18
+
+    @using(checkExternalCaller = false)
+    pub fn price() -> U256 {
+        let (price, timestamp) = IDia(addressToContractId!(diaOracleAddress)).getValue(marketId)
+        assert!(blockTimeStamp!() - timestamp <= heartbeatInterval, 1)
+        return if (price < DECIMALS) price * 10^10 else price
+    }
+}
