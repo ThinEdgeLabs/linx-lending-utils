@@ -1,0 +1,71 @@
+/// Market parameters structure
+/// 
+/// Contains the essential parameters needed to identify and interact with a market
+struct MarketParams {
+    /// Address of the loan token
+    loanToken: Address,
+    /// Address of the collateral token
+    collateralToken: Address,
+    /// Address of the oracle contract for price feeds
+    oracle: Address
+}
+
+/// Market state structure
+/// 
+/// Contains the current state of a market, including supply, borrow, and timing information
+struct MarketState {
+    /// Total amount of assets supplied to the market
+    totalSupplyAssets: U256,
+    /// Total number of supply shares in the market
+    totalSupplyShares: U256,
+    /// Total amount of assets borrowed from the market
+    totalBorrowAssets: U256,
+    /// Total number of borrow shares in the market
+    totalBorrowShares: U256,
+    /// Timestamp of the last market update
+    lastUpdate: U256,
+    /// Current fee rate for the market
+    fee: U256
+}
+
+/// Constants contract containing shared parameters and error codes
+/// 
+/// This abstract contract defines constants used across different interest rate models
+/// and provides common error codes for the system.
+Abstract Contract Constants() {
+    /// Maximum allowed borrow rate (100% in Wei format)
+    const MAX_BORROW_RATE = 1e20
+    
+    /// One unit in fixed-point format (1.0 * 10^18)
+    const WAD = 1e18i
+    
+    /// Target utilization rate (90%)
+    const TARGET_UTILIZATION = 9e17i
+    
+    /// Initial rate at target utilization (4% per year converted to per second)
+    const INITIAL_RATE_AT_TARGET = 4e16i / 31536000i
+    
+    /// Rate adjustment speed (50/year converted to per second)
+    const ADJUSTMENT_SPEED = 5e19i / 31536000i
+    
+    /// Curve steepness parameter for rate calculations
+    const CURVE_STEEPNESS = 4e18i
+    
+    /// Minimum rate at target utilization (0.1% per year converted to per second)
+    const MIN_RATE_AT_TARGET = 1e15i / 31536000i
+    
+    /// Maximum rate at target utilization (200% per year converted to per second)
+    const MAX_RATE_AT_TARGET = 2e18i / 31536000i
+
+    /// Error codes used across the system
+    enum ErrorCodes {
+        /// Caller is not authorized to perform the action
+        NotAuthorized = 0
+        /// Rate has already been set and cannot be changed
+        RateAlreadySet = 1
+        /// Rate is outside valid bounds
+        InvalidRate = 2
+        /// Invalid zero address provided
+        ZeroAddress = 3
+    }
+}

@@ -11,7 +11,7 @@ export type Settings = {
 const configuration: Configuration<Settings> = {
   networks: {
     devnet: {
-      nodeUrl: 'http://127.0.0.1:22973',
+      nodeUrl: 'https://node.testnet.alephium.org',
       privateKeys: [
         'a642942e67258589cd2b1822c631506632db5a12aabcf413604e785300d762a5' // group 0
       ],

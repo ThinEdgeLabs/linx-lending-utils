@@ -1,0 +1,28 @@
+/// Extended interface for fixed rate models
+/// 
+/// This interface extends the base interest rate interface to add functionality
+/// specific to fixed rate models, where the borrow rate remains constant.
+Interface IFixedRate extends IInterestRate {
+    /// Returns the current fixed borrow rate
+    /// 
+    /// This function returns the constant borrow rate that has been set for the model.
+    /// 
+    /// # Returns
+    /// The fixed borrow rate scaled by 10^18 (1% = 0.01 * 10^18)
+    pub fn getRate() -> U256
+
+    /// Sets the borrow rate (can only be called once by admin)
+    /// 
+    /// This function allows the admin to set the fixed borrow rate. It can only be called once,
+    /// and the rate must be within the maximum bounds defined in the Constants contract.
+    /// 
+    /// # Arguments
+    /// * `newBorrowRate` - New rate scaled by 10^18
+    /// 
+    /// # Panics
+    /// Panics if:
+    /// - Called by any address other than the admin
+    /// - Rate has already been set
+    /// - New rate exceeds MAX_BORROW_RATE
+    pub fn setBorrowRate(newBorrowRate: U256) -> ()
+}

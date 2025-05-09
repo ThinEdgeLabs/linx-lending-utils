@@ -1,5 +1,5 @@
 import { web3, DUST_AMOUNT } from '@alephium/web3'
-import { testNodeWallet } from '@alephium/web3-test'
+import { expectAssertionError, testNodeWallet } from '@alephium/web3-test'
 import { deployToDevnet } from '@alephium/cli'
 import { FixedRate } from '../../artifacts/ts'
 import { describe, it, expect, beforeAll } from '@jest/globals'
@@ -45,13 +45,15 @@ describe('integration tests', () => {
                 expect(updatedState.fields.rateUpdated).toEqual(true)
 
                 // Verify that attempt to set rate again fails (as rateUpdated is now true)
-                await expect(
+                await expectAssertionError(
                     fixedRate.transact.setBorrowRate({
                         signer: signer,
                         attoAlphAmount: DUST_AMOUNT * 3n,
                         args: { newBorrowRate: newRate * 2n }
-                    })
-                ).rejects.toThrow('AssertionFailedError')
+                    }),
+                    fixedRate.address,
+                    Number(FixedRate.consts.ErrorCodes.RateAlreadySet)
+                )
             }
         }
     }, 20000)

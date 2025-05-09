@@ -1,64 +1,67 @@
-// Constants
-const MAX_BORROW_RATE = 1e20 // 100% in Wei format (1.0 * 10^18)
-
-struct MarketParams {
-    lendingAmount: U256
-}
-
-struct MarketState {
-    totalLendingOffers: U256
-}
-
-// Base interface for interest rate models
-Interface IInterestRate {
-    // Calculate the current borrow rate based on market parameters and state
-    // Returns: Rate scaled by 10^18 (1% = 0.01 * 10^18)
-    pub fn borrowRate(marketParams: MarketParams, marketState: MarketState) -> U256
-}
-
-// Extended interface for fixed rate models
-Interface IFixedRate extends IInterestRate {
-    // Get the current fixed rate
-    // Returns: Fixed rate scaled by 10^18 (1% = 0.01 * 10^18)
-    pub fn getRate() -> U256
-
-    // Set the borrow rate (can only be called once by admin)
-    // Parameters:
-    // - newBorrowRate: New rate scaled by 10^18
-    pub fn setBorrowRate(newBorrowRate: U256) -> ()
-}
-
-// Fixed Rate Interest Rate Model
-// Implements a constant borrow rate that doesn't change with market conditions
+/// Fixed Rate Interest Rate Model
+/// 
+/// This contract implements a simple constant interest rate model where the borrow rate
+/// remains fixed regardless of market conditions. The rate can be set once by the admin
+/// and cannot be changed afterward.
 Contract FixedRate(
+    /// Address of the admin who can set the rate
     admin: Address,
+    /// Current fixed borrow rate
     mut rate: U256,
+    /// Flag indicating if the rate has been set
     mut rateUpdated: Bool
-) implements IFixedRate {
-    // Events for rate changes
+) extends Constants() implements IFixedRate {
+    // Events
+    /// Emitted when the borrow rate is set
+    /// 
+    /// # Arguments
+    /// * `setter` - Address that set the rate
+    /// * `oldRate` - Previous rate value
+    /// * `newRate` - New rate value
     event RateSet(setter: Address, oldRate: U256, newRate: U256)
     
-    // Error codes
-    enum ErrorCodes {
-        RateAlreadySet = 0
-        InvalidRate = 1
-        NotAdmin = 2
-    }
-    
+    /// Returns the fixed borrow rate
+    /// 
+    /// This function returns the constant borrow rate that was set by the admin.
+    /// The market parameters and state are unused in this model.
+    /// 
+    /// # Arguments
+    /// * `marketParams` - Market parameters (unused)
+    /// * `marketState` - Market state (unused)
+    /// 
+    /// # Returns
+    /// The fixed borrow rate
     pub fn borrowRate(marketParams: MarketParams, marketState: MarketState) -> U256 {
         // Fixed rate model, so we don't need to use marketParams and marketState
-        let _ = marketParams.lendingAmount
-        let _ = marketState.totalLendingOffers
+        let _ = marketParams
+        let _ = marketState
         return rate
     }
     
+    /// Returns the current fixed rate
+    /// 
+    /// # Returns
+    /// The current fixed borrow rate
     pub fn getRate() -> U256 {
         return rate
     }
     
+    /// Sets the borrow rate (can only be called once by admin)
+    /// 
+    /// This function allows the admin to set the fixed borrow rate. It can only be called once,
+    /// and the rate must be within the maximum bounds defined in the Constants contract.
+    /// 
+    /// # Arguments
+    /// * `newBorrowRate` - The new fixed rate to set
+    /// 
+    /// # Panics
+    /// Panics if:
+    /// - Called by any address other than the admin
+    /// - Rate has already been set
+    /// - New rate exceeds MAX_BORROW_RATE
     @using(updateFields = true, checkExternalCaller = false)
     pub fn setBorrowRate(newBorrowRate: U256) -> () {
-        assert!(callerAddress!() == admin, ErrorCodes.NotAdmin)
+        assert!(callerAddress!() == admin, ErrorCodes.NotAuthorized)
         assert!(!rateUpdated, ErrorCodes.RateAlreadySet)
         assert!(newBorrowRate <= MAX_BORROW_RATE, ErrorCodes.InvalidRate)
         

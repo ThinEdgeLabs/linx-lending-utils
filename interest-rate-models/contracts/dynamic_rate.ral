@@ -1,0 +1,185 @@
+/// Dynamic Rate Interest Rate Model
+/// 
+/// This contract implements an adaptive interest rate model that adjusts rates based on market utilization.
+/// The rate changes dynamically based on the ratio of borrowed assets to supplied assets (utilization),
+/// with a target utilization rate of 90%. Rates are adjusted smoothly to maintain market stability.
+Contract DynamicRate(
+    /// Address of the Linx protocol contract
+    linx: Address,
+    /// Address of the admin who can transfer admin rights
+    mut admin: Address
+) extends Constants(), StringUtils(), CurveUtils() implements IDynamicRate {
+    // Storage
+    /// Maps market IDs to their current rate at target utilization
+    mapping[ByteVec, I256] rateAtTarget
+    
+    // Events
+    /// Emitted when the borrow rate is updated
+    /// 
+    /// # Arguments
+    /// * `id` - Market identifier
+    /// * `avgBorrowRate` - New average borrow rate
+    /// * `newRateAtTarget` - New rate at target utilization
+    event BorrowRateUpdate(id: ByteVec, avgBorrowRate: U256, newRateAtTarget: U256)
+    
+    /// Emitted when admin rights are transferred
+    /// 
+    /// # Arguments
+    /// * `oldAdmin` - Previous admin address
+    /// * `newAdmin` - New admin address
+    event AdminTransferred(oldAdmin: Address, newAdmin: Address)
+    
+    /// Calculates and updates the borrow rate based on current market conditions
+    /// 
+    /// This function is called by the Linx protocol to update the borrow rate for a market.
+    /// It calculates the new rate based on current utilization and updates the stored rate.
+    /// 
+    /// # Arguments
+    /// * `marketParams` - Market parameters including loan and collateral tokens
+    /// * `marketState` - Current state of the market
+    /// 
+    /// # Returns
+    /// The new average borrow rate
+    /// 
+    /// # Panics
+    /// Panics if called by any address other than the Linx protocol
+    @using(preapprovedAssets = true, checkExternalCaller = false)
+    pub fn getBorrowRateAndUpdate(marketParams: MarketParams, marketState: MarketState) -> U256 {
+        let caller = callerAddress!()
+        assert!(caller == linx, ErrorCodes.NotAuthorized)
+        
+        let id = calcMarketId(marketParams.loanToken, marketParams.collateralToken)
+        let (avgRate, endRateAtTarget) = calculateBorrowRate(id, marketState)
+        
+        if(rateAtTarget.contains!(id)) {
+            rateAtTarget[id] = endRateAtTarget
+        } else {
+            rateAtTarget.insert!(caller, id, endRateAtTarget)
+        }
+        
+        // Emit event for tracking
+        emit BorrowRateUpdate(id, avgRate, toU256!(endRateAtTarget))
+        
+        return avgRate
+    }
+    
+    /// Returns the current borrow rate without modifying state
+    /// 
+    /// This is a view function that calculates the current borrow rate based on market conditions
+    /// without making any state changes.
+    /// 
+    /// # Arguments
+    /// * `marketParams` - Market parameters
+    /// * `marketState` - Current market state
+    /// 
+    /// # Returns
+    /// The current borrow rate
+    pub fn borrowRate(marketParams: MarketParams, marketState: MarketState) -> U256 {
+        let id = calcMarketId(marketParams.loanToken, marketParams.collateralToken)
+        let (avgRate, _) = calculateBorrowRate(id, marketState)
+        return avgRate
+    }
+
+    /// Returns the rate at target utilization for a specific market
+    /// 
+    /// # Arguments
+    /// * `loanToken` - Address of the loan token
+    /// * `collateralToken` - Address of the collateral token
+    /// 
+    /// # Returns
+    /// The rate at target utilization, or 0 if not set
+    pub fn getRateAtTarget(loanToken: Address, collateralToken: Address) -> U256 {
+        let id = calcMarketId(loanToken, collateralToken)
+        let mut rate = 0i
+        if (rateAtTarget.contains!(id)) {
+            rate = rateAtTarget[id]
+        }
+        return toU256!(rate)
+    }
+    
+    /// Internal function to calculate borrow rate based on market conditions
+    /// 
+    /// This function implements the core rate calculation logic, taking into account:
+    /// - Current market utilization
+    /// - Target utilization (90%)
+    /// - Rate adjustment speed
+    /// - Minimum and maximum rate bounds
+    /// 
+    /// # Arguments
+    /// * `id` - Market identifier
+    /// * `market` - Current market state
+    /// 
+    /// # Returns
+    /// Tuple containing (average rate, end rate at target)
+    fn calculateBorrowRate(id: ByteVec, market: MarketState) -> (U256, I256) {
+        // Calculate utilization
+        let mut utilization = 0i
+        if (market.totalSupplyAssets > 0) {
+            utilization = wadDiv(toI256!(market.totalBorrowAssets), toI256!(market.totalSupplyAssets))
+        }
+        
+        // Calculate error normalized by distance to target
+        let mut errNormFactor = TARGET_UTILIZATION
+        if (utilization > TARGET_UTILIZATION) {
+            errNormFactor = WAD - TARGET_UTILIZATION
+        }
+        
+        let mut err = 0i
+        if (errNormFactor > 0i) {
+            err = wadDiv(utilization - TARGET_UTILIZATION, errNormFactor)
+        }
+        
+        let mut startRateAtTarget = 0i
+        if (rateAtTarget.contains!(id)) {
+            startRateAtTarget = rateAtTarget[id]
+        }
+        
+        let mut avgRateAtTarget = 0i
+        let mut endRateAtTarget = 0i
+        
+        if (startRateAtTarget == 0i) {
+            // First interaction
+            avgRateAtTarget = INITIAL_RATE_AT_TARGET
+            endRateAtTarget = INITIAL_RATE_AT_TARGET
+        } else {
+            // Calculate adjustment
+            let speed = wadMul(ADJUSTMENT_SPEED, err)
+            let elapsed = blockTimeStamp!() - market.lastUpdate
+            let linearAdaptation = speed * toI256!(elapsed)
+            
+            if (linearAdaptation == 0i) {
+                avgRateAtTarget = startRateAtTarget
+                endRateAtTarget = startRateAtTarget
+            } else {
+                endRateAtTarget = newRateAtTarget(startRateAtTarget, linearAdaptation)
+                let midRateAtTarget = newRateAtTarget(startRateAtTarget, linearAdaptation / 2i)
+                avgRateAtTarget = (startRateAtTarget + endRateAtTarget + 2i * midRateAtTarget) / 4i
+            }
+        }
+        
+        // Apply the rate curve
+        let avgRate = applyCurve(avgRateAtTarget, err)
+        return toU256!(avgRate), endRateAtTarget
+    }
+
+    /// Transfers admin rights to a new address
+    /// 
+    /// # Arguments
+    /// * `newAdmin` - Address of the new admin
+    /// 
+    /// # Panics
+    /// Panics if called by any address other than the current admin
+    @using(updateFields = true, checkExternalCaller = false)
+    pub fn transferAdmin(newAdmin: Address) -> () {
+      assert!(callerAddress!() == admin, ErrorCodes.NotAuthorized)
+
+      let oldAdmin = admin
+      admin = newAdmin
+      emit AdminTransferred(oldAdmin, newAdmin)
+    }
+
+    pub fn marketId(loanToken: Address, collateralToken: Address) -> ByteVec {
+        return calcMarketId(loanToken, collateralToken)
+    }
+}
+

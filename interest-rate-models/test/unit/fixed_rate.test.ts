@@ -1,20 +1,30 @@
-import { web3, TestContractParams, addressFromContractId } from '@alephium/web3'
-import { randomContractId, testAddress, expectAssertionError } from '@alephium/web3-test'
+import { web3, TestContractParams, addressFromContractId, DUST_AMOUNT } from '@alephium/web3'
+import { testAddress, expectAssertionError, testNodeWallet } from '@alephium/web3-test'
 import { FixedRate, FixedRateTypes } from '../../artifacts/ts'
-import { describe, it, expect, beforeAll } from '@jest/globals'
+import { describe, it, expect, beforeAll, beforeEach } from '@jest/globals'
+import { deployToDevnet } from '@alephium/cli'
 
 describe('unit tests', () => {
-    let testContractId: string
     let testContractAddress: string
     let testParamsFixture: TestContractParams<FixedRateTypes.Fields, { newBorrowRate: bigint }>
+    let fixedRate: any
 
     // We initialize the fixture variables before all tests
     beforeAll(async () => {
-        web3.setCurrentNodeProvider('https://node.testnet.alephium.org', undefined, fetch)
-        testContractId = randomContractId()
-        testContractAddress = addressFromContractId(testContractId)
+        web3.setCurrentNodeProvider('http://127.0.0.1:22973', undefined, fetch)
+
+        // Deploy the contract to devnet
+        const deployments = await deployToDevnet()
+        const signer = await testNodeWallet()
+        const account = (await signer.getAccounts())[0]
+        await signer.setSelectedAccount(account.address)
+        const testGroup = account.group
+
+        fixedRate = deployments.getInstance(FixedRate, testGroup)
+        testContractAddress = fixedRate.address
+
         testParamsFixture = {
-            // a random address that the test contract resides in the tests
+            // Use the actual deployed contract address
             address: testContractAddress,
             // assets owned by the test contract before a test
             initialAsset: { alphAmount: 10n ** 18n },
@@ -28,6 +38,27 @@ describe('unit tests', () => {
             testArgs: { newBorrowRate: 50000000000000000n }, // 0.05 * 10^18 = 5%
             // assets owned by the caller of the function
             inputAssets: [{ address: testAddress, asset: { alphAmount: 10n ** 18n } }]
+        }
+    })
+
+    // Reset the contract state before each test
+    beforeEach(async () => {
+        // Get current state
+        const state = await fixedRate.fetchState()
+
+        // If the rate has been updated, reset it by deploying a new instance
+        if (state.fields.rateUpdated) {
+            const deployments = await deployToDevnet()
+            const signer = await testNodeWallet()
+            const account = (await signer.getAccounts())[0]
+            await signer.setSelectedAccount(account.address)
+            const testGroup = account.group
+
+            fixedRate = deployments.getInstance(FixedRate, testGroup)
+            testContractAddress = fixedRate.address
+
+            // Update the testParamsFixture with the new address
+            testParamsFixture.address = testContractAddress
         }
     })
 
@@ -76,13 +107,21 @@ describe('unit tests', () => {
     })
 
     it('test setBorrowRate fails when already updated', async () => {
+        // First set the rate to make rateUpdated true
+        const initialParams = {
+            ...testParamsFixture,
+            testArgs: { newBorrowRate: 50000000000000000n }
+        }
+        await FixedRate.tests.setBorrowRate(initialParams)
+
+        // Now try to set it again
         const testParams = {
             ...testParamsFixture,
             initialFields: {
                 ...testParamsFixture.initialFields,
                 rateUpdated: true
             },
-            testArgs: { newBorrowRate: 50000000000000000n }
+            testArgs: { newBorrowRate: 70000000000000000n }
         }
 
         // Test that assertion fails with the RateAlreadySet error code
@@ -108,8 +147,13 @@ describe('unit tests', () => {
     })
 
     it('test setBorrowRate fails when caller is not admin', async () => {
-        // Generate a valid address for not-admin instead of using a string
-        const notAdmin = addressFromContractId(randomContractId())
+        // Create a signer with a different address
+        const signer = await testNodeWallet()
+        const accounts = await signer.getAccounts()
+        // Find an account different from the admin
+        const notAdminAccount = accounts.find(acc => acc.address !== testAddress) || accounts[1]
+        const notAdmin = notAdminAccount.address
+
         const testParams = {
             ...testParamsFixture,
             inputAssets: [{ address: notAdmin, asset: { alphAmount: 10n ** 18n } }]
@@ -119,7 +163,7 @@ describe('unit tests', () => {
         await expectAssertionError(
             FixedRate.tests.setBorrowRate(testParams),
             testContractAddress,
-            Number(FixedRate.consts.ErrorCodes.NotAdmin)
+            Number(FixedRate.consts.ErrorCodes.NotAuthorized)
         )
     })
 
@@ -127,8 +171,8 @@ describe('unit tests', () => {
         const testParams = {
             ...testParamsFixture,
             testArgs: {
-                marketParams: { lendingAmount: 1000000000000000000000n }, // 1000 * 10^18
-                marketState: { totalLendingOffers: 2000000000000000000000n } // 2000 * 10^18
+                marketParams: { loanToken: testAddress, collateralToken: testAddress, oracle: testAddress },
+                marketState: { totalSupplyAssets: 1000000000000000000000n, totalSupplyShares: 2000000000000000000000n, totalBorrowAssets: 1000000000000000000000n, totalBorrowShares: 2000000000000000000000n, lastUpdate: 1000000000000000000000n, fee: 1000000000000000000000n }
             }
         }
 

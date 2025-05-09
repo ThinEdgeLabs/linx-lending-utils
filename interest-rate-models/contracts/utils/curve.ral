@@ -1,0 +1,54 @@
+Abstract Contract CurveUtils() extends Constants() {
+      
+    // Apply the interest rate curve
+    fn applyCurve(rateAtTarget_: I256, err: I256) -> I256 {
+        let mut coeff = CURVE_STEEPNESS - WAD
+        if (err < 0i) {
+            coeff = WAD - wadDiv(WAD, CURVE_STEEPNESS)
+        }
+        
+        return wadMul(wadMul(coeff, err) + WAD, rateAtTarget_)
+    }
+    
+    // Calculate new rate with exponential growth/decay
+    fn newRateAtTarget(startRateAtTarget: I256, linearAdaptation: I256) -> I256 {
+        let expFactor = wadExp(linearAdaptation)
+        let newRate = wadMul(startRateAtTarget, expFactor)
+        
+        // Bound the rate
+        if (newRate < MIN_RATE_AT_TARGET) {
+            return MIN_RATE_AT_TARGET
+        } else if (newRate > MAX_RATE_AT_TARGET) {
+            return MAX_RATE_AT_TARGET
+        } else {
+            return newRate
+        }
+    }
+    
+    // Exponential function approximation (Taylor series)
+    fn wadExp(x: I256) -> I256 {
+        if (x == 0i) {
+            return WAD
+        }
+        
+        let x2 = wadMul(x, x)
+        let x3 = wadMul(x2, x)
+        
+        // e^x ≈ 1 + x + x^2/2 + x^3/6
+        return WAD + x + wadDiv(x2, 2i * WAD) + wadDiv(x3, 6i * WAD)
+    }
+    
+    // WAD division (18 decimals)
+    fn wadDiv(a: I256, b: I256) -> I256 {
+        if (b == 0i) {
+            return 0i
+        }
+        return a * WAD / b
+    }
+    
+    // WAD multiplication (18 decimals)
+    fn wadMul(a: I256, b: I256) -> I256 {
+        return a * b / WAD
+    }
+
+}
