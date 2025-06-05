@@ -1,9 +1,7 @@
 Abstract Contract StringUtils() {
 
-    fn calcMarketId(loanToken: Address, collateralToken: Address) -> ByteVec {
-        let loanTokenBytes = toByteVec!(loanToken)
-        let collateralTokenBytes = toByteVec!(collateralToken)
-        return loanTokenBytes++collateralTokenBytes
+    fn calcMarketId(loanToken: ByteVec, collateralToken: ByteVec) -> ByteVec {
+        return keccak256!(loanToken++collateralToken)
     }
 }
 

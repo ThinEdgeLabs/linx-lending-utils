@@ -28,5 +28,5 @@ Interface IDynamicRate extends IInterestRate {
     /// 
     /// # Returns
     /// The rate at target utilization, or 0 if not set
-    pub fn getRateAtTarget(loanToken: Address, collateralToken: Address) -> U256
+    pub fn getRateAtTarget(loanToken: ByteVec, collateralToken: ByteVec) -> U256
 }

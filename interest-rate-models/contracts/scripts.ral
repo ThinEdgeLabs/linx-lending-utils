@@ -13,14 +13,14 @@ TxScript GetBorrowRate(dynamicRate: DynamicRate, marketParams: MarketParams, mar
     }
 }
 
-TxScript GetMarketId(dynamicRate: DynamicRate, loanToken: Address, collateralToken: Address) {
+TxScript GetMarketId(dynamicRate: DynamicRate, loanToken: ByteVec, collateralToken: ByteVec) {
     pub fn main() -> ByteVec {
         let marketId = dynamicRate.marketId(loanToken, collateralToken)
         return marketId
     }
 }
 
-TxScript GetRateAtTarget(dynamicRate: DynamicRate, loanToken: Address, collateralToken: Address) {
+TxScript GetRateAtTarget(dynamicRate: DynamicRate, loanToken: ByteVec, collateralToken: ByteVec) {
     pub fn main() -> U256 {
         let rateAtTarget = dynamicRate.getRateAtTarget(loanToken, collateralToken)
         return rateAtTarget

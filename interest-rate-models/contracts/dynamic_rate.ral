@@ -80,7 +80,7 @@ Contract DynamicRate(
     /// 
     /// # Returns
     /// The rate at target utilization, or 0 if not set
-    pub fn getRateAtTarget(loanToken: Address, collateralToken: Address) -> U256 {
+    pub fn getRateAtTarget(loanToken: ByteVec, collateralToken: ByteVec) -> U256 {
         let id = calcMarketId(loanToken, collateralToken)
         let mut rate = 0i
         if (rateAtTarget.contains!(id)) {
@@ -154,7 +154,7 @@ Contract DynamicRate(
         return toU256!(avgRate), endRateAtTarget
     }
 
-    pub fn marketId(loanToken: Address, collateralToken: Address) -> ByteVec {
+    pub fn marketId(loanToken: ByteVec, collateralToken: ByteVec) -> ByteVec {
         return calcMarketId(loanToken, collateralToken)
     }
 }

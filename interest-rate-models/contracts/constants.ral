@@ -3,11 +3,15 @@
 /// Contains the essential parameters needed to identify and interact with a market
 struct MarketParams {
     /// Address of the loan token
-    loanToken: Address,
+    loanToken: ByteVec,
     /// Address of the collateral token
-    collateralToken: Address,
+    collateralToken: ByteVec,
     /// Address of the oracle contract for price feeds
-    oracle: Address
+    oracle: ByteVec,
+    /// Address of the Interest rate model contract
+    interestRateModel: ByteVec,
+    /// Liquidation Loan to value ratio
+    loanToValue: U256
 }
 
 /// Market state structure
