@@ -35,20 +35,20 @@ Contract DynamicRate(
     /// 
     /// # Panics
     /// Panics if called by any address other than the Linx protocol
-    @using(preapprovedAssets = true, checkExternalCaller = true)
-    pub fn getBorrowRateAndUpdate(marketParams: MarketParams, marketState: MarketState) -> U256 {
+    @using(preapprovedAssets = true, checkExternalCaller = true, updateFields = true)
+    pub fn borrowRate(marketParams: MarketParams, marketState: MarketState) -> U256 {
         let caller = callerAddress!()
         checkCaller!(caller == linx, ErrorCodes.NotAuthorized)
         
         let id = calcMarketId(marketParams.loanToken, marketParams.collateralToken)
         let (avgRate, endRateAtTarget) = calculateBorrowRate(id, marketState)
         
-        if(rateAtTarget.contains!(id)) {
-            rateAtTarget[id] = endRateAtTarget
-        } else {
+        if(!rateAtTarget.contains!(id)) {
             rateAtTarget.insert!(caller, id, endRateAtTarget)
-        }
-        
+        } 
+
+        rateAtTarget[id] = endRateAtTarget
+
         // Emit event for tracking
         emit BorrowRateUpdate(id, avgRate, toU256!(endRateAtTarget))
         
@@ -66,7 +66,7 @@ Contract DynamicRate(
     /// 
     /// # Returns
     /// The current borrow rate
-    pub fn borrowRate(marketParams: MarketParams, marketState: MarketState) -> U256 {
+    pub fn borrowRateView(marketParams: MarketParams, marketState: MarketState) -> U256 {
         let id = calcMarketId(marketParams.loanToken, marketParams.collateralToken)
         let (avgRate, _) = calculateBorrowRate(id, marketState)
         return avgRate
