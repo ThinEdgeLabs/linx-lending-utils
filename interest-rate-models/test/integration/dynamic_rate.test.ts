@@ -1,5 +1,5 @@
 import { web3, DUST_AMOUNT } from '@alephium/web3'
-import { testNodeWallet } from '@alephium/web3-test'
+import { testNodeWallet, randomContractId } from '@alephium/web3-test'
 import { deployToDevnet } from '@alephium/cli'
 import { DynamicRate } from '../../artifacts/ts'
 import { describe, it, expect, beforeAll, jest } from '@jest/globals'
@@ -19,8 +19,8 @@ describe('dynamic rate integration tests', () => {
 
         // Test with all of the addresses of the wallet
         for (const account of await signer.getAccounts()) {
-            const testAddress = account.address
-            await signer.setSelectedAccount(testAddress)
+            const testAddress = randomContractId()
+            await signer.setSelectedAccount(account.address)
             const testGroup = account.group
 
             const dynamicRate = deployments.getInstance(DynamicRate, testGroup)
@@ -37,7 +37,9 @@ describe('dynamic rate integration tests', () => {
             const marketParams = {
                 loanToken: testAddress,
                 collateralToken: testAddress,
-                oracle: testAddress
+                oracle: testAddress,
+                interestRateModel: testAddress,
+                loanToValue: 75n * 10n ** 16n
             }
 
             const marketState = {
@@ -68,7 +70,7 @@ describe('dynamic rate integration tests', () => {
             console.log("Expected calculated rate:", expectedRate.toString());
 
             // Get borrow rate from contract
-            const viewResult = await dynamicRate.view.borrowRate({
+            const viewResult = await dynamicRate.view.borrowRateView({
                 args: { marketParams, marketState }
             });
             console.log("Actual contract rate:", viewResult.returns.toString());
@@ -77,7 +79,7 @@ describe('dynamic rate integration tests', () => {
             expect(viewResult.returns).toEqual(expectedRate);
 
             // Test rate update via transaction
-            const borrowRate = await dynamicRate.transact.getBorrowRateAndUpdate({
+            const borrowRate = await dynamicRate.transact.borrowRate({
                 signer: signer,
                 attoAlphAmount: DUST_AMOUNT * 100n,
                 args: { marketParams, marketState }
@@ -103,7 +105,7 @@ describe('dynamic rate integration tests', () => {
             const expectedTargetRate = calculateBorrowRate(targetUtilizationMarketState, newRateAtTarget.returns);
             console.log("Expected target utilization rate:", expectedTargetRate.toString());
 
-            const targetUtilizationResult = await dynamicRate.view.borrowRate({
+            const targetUtilizationResult = await dynamicRate.view.borrowRateView({
                 args: { marketParams, marketState: targetUtilizationMarketState }
             });
             console.log("Actual target utilization rate:", targetUtilizationResult.returns.toString());
@@ -122,7 +124,7 @@ describe('dynamic rate integration tests', () => {
             const expectedHighRate = calculateBorrowRate(highUtilizationMarketState, newRateAtTarget.returns);
             console.log("Expected high utilization rate:", expectedHighRate.toString());
 
-            const highUtilizationResult = await dynamicRate.view.borrowRate({
+            const highUtilizationResult = await dynamicRate.view.borrowRateView({
                 args: { marketParams, marketState: highUtilizationMarketState }
             });
             console.log("Actual high utilization rate:", highUtilizationResult.returns.toString());
@@ -141,7 +143,7 @@ describe('dynamic rate integration tests', () => {
             }
 
             const expectedZeroRate = calculateBorrowRate(zeroUtilizationMarketState, newRateAtTarget.returns)
-            const zeroUtilizationResult = await dynamicRate.view.borrowRate({
+            const zeroUtilizationResult = await dynamicRate.view.borrowRateView({
                 args: { marketParams, marketState: zeroUtilizationMarketState }
             })
 
@@ -158,7 +160,7 @@ describe('dynamic rate integration tests', () => {
             }
 
             const expectedOverRate = calculateBorrowRate(overUtilizationMarketState, newRateAtTarget.returns)
-            const overUtilizationResult = await dynamicRate.view.borrowRate({
+            const overUtilizationResult = await dynamicRate.view.borrowRateView({
                 args: { marketParams, marketState: overUtilizationMarketState }
             })
 
@@ -179,10 +181,10 @@ describe('dynamic rate integration tests', () => {
                 lastUpdate: highUtilizationMarketState.lastUpdate // older (baseline)
             }
 
-            const recentHighRate = await dynamicRate.view.borrowRate({
+            const recentHighRate = await dynamicRate.view.borrowRateView({
                 args: { marketParams, marketState: highUtilRecent }
             })
-            const oldHighRate = await dynamicRate.view.borrowRate({
+            const oldHighRate = await dynamicRate.view.borrowRateView({
                 args: { marketParams, marketState: highUtilOld }
             })
 
@@ -199,10 +201,10 @@ describe('dynamic rate integration tests', () => {
                 lastUpdate: marketState.lastUpdate // baseline (older)
             }
 
-            const recentLowRate = await dynamicRate.view.borrowRate({
+            const recentLowRate = await dynamicRate.view.borrowRateView({
                 args: { marketParams, marketState: lowUtilRecent }
             })
-            const oldLowRate = await dynamicRate.view.borrowRate({
+            const oldLowRate = await dynamicRate.view.borrowRateView({
                 args: { marketParams, marketState: lowUtilOld }
             })
 

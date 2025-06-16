@@ -1,5 +1,5 @@
 import { web3, TestContractParams, addressFromContractId, DUST_AMOUNT } from '@alephium/web3'
-import { testAddress, expectAssertionError, testNodeWallet } from '@alephium/web3-test'
+import { testAddress, expectAssertionError, testNodeWallet, randomContractId } from '@alephium/web3-test'
 import { DynamicRate, DynamicRateTypes } from '../../artifacts/ts'
 import { describe, it, expect, beforeAll, beforeEach, jest } from '@jest/globals'
 import { deployToDevnet } from '@alephium/cli'
@@ -12,6 +12,7 @@ describe('dynamic rate unit tests', () => {
     let testParamsFixture: TestContractParams<DynamicRateTypes.Fields, {}>
     let dynamicRate: any
     let linxAddress: string
+    let testContractId: string
 
     // We initialize the fixture variables before all tests
     beforeAll(async () => {
@@ -28,6 +29,8 @@ describe('dynamic rate unit tests', () => {
 
         dynamicRate = deployments.getInstance(DynamicRate, testGroup)
         testContractAddress = dynamicRate.address
+
+        testContractId = randomContractId()
 
         testParamsFixture = {
             // Contract address
@@ -48,9 +51,11 @@ describe('dynamic rate unit tests', () => {
 
     it('test borrowRateView for first interaction', async () => {
         const marketParams = {
-            loanToken: testAddress,
-            collateralToken: testAddress,
-            oracle: testAddress
+            loanToken: testContractId,
+            collateralToken: testContractId,
+            oracle: testContractId,
+            interestRateModel: testContractId,
+            loanToValue: 75n * 10n ** 16n // 75% LTV
         }
 
         const marketState = {
@@ -80,9 +85,11 @@ describe('dynamic rate unit tests', () => {
 
     it('test borrowRate requires authorization', async () => {
         const marketParams = {
-            loanToken: testAddress,
-            collateralToken: testAddress,
-            oracle: testAddress
+            loanToken: testContractId,
+            collateralToken: testContractId,
+            oracle: testContractId,
+            interestRateModel: testContractId,
+            loanToValue: 75n * 10n ** 16n // 75% LTV
         }
 
         const marketState = {
@@ -111,7 +118,7 @@ describe('dynamic rate unit tests', () => {
         }
 
         await expectAssertionError(
-            DynamicRate.tests.getBorrowRateAndUpdate(testParams),
+            DynamicRate.tests.borrowRate(testParams),
             testContractAddress,
             Number(DynamicRate.consts.ErrorCodes.NotAuthorized)
         )
@@ -119,9 +126,11 @@ describe('dynamic rate unit tests', () => {
 
     it('test borrowRate with successful update', async () => {
         const marketParams = {
-            loanToken: testAddress,
-            collateralToken: testAddress,
-            oracle: testAddress
+            loanToken: testContractId,
+            collateralToken: testContractId,
+            oracle: testContractId,
+            interestRateModel: testContractId,
+            loanToValue: 75n * 10n ** 16n // 75% LTV
         }
 
         const marketState = {
@@ -141,7 +150,7 @@ describe('dynamic rate unit tests', () => {
             }
         }
 
-        const testResult = await DynamicRate.tests.getBorrowRateAndUpdate(testParams)
+        const testResult = await DynamicRate.tests.borrowRate(testParams)
 
         // Check the return value
         expect(testResult.returns).toBeDefined()
@@ -158,9 +167,11 @@ describe('dynamic rate unit tests', () => {
 
     it('test borrowRate with high utilization', async () => {
         const marketParams = {
-            loanToken: testAddress,
-            collateralToken: testAddress,
-            oracle: testAddress
+            loanToken: testContractId,
+            collateralToken: testContractId,
+            oracle: testContractId,
+            interestRateModel: testContractId,
+            loanToValue: 75n * 10n ** 16n // 75% LTV
         }
 
         const marketState = {
@@ -180,7 +191,7 @@ describe('dynamic rate unit tests', () => {
             }
         }
 
-        const testResultHigh = await DynamicRate.tests.getBorrowRateAndUpdate(testParams)
+        const testResultHigh = await DynamicRate.tests.borrowRate(testParams)
 
         // Now test with lower utilization to compare
         const marketStateWithLowUtilization = {
@@ -196,7 +207,7 @@ describe('dynamic rate unit tests', () => {
             }
         }
 
-        const testResultLow = await DynamicRate.tests.getBorrowRateAndUpdate(testParamsLow)
+        const testResultLow = await DynamicRate.tests.borrowRate(testParamsLow)
 
         // High utilization should give higher rate
         expect(testResultHigh.returns > testResultLow.returns).toBeTruthy()
@@ -204,9 +215,11 @@ describe('dynamic rate unit tests', () => {
 
     it('test borrowRate with zero supply assets', async () => {
         const marketParams = {
-            loanToken: testAddress,
-            collateralToken: testAddress,
-            oracle: testAddress
+            loanToken: testContractId,
+            collateralToken: testContractId,
+            oracle: testContractId,
+            interestRateModel: testContractId,
+            loanToValue: 75n * 10n ** 16n // 75% LTV
         }
 
         const marketState = {
@@ -227,15 +240,17 @@ describe('dynamic rate unit tests', () => {
         }
 
         // Should not revert with division by zero
-        const testResult = await DynamicRate.tests.getBorrowRateAndUpdate(testParams)
+        const testResult = await DynamicRate.tests.borrowRate(testParams)
         expect(testResult.returns).toBeDefined()
     })
 
     it('test rate adjustment over time', async () => {
         const marketParams = {
-            loanToken: testAddress,
-            collateralToken: testAddress,
-            oracle: testAddress
+            loanToken: testContractId,
+            collateralToken: testContractId,
+            oracle: testContractId,
+            interestRateModel: testContractId,
+            loanToValue: 75n * 10n ** 16n // 75% LTV
         }
 
         const marketState = {
@@ -255,7 +270,7 @@ describe('dynamic rate unit tests', () => {
             }
         }
 
-        const initialResult = await DynamicRate.tests.getBorrowRateAndUpdate(initialTestParams)
+        const initialResult = await DynamicRate.tests.borrowRate(initialTestParams)
 
         // Now simulate passage of time and changed utilization
         const laterMarketState = {
@@ -272,7 +287,7 @@ describe('dynamic rate unit tests', () => {
             }
         }
 
-        const laterResult = await DynamicRate.tests.getBorrowRateAndUpdate(laterTestParams)
+        const laterResult = await DynamicRate.tests.borrowRate(laterTestParams)
 
         // Rates should adjust over time, with higher utilization leading to higher rates
         expect(laterResult.returns > initialResult.returns).toBeTruthy()

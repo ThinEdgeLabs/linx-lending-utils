@@ -1,14 +1,14 @@
 TxScript GetBorrowRateAndUpdate(dynamicRate: DynamicRate, marketParams: MarketParams, marketState: MarketState) {
     @using(preapprovedAssets = true)
     pub fn main() -> U256 {
-        let borrowRate = dynamicRate.getBorrowRateAndUpdate{callerAddress!() -> ALPH : mapEntryDeposit!()}(marketParams, marketState)
+        let borrowRate = dynamicRate.borrowRate{callerAddress!() -> ALPH : mapEntryDeposit!()}(marketParams, marketState)
         return borrowRate
     }
 }
 
 TxScript GetBorrowRate(dynamicRate: DynamicRate, marketParams: MarketParams, marketState: MarketState) {
     pub fn main() -> U256 {
-        let borrowRate = dynamicRate.borrowRate(marketParams, marketState)
+        let borrowRate = dynamicRate.borrowRateView(marketParams, marketState)
         return borrowRate
     }
 }

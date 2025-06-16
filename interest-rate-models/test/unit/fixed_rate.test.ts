@@ -1,5 +1,5 @@
 import { web3, TestContractParams, addressFromContractId, DUST_AMOUNT } from '@alephium/web3'
-import { testAddress, expectAssertionError, testNodeWallet } from '@alephium/web3-test'
+import { testAddress, expectAssertionError, testNodeWallet, randomContractId } from '@alephium/web3-test'
 import { FixedRate, FixedRateTypes } from '../../artifacts/ts'
 import { describe, it, expect, beforeAll, beforeEach } from '@jest/globals'
 import { deployToDevnet } from '@alephium/cli'
@@ -8,6 +8,7 @@ describe('unit tests', () => {
     let testContractAddress: string
     let testParamsFixture: TestContractParams<FixedRateTypes.Fields, { newBorrowRate: bigint }>
     let fixedRate: any
+    let testContractId: string
 
     // We initialize the fixture variables before all tests
     beforeAll(async () => {
@@ -22,6 +23,7 @@ describe('unit tests', () => {
 
         fixedRate = deployments.getInstance(FixedRate, testGroup)
         testContractAddress = fixedRate.address
+        testContractId = randomContractId()
 
         testParamsFixture = {
             // Use the actual deployed contract address
@@ -171,7 +173,7 @@ describe('unit tests', () => {
         const testParams = {
             ...testParamsFixture,
             testArgs: {
-                marketParams: { loanToken: testAddress, collateralToken: testAddress, oracle: testAddress },
+                marketParams: { loanToken: testContractId, collateralToken: testContractId, oracle: testContractId, interestRateModel: testContractId, loanToValue: 75n * 10n ** 16n },
                 marketState: { totalSupplyAssets: 1000000000000000000000n, totalSupplyShares: 2000000000000000000000n, totalBorrowAssets: 1000000000000000000000n, totalBorrowShares: 2000000000000000000000n, lastUpdate: 1000000000000000000000n, fee: 1000000000000000000000n }
             }
         }

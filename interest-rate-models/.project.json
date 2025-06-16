@@ -25,43 +25,43 @@
     },
     "DynamicRate": {
       "sourceFile": "dynamic_rate.ral",
-      "sourceCodeHash": "2b2fce438feaa27e70362229dd135d71ce40f5d3b11ebd7ef6053c181dfd001c",
-      "bytecodeDebugPatch": "=10-1=1+5=1-2+1=1+9=1-3+116=2-2+72=2-2+b1=2+7=1-1=2-2+94=2-2+ab=2-2+b9=2+c=1-1=95-1+9=173-1+b=38+7a7e0214696e73657274206174206d617020706174683a2000=1584",
-      "codeHashDebug": "ff2c1cf9202b0343222621c8d4ec2f0a9cef8b26a459b59df201b13219ab32f1"
+      "sourceCodeHash": "2cbe7018e35938796be685549bc58be41f8dfbdb2539768f782d6e45d91109a5",
+      "bytecodeDebugPatch": "=6-5+9=3-2+c3=1+1=1-2+7=2-2+14=2-2+70=1-2+1=1+f=3+342=1+2=2+a=1-1=2-2+b7=2-2+c9=13-1+8=123-1+b=38+7a7e0214696e73657274206174206d617020706174683a2000=1712",
+      "codeHashDebug": "a194d0227ffeec1536478461a0297be0abd9a8435fbed8e3cbcb8ffb1816ce7d"
     },
     "FixedRate": {
       "sourceFile": "fixed_rate.ral",
-      "sourceCodeHash": "f6486b03e9fac7c25c67e876bc27d5b86fc393d17a48f20e3cb19df296a29dbf",
+      "sourceCodeHash": "ff2bc091022e2157392275c78e14bb6d1a18a4eb0b95be1d7be1d7603c3347bd",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "645bbdc785cb3ecb5c0e5ab20165a01f279b606ce71af15763bacf9d20eb69f2"
+      "codeHashDebug": "4646a0be7f5de97e150b6eb7cc3683d60cba5499986533f80c9bd575e64532f0"
     },
     "GetBorrowRate": {
       "sourceFile": "scripts.ral",
-      "sourceCodeHash": "655761ec32001706c50d620a538ebf97f6a90ff214de5b63e00fbd5f591b143b",
+      "sourceCodeHash": "57d9dd839ddb07f1c5c6ee974c24146a1d01897e755029d1cff36b77139dbb2e",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "GetBorrowRateAndUpdate": {
       "sourceFile": "scripts.ral",
-      "sourceCodeHash": "655761ec32001706c50d620a538ebf97f6a90ff214de5b63e00fbd5f591b143b",
+      "sourceCodeHash": "57d9dd839ddb07f1c5c6ee974c24146a1d01897e755029d1cff36b77139dbb2e",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "GetMarketId": {
       "sourceFile": "scripts.ral",
-      "sourceCodeHash": "655761ec32001706c50d620a538ebf97f6a90ff214de5b63e00fbd5f591b143b",
+      "sourceCodeHash": "57d9dd839ddb07f1c5c6ee974c24146a1d01897e755029d1cff36b77139dbb2e",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "GetRateAtTarget": {
       "sourceFile": "scripts.ral",
-      "sourceCodeHash": "655761ec32001706c50d620a538ebf97f6a90ff214de5b63e00fbd5f591b143b",
+      "sourceCodeHash": "57d9dd839ddb07f1c5c6ee974c24146a1d01897e755029d1cff36b77139dbb2e",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "IDynamicRate": {
       "sourceFile": "interface/IDynamicRate.ral",
-      "sourceCodeHash": "1d589a60a7a8c42e4e048b67ba46f922c1919125cc59ca23e5ed3a3785fb544a",
+      "sourceCodeHash": "b5d0a7ea7ef43777fd9129686d91809df074a07957b3e5f7b625080ddfdda60a",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -73,7 +73,7 @@
     },
     "IInterestRate": {
       "sourceFile": "interface/IInterestRate.ral",
-      "sourceCodeHash": "7343617d8cfa82166500b3d9abd77b31b1957302affc771bd7ad52325842676b",
+      "sourceCodeHash": "5edd7d158281eb6ff7a28cd6483e07519421f3d98826b03449d6cb6d28146684",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -91,7 +91,7 @@
     },
     "SetFixedRate": {
       "sourceFile": "scripts.ral",
-      "sourceCodeHash": "655761ec32001706c50d620a538ebf97f6a90ff214de5b63e00fbd5f591b143b",
+      "sourceCodeHash": "57d9dd839ddb07f1c5c6ee974c24146a1d01897e755029d1cff36b77139dbb2e",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },

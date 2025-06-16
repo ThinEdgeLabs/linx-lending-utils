@@ -31,6 +31,7 @@ Contract FixedRate(
     /// 
     /// # Returns
     /// The fixed borrow rate
+    @using(preapprovedAssets = true, checkExternalCaller = false)
     pub fn borrowRate(marketParams: MarketParams, marketState: MarketState) -> U256 {
         // Fixed rate model, so we don't need to use marketParams and marketState
         let _ = marketParams
