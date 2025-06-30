@@ -1,5 +1,5 @@
 {
-  "fullNodeVersion": "v3.12.6",
+  "fullNodeVersion": "v3.15.3",
   "compilerOptionsUsed": {
     "ignoreUnusedConstantsWarnings": false,
     "ignoreUnusedVariablesWarnings": false,
@@ -8,7 +8,8 @@
     "ignoreUpdateFieldsCheckWarnings": false,
     "ignoreCheckExternalCallerWarnings": false,
     "ignoreUnusedFunctionReturnWarnings": false,
-    "skipAbstractContractCheck": false
+    "skipAbstractContractCheck": false,
+    "skipTests": false
   },
   "infos": {
     "Constants": {
@@ -26,8 +27,8 @@
     "DynamicRate": {
       "sourceFile": "dynamic_rate.ral",
       "sourceCodeHash": "2cbe7018e35938796be685549bc58be41f8dfbdb2539768f782d6e45d91109a5",
-      "bytecodeDebugPatch": "=6-5+9=3-2+c3=1+1=1-2+7=2-2+14=2-2+70=1-2+1=1+f=3+342=1+2=2+a=1-1=2-2+b7=2-2+c9=13-1+8=123-1+b=38+7a7e0214696e73657274206174206d617020706174683a2000=1712",
-      "codeHashDebug": "a194d0227ffeec1536478461a0297be0abd9a8435fbed8e3cbcb8ffb1816ce7d"
+      "bytecodeDebugPatch": "=6-5+9=3-2+c=1+41=1-2+8=1+1=2-1=2-1=1+141b0=2-2+8c=2-2+b8=2+d=1-1+4405=1-3=1-3+17=13-1+9=125-1+b=38+7a7e0214696e73657274206174206d617020706174683a2000=1866",
+      "codeHashDebug": "9b39f65a2a444c2c1683d49e039121ea26aab683ecc648073e5d578d62847cf6"
     },
     "FixedRate": {
       "sourceFile": "fixed_rate.ral",
