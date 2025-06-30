@@ -13,10 +13,10 @@ Contract MockDIAOracle() {
     // The first key is the address of the entity that set the price, and the second key
     // is the market identifier.
     mapping[ByteVec, DIAOracleValue] prices
-    
+
     // Emitted when a price is successfully set for a given key.
     event PriceSet(key: ByteVec, price: U256, timestamp: U256)
-    
+
     // Sets the price for a given key.
     //
     // # Arguments
@@ -29,18 +29,18 @@ Contract MockDIAOracle() {
     // This function is marked with `@using(preapprovedAssets = true, checkExternalCaller = false)`,
     // allowing any caller to set the price. It is assumed that a minimal ALPH deposit
     // will be provided for the new map entry.
-    @using(preapprovedAssets = true, checkExternalCaller = false)
+    @using(preapprovedAssets = true, checkExternalCaller = false, updateFields = true)
     pub fn setPrice(key: ByteVec, price: U256) -> () {
         // The caller will deposit a minimal ALPH deposit for the new map entry which is a subcontract
         let caller = callerAddress!()
-    
+
         let timestamp = blockTimeStamp!()
         let value = DIAOracleValue { value: price, timestamp: timestamp }
         prices.insert!(caller, key, value)
-    
+
         emit PriceSet(key, price, timestamp)
     }
-    
+
     // Retrieves the value and timestamp associated with a given key.
     //
     // # Arguments
