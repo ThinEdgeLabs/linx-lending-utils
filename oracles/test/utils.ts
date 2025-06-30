@@ -8,7 +8,7 @@ export const HUNDRED_ALPH = ONE_ALPH * 100n
 export async function setPrice(address: Address) {
   return await MockDIAOracle.tests.setPrice({
     initialMaps: {},
-    testArgs: { key: KEY, price: PRICE },
+    args: { key: KEY, price: PRICE },
     inputAssets: [{ address, asset: { alphAmount: HUNDRED_ALPH } }]
   })
 }

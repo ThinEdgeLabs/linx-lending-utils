@@ -1,7 +1,7 @@
-import { stringToHex, web3, Address, node, NodeProvider, DUST_AMOUNT, hexToString, ONE_ALPH } from '@alephium/web3'
+import { web3, ONE_ALPH } from '@alephium/web3'
 import { PrivateKeyWallet } from '@alephium/web3-wallet'
-import { DIAOracleWrapper, DIAOracleWrapperInstance, MockDIAOracle, MockDIAOracleInstance } from '../../artifacts/ts'
-import { testPrivateKey, testNodeWallet, getSigner } from '@alephium/web3-test'
+import { MockDIAOracle } from '../../artifacts/ts'
+import { getSigner } from '@alephium/web3-test'
 import { HUNDRED_ALPH, KEY, PRICE, setPrice } from '../utils'
 
 web3.setCurrentNodeProvider('http://127.0.0.1:22973', undefined, fetch)
@@ -59,7 +59,7 @@ describe('MockOracle', () => {
 
     const view = await MockDIAOracle.tests.getValue({
       initialMaps: maps,
-      testArgs: { key: KEY },
+      args: { key: KEY },
       inputAssets: [{ address: signer.address, asset: { alphAmount: ONE_ALPH * 100n } }]
     })
 
