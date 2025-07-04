@@ -1,4 +1,4 @@
-import { web3, TestContractParams } from '@alephium/web3'
+import { web3, TestContractParams, NamedVals } from '@alephium/web3'
 import { expectAssertionError, testNodeWallet, randomContractId, randomContractAddress } from '@alephium/web3-test'
 import { DynamicRate, DynamicRateTypes } from '../../artifacts/ts'
 import { describe, it, expect, beforeAll, jest } from '@jest/globals'
@@ -8,7 +8,7 @@ jest.setTimeout(15000)
 
 describe('dynamic rate unit tests', () => {
   let testContractAddress: string
-  let testParamsFixture: TestContractParams<DynamicRateTypes.Fields, {}>
+  let testParamsFixture: TestContractParams<DynamicRateTypes.Fields, NamedVals>
   //let dynamicRate: any
   let linxAddress: string
   let testContractId: string

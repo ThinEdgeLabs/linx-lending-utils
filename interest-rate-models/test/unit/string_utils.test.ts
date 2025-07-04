@@ -1,20 +1,16 @@
-import { web3, TestContractParams, addressFromContractId } from '@alephium/web3'
+import { web3, TestContractParams, addressFromContractId, NamedVals } from '@alephium/web3'
 import { randomContractId, testAddress } from '@alephium/web3-test'
 import { DynamicRate, DynamicRateTypes } from '../../artifacts/ts'
 import { describe, it, expect, beforeAll } from '@jest/globals'
 
 // Testing the StringUtils functions through DynamicRate which extends StringUtils
 describe('string utils unit tests', () => {
-  let testContractId: string
-  let testContractAddress: string
-  let testParamsFixture: TestContractParams<DynamicRateTypes.Fields, {}>
+  let testParamsFixture: TestContractParams<DynamicRateTypes.Fields, NamedVals>
   let linxAddress: string
 
   // We initialize the fixture variables before all tests
   beforeAll(async () => {
     web3.setCurrentNodeProvider('https://node.testnet.alephium.org', undefined, fetch)
-    testContractId = randomContractId()
-    testContractAddress = addressFromContractId(testContractId)
     linxAddress = addressFromContractId(randomContractId())
     testParamsFixture = {
       // Assets owned by the test contract before a test

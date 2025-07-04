@@ -1,13 +1,13 @@
-import { web3, TestContractParams, addressFromContractId, DUST_AMOUNT, groupOfAddress } from '@alephium/web3'
+import { web3, TestContractParams, groupOfAddress } from '@alephium/web3'
 import { testAddress, expectAssertionError, testNodeWallet, randomContractId } from '@alephium/web3-test'
-import { FixedRate, FixedRateTypes } from '../../artifacts/ts'
+import { FixedRate, FixedRateInstance, FixedRateTypes } from '../../artifacts/ts'
 import { describe, it, expect, beforeAll, beforeEach } from '@jest/globals'
 import { deployToDevnet } from '@alephium/cli'
 
 describe('unit tests', () => {
   let testContractAddress: string
   let testParamsFixture: TestContractParams<FixedRateTypes.Fields, { newBorrowRate: bigint }>
-  let fixedRate: any
+  let fixedRate: FixedRateInstance
   let testContractId: string
 
   // We initialize the fixture variables before all tests
@@ -21,7 +21,7 @@ describe('unit tests', () => {
     await signer.setSelectedAccount(account.address)
     const testGroup = groupOfAddress(account.address)
 
-    fixedRate = deployments.getInstance(FixedRate, testGroup)
+    fixedRate = deployments.getInstance(FixedRate, testGroup)!
     testContractAddress = fixedRate.address
     testContractId = randomContractId()
 
@@ -56,7 +56,7 @@ describe('unit tests', () => {
       await signer.setSelectedAccount(account.address)
       const testGroup = groupOfAddress(account.address)
 
-      fixedRate = deployments.getInstance(FixedRate, testGroup)
+      fixedRate = deployments.getInstance(FixedRate, testGroup)!
       testContractAddress = fixedRate.address
 
       // Update the testParamsFixture with the new address
