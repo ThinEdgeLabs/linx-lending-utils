@@ -1,5 +1,5 @@
 /// Market parameters structure
-/// 
+///
 /// Contains the essential parameters needed to identify and interact with a market
 struct MarketParams {
     /// Address of the loan token
@@ -15,7 +15,7 @@ struct MarketParams {
 }
 
 /// Market state structure
-/// 
+///
 /// Contains the current state of a market, including supply, borrow, and timing information
 struct MarketState {
     /// Total amount of assets supplied to the market
@@ -33,43 +33,43 @@ struct MarketState {
 }
 
 /// Constants contract containing shared parameters and error codes
-/// 
+///
 /// This abstract contract defines constants used across different interest rate models
 /// and provides common error codes for the system.
 Abstract Contract Constants() {
     /// Maximum allowed borrow rate (100% in Wei format)
     const MAX_BORROW_RATE = 1e20
-    
+
     /// One unit in fixed-point format (1.0 * 10^18)
     const WAD = 1e18i
-    
+
     /// ln(2) scaled by 1e18
     const LN_2_INT = 693147180559945309i
-    
+
     /// ln(1e-18) scaled by 1e18 (lower bound for wExp)
     const LN_WEI_INT = -41446531673892822312i
-    
+
     /// Upper input bound for wExp to prevent overflow: ln(type(int256).max / 1e36)
     const WEXP_UPPER_BOUND = 93859467695000404319i
-    
+
     /// Pre-computed wExp(WEXP_UPPER_BOUND) to cap extreme outputs
     const WEXP_UPPER_VALUE = 57716089161558943949701069502944508345128422502756744429568i
-    
+
     /// Target utilization rate (90%)
     const TARGET_UTILIZATION = 9e17i
-    
+
     /// Initial rate at target utilization (4% per year converted to per second)
     const INITIAL_RATE_AT_TARGET = 4e16i / 31536000i
-    
+
     /// Rate adjustment speed (50/year converted to per second)
     const ADJUSTMENT_SPEED = 5e19i / 31536000i
-    
+
     /// Curve steepness parameter for rate calculations
     const CURVE_STEEPNESS = 4e18i
-    
+
     /// Minimum rate at target utilization (0.1% per year converted to per second)
     const MIN_RATE_AT_TARGET = 1e15i / 31536000i
-    
+
     /// Maximum rate at target utilization (200% per year converted to per second)
     const MAX_RATE_AT_TARGET = 2e18i / 31536000i
 
@@ -82,6 +82,6 @@ Abstract Contract Constants() {
         /// Rate is outside valid bounds
         InvalidRate = 2
         /// Invalid zero address provided
-        ZeroAddress = 3
+        // ZeroAddress = 3
     }
 }
