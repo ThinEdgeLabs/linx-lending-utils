@@ -1,0 +1,66 @@
+name: IRM CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./interest-rate-models
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: "npm"
+          cache-dependency-path: "interest-rate-models/package-lock.json"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint code
+        run: npm run lint
+
+      - name: Setup Alephium devnet
+        run: |
+          # Create .alephium directory and copy configuration
+          mkdir -p ~/.alephium
+          cp ../.github/scripts/user.conf ~/.alephium/user.conf
+
+          # Download and setup Alephium jar
+          wget -q https://github.com/alephium/alephium/releases/download/v4.0.0/alephium-4.0.0.jar
+
+          # Start Alephium devnet in background
+          java -jar alephium-4.0.0.jar &
+          ALEPHIUM_PID=$!
+          echo "ALEPHIUM_PID=$ALEPHIUM_PID" >> $GITHUB_ENV
+
+          # Wait for Alephium to start
+          echo "Waiting for Alephium devnet to start..."
+          timeout 60 bash -c 'until curl -s http://127.0.0.1:22973/docs >/dev/null 2>&1; do sleep 2; done' || {
+            echo "Alephium failed to start within 60 seconds"
+            exit 1
+          }
+          echo "Alephium devnet is running"
+
+      - name: Compile contracts
+        run: npm run compile
+
+      - name: Run tests
+        run: npx cli test
+
+      - name: Cleanup
+        if: always()
+        run: |
+          if [ ! -z "$ALEPHIUM_PID" ]; then
+            kill $ALEPHIUM_PID || true
+          fi
