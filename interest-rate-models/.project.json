@@ -14,7 +14,7 @@
   "infos": {
     "Constants": {
       "sourceFile": "constants.ral",
-      "sourceCodeHash": "2423b42264e5fab5094982764a2fb94a2905cdeb15391b0d4f45a6bb58b05931",
+      "sourceCodeHash": "4007b23bf949a59e55398e60a53509b4e27dfcee834c978d065fe838596f171c",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -27,8 +27,8 @@
     "DynamicRate": {
       "sourceFile": "dynamic_rate.ral",
       "sourceCodeHash": "5e5a6f5d19178a62379b2cf017da663cb046251eedd7f936760d46f1de20a14f",
-      "bytecodeDebugPatch": "=6-5+9=3-2+c4=1+1=1-2+8=1+1=2-1=2-1=1+1=1-2+1=1+0=3-1+4=3-2=1-2+42aa=3-1+843ca=13-1+9=125-1+b=38+7a7e0214696e73657274206174206d617020706174683a2000=1712",
-      "codeHashDebug": "c97823c4165f7ffde5e88c2b817c2eb9a010a50a2a4cec9dcf9a4d8e93afe610"
+      "bytecodeDebugPatch": "=6-5+9=3-2+c=1+41=1-2+8=1+1=2-1=2-1=1+141b0=2-2+8c=2-2+b8=2+d=1-1+4405=1-3=1-3+17=13-1+9=125-1+b=38+7a7e0214696e73657274206174206d617020706174683a2000=1866",
+      "codeHashDebug": "9b39f65a2a444c2c1683d49e039121ea26aab683ecc648073e5d578d62847cf6"
     },
     "FixedRate": {
       "sourceFile": "fixed_rate.ral",
@@ -80,13 +80,13 @@
     },
     "MarketParams": {
       "sourceFile": "constants.ral",
-      "sourceCodeHash": "2423b42264e5fab5094982764a2fb94a2905cdeb15391b0d4f45a6bb58b05931",
+      "sourceCodeHash": "4007b23bf949a59e55398e60a53509b4e27dfcee834c978d065fe838596f171c",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "MarketState": {
       "sourceFile": "constants.ral",
-      "sourceCodeHash": "2423b42264e5fab5094982764a2fb94a2905cdeb15391b0d4f45a6bb58b05931",
+      "sourceCodeHash": "4007b23bf949a59e55398e60a53509b4e27dfcee834c978d065fe838596f171c",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
