@@ -8,7 +8,8 @@
     "ignoreUpdateFieldsCheckWarnings": false,
     "ignoreCheckExternalCallerWarnings": false,
     "ignoreUnusedFunctionReturnWarnings": false,
-    "skipAbstractContractCheck": false
+    "skipAbstractContractCheck": false,
+    "skipTests": false
   },
   "infos": {
     "DIAOracleValue": {
@@ -19,19 +20,19 @@
     },
     "DIAOracleWrapper": {
       "sourceFile": "diaoraclewrapper.ral",
-      "sourceCodeHash": "3fab04c219fb7b2a630877f7baab1e0f5ffe1e8738b948e3ee34a10ffaf5bb1d",
+      "sourceCodeHash": "d7ca735928aa6f96476e2dd2b0d911d0494dfda64796fc2cc8e73f2921bad104",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "e0e94814954464a641c01c396a1a58c8604aff3170fdd7149fc5ac7436ef7cd0"
     },
     "IDIAOracle": {
       "sourceFile": "diaoraclewrapper.ral",
-      "sourceCodeHash": "3fab04c219fb7b2a630877f7baab1e0f5ffe1e8738b948e3ee34a10ffaf5bb1d",
+      "sourceCodeHash": "d7ca735928aa6f96476e2dd2b0d911d0494dfda64796fc2cc8e73f2921bad104",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "IOracle": {
       "sourceFile": "diaoraclewrapper.ral",
-      "sourceCodeHash": "3fab04c219fb7b2a630877f7baab1e0f5ffe1e8738b948e3ee34a10ffaf5bb1d",
+      "sourceCodeHash": "d7ca735928aa6f96476e2dd2b0d911d0494dfda64796fc2cc8e73f2921bad104",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },

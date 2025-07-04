@@ -10,7 +10,7 @@ Interface IDIAOracle {
     //
     // A tuple containing:
     // * `U256`: The value associated with the key.
-    // * `U256`: The timestamp of when the value was last updated in the DIA Oracle.
+    // * `U256`: The timestamp of when the value was last updated in the DIA Oracle in milliseconds.
     pub fn getValue(key: ByteVec) -> (U256, U256)
 }
 
@@ -28,16 +28,14 @@ Interface IOracle {
 // This contract fetches price data from a specific DIA Oracle for a given market
 // and ensures the data is not stale based on a defined heartbeat interval.
 Contract DIAOracleWrapper(
-    diaOracleAddress: Address, 
-    marketId: ByteVec, 
-    heartbeatInterval: U256
+    diaOracleAddress: Address, // The address of the DIA Oracle contract to query
+    marketId: ByteVec,         // The market identifier to query (e.g., "ALPH/USD")
+    heartbeatInterval: U256    // Interval in milliseconds to consider the price data fresh
 ) implements IOracle {
-    // The scaling factor used by the `IOracle` interface.
-    const DECIMALS = 10^18
+    // The scaling factor for the price returned by the DIA Oracle.
+    const PRECISION = 10^18
 
-    // Enum defining possible error codes within this contract.
     enum ErrorCodes {
-        // The price data fetched from the DIA Oracle is older than the allowed heartbeat interval.
         StalePrice = 0
     }
 
@@ -45,8 +43,8 @@ Contract DIAOracleWrapper(
     //
     // It fetches the raw price and timestamp from the DIA Oracle, checks if the
     // data is stale based on the `heartbeatInterval`, and then returns the price
-    // scaled to `DECIMALS` (10^18). If the raw price from DIA is less than
-    // `DECIMALS`, it is assumed to be in a smaller unit (10^8) and is scaled up by 10^10.
+    // scaled to `PRECISION` (10^18). If the raw price from DIA is less than
+    // `PRECISION`, it is assumed to be in a smaller unit (10^8) and is scaled up by 10^10.
     //
     // # Returns
     //
@@ -62,10 +60,10 @@ Contract DIAOracleWrapper(
         let (price, timestamp) = IDIAOracle(diaContractId).getValue(marketId)
 
         assert!(blockTimeStamp!() - timestamp <= heartbeatInterval, ErrorCodes.StalePrice)
-        
+
         // DIA returns values with 8 decimals precision,
-        // so we scale them up by 10 decimals 
+        // so we scale them up by 10 decimals
         // to get the price in 18 decimals precision.
-        return if (price < DECIMALS) price * 10^10 else price
+        return if (price < PRECISION) price * 10^10 else price
     }
 }
