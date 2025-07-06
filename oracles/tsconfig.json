@@ -17,5 +17,5 @@
     "noImplicitOverride": true
   },
   "exclude": ["node_modules"],
-  "include": ["./artifacts/**/*.ts"]
+  "include": ["./artifacts/**/*.ts", "test/**/*.ts", "scripts/**/*.ts", "alephium.config.ts"]
 }

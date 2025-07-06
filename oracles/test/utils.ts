@@ -23,7 +23,7 @@ export async function fetchPrice() {
 
     const { Price: price } = await response.json()
     return price
-  } catch (error: any) {
-    console.error(error.message)
+  } catch (error: unknown) {
+    console.error(error instanceof Error ? error.message : String(error))
   }
 }

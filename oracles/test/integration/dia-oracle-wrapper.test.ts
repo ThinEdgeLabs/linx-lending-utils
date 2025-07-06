@@ -63,8 +63,8 @@ describe('DIAOracleWrapper', () => {
       args: { key: KEY, price: PRICE }
     })
 
-    let mould = await mockOracle.view.getValue({ args: { key: KEY } })
-    let [value, timestamp] = mould.returns
+    const mould = await mockOracle.view.getValue({ args: { key: KEY } })
+    const [value, timestamp] = mould.returns
     expect(value).toEqual(PRICE)
     expect(timestamp).toBeGreaterThan(0)
 
