@@ -1,0 +1,70 @@
+{
+  "version": "v4.0.0",
+  "name": "MockDIAOracle",
+  "bytecode": "0002403c4078010302060018d37060ada1b4170256170316011603170517041602d1a2140a5f5f6d61705f5f305f5f16004416041605b1d203000516001601160360010001060219d3a0e6c2310c0d0d140a5f5f6d61705f5f305f5f160044cb1705160501000d0d0d160501001704170316031701160417021601160202",
+  "codeHash": "3a7a7405586574998f4d3580ac9ef7b4f2c1014e4de0e239f6e1933dd9366a24",
+  "fieldsSig": {
+    "names": [],
+    "types": [],
+    "isMutable": []
+  },
+  "eventsSig": [
+    {
+      "name": "PriceSet",
+      "fieldNames": [
+        "key",
+        "price",
+        "timestamp"
+      ],
+      "fieldTypes": [
+        "ByteVec",
+        "U256",
+        "U256"
+      ]
+    }
+  ],
+  "functions": [
+    {
+      "name": "setPrice",
+      "paramNames": [
+        "key",
+        "price"
+      ],
+      "paramTypes": [
+        "ByteVec",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "getValue",
+      "paramNames": [
+        "key"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": [
+        "U256",
+        "U256"
+      ]
+    }
+  ],
+  "constants": [],
+  "enums": [],
+  "mapsSig": {
+    "names": [
+      "prices"
+    ],
+    "types": [
+      "Map[ByteVec,DIAOracleValue]"
+    ]
+  }
+}
