@@ -1,0 +1,194 @@
+{
+  "version": "v4.0.0",
+  "name": "FixedRate",
+  "bytecode": "0303402f403d407101030b0b0119d30130768916001601160216031604181818181816051606160716081609160a181818181818a00002010000000103d30cd89570a00002010001010018d3c43614d7b4ce00450c7ba001190d7b160013c5056bc75e2d63100000320e7b03a1011600a10005b4a000160060",
+  "codeHash": "4646a0be7f5de97e150b6eb7cc3683d60cba5499986533f80c9bd575e64532f0",
+  "fieldsSig": {
+    "names": [
+      "admin",
+      "rate",
+      "rateUpdated"
+    ],
+    "types": [
+      "Address",
+      "U256",
+      "Bool"
+    ],
+    "isMutable": [
+      false,
+      true,
+      true
+    ]
+  },
+  "eventsSig": [
+    {
+      "name": "RateSet",
+      "fieldNames": [
+        "setter",
+        "oldRate",
+        "newRate"
+      ],
+      "fieldTypes": [
+        "Address",
+        "U256",
+        "U256"
+      ]
+    }
+  ],
+  "functions": [
+    {
+      "name": "borrowRate",
+      "paramNames": [
+        "marketParams",
+        "marketState"
+      ],
+      "paramTypes": [
+        "MarketParams",
+        "MarketState"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "getRate",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "setBorrowRate",
+      "paramNames": [
+        "newBorrowRate"
+      ],
+      "paramTypes": [
+        "U256"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    }
+  ],
+  "constants": [
+    {
+      "name": "MAX_BORROW_RATE",
+      "value": {
+        "type": "U256",
+        "value": "100000000000000000000"
+      }
+    },
+    {
+      "name": "WAD",
+      "value": {
+        "type": "I256",
+        "value": "1000000000000000000"
+      }
+    },
+    {
+      "name": "LN_2_INT",
+      "value": {
+        "type": "I256",
+        "value": "693147180559945309"
+      }
+    },
+    {
+      "name": "LN_WEI_INT",
+      "value": {
+        "type": "I256",
+        "value": "-41446531673892822312"
+      }
+    },
+    {
+      "name": "WEXP_UPPER_BOUND",
+      "value": {
+        "type": "I256",
+        "value": "93859467695000404319"
+      }
+    },
+    {
+      "name": "WEXP_UPPER_VALUE",
+      "value": {
+        "type": "I256",
+        "value": "57716089161558943949701069502944508345128422502756744429568"
+      }
+    },
+    {
+      "name": "TARGET_UTILIZATION",
+      "value": {
+        "type": "I256",
+        "value": "900000000000000000"
+      }
+    },
+    {
+      "name": "INITIAL_RATE_AT_TARGET",
+      "value": {
+        "type": "I256",
+        "value": "1268391679"
+      }
+    },
+    {
+      "name": "ADJUSTMENT_SPEED",
+      "value": {
+        "type": "I256",
+        "value": "1585489599188"
+      }
+    },
+    {
+      "name": "CURVE_STEEPNESS",
+      "value": {
+        "type": "I256",
+        "value": "4000000000000000000"
+      }
+    },
+    {
+      "name": "MIN_RATE_AT_TARGET",
+      "value": {
+        "type": "I256",
+        "value": "31709791"
+      }
+    },
+    {
+      "name": "MAX_RATE_AT_TARGET",
+      "value": {
+        "type": "I256",
+        "value": "63419583967"
+      }
+    }
+  ],
+  "enums": [
+    {
+      "name": "ErrorCodes",
+      "fields": [
+        {
+          "name": "NotAuthorized",
+          "value": {
+            "type": "U256",
+            "value": "0"
+          }
+        },
+        {
+          "name": "RateAlreadySet",
+          "value": {
+            "type": "U256",
+            "value": "1"
+          }
+        },
+        {
+          "name": "InvalidRate",
+          "value": {
+            "type": "U256",
+            "value": "2"
+          }
+        }
+      ]
+    }
+  ]
+}

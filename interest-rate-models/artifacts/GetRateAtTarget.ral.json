@@ -1,0 +1,33 @@
+{
+  "version": "v4.0.0",
+  "name": "GetRateAtTarget",
+  "bytecodeTemplate": "01010000010109{1}{2}0e0d{0}01021700160002",
+  "fieldsSig": {
+    "names": [
+      "dynamicRate",
+      "loanToken",
+      "collateralToken"
+    ],
+    "types": [
+      "DynamicRate",
+      "ByteVec",
+      "ByteVec"
+    ],
+    "isMutable": [
+      false,
+      false,
+      false
+    ]
+  },
+  "functions": [
+    {
+      "name": "main",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "U256"
+      ]
+    }
+  ]
+}

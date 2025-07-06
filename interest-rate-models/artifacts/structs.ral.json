@@ -1,0 +1,53 @@
+[
+  {
+    "name": "MarketParams",
+    "fieldNames": [
+      "loanToken",
+      "collateralToken",
+      "oracle",
+      "interestRateModel",
+      "loanToValue"
+    ],
+    "fieldTypes": [
+      "ByteVec",
+      "ByteVec",
+      "ByteVec",
+      "ByteVec",
+      "U256"
+    ],
+    "isMutable": [
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  {
+    "name": "MarketState",
+    "fieldNames": [
+      "totalSupplyAssets",
+      "totalSupplyShares",
+      "totalBorrowAssets",
+      "totalBorrowShares",
+      "lastUpdate",
+      "fee"
+    ],
+    "fieldTypes": [
+      "U256",
+      "U256",
+      "U256",
+      "U256",
+      "U256",
+      "U256"
+    ],
+    "isMutable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  }
+]

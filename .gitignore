@@ -77,5 +77,3 @@ coverage
 **/*.swo
 **/*.swn
 **/*.un~
-
-**/artifacts/

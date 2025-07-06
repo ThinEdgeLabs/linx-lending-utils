@@ -1,0 +1,33 @@
+{
+  "version": "v4.0.0",
+  "name": "GetBorrowRateAndUpdate",
+  "bytecodeTemplate": "010103000c01402b{1}{2}{3}{4}{5}17041703170217011700{6}{7}{8}{9}{10}{11}170a17091708170717061705b4d1a21600160116021603160416051606160716081609160a130b0d{0}0100170b160b02",
+  "fieldsSig": {
+    "names": [
+      "dynamicRate",
+      "marketParams",
+      "marketState"
+    ],
+    "types": [
+      "DynamicRate",
+      "MarketParams",
+      "MarketState"
+    ],
+    "isMutable": [
+      false,
+      false,
+      false
+    ]
+  },
+  "functions": [
+    {
+      "name": "main",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "U256"
+      ]
+    }
+  ]
+}
