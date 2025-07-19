@@ -7,13 +7,11 @@ const deployDynamicRate: DeployFunction<Settings> = async (
   deployer: Deployer,
   network: Network<Settings>
 ): Promise<void> => {
-  const linxAddress = network.settings.linxAddress || deployer.account.address // Using deployer account as linx for testing
+  const linxAddress = network.settings.linxAddress
 
   console.log(`Using Linx Address:  ${linxAddress}`)
 
-  // Deploy the DynamicRate contract
   const result = await deployer.deployContract(DynamicRate, {
-    // The initial states of the dynamic rate contract
     initialFields: {
       linx: linxAddress
     }

@@ -8,12 +8,9 @@ const deployFixedRate: DeployFunction<Settings> = async (
   deployer: Deployer,
   network: Network<Settings>
 ): Promise<void> => {
-  // Get settings
   const initialRate = network.settings.initialRate || 50000000000000000n // Default to 5% (0.05 * 10^18)
 
-  // Deploy the FixedRate contract
   const result = await deployer.deployContract(FixedRate, {
-    // The initial states of the fixed rate contract
     initialFields: {
       admin: deployer.account.address,
       rate: BigInt(initialRate),
