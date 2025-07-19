@@ -53,6 +53,13 @@ export namespace DynamicRateTypes {
   }>;
 
   export interface CallMethodTable {
+    initInterest: {
+      params: CallContractParams<{
+        marketParams: MarketParams;
+        marketState: MarketState;
+      }>;
+      result: CallContractResult<bigint>;
+    };
     borrowRate: {
       params: CallContractParams<{
         marketParams: MarketParams;
@@ -133,6 +140,13 @@ export namespace DynamicRateTypes {
   };
 
   export interface SignExecuteMethodTable {
+    initInterest: {
+      params: SignExecuteContractMethodParams<{
+        marketParams: MarketParams;
+        marketState: MarketState;
+      }>;
+      result: SignExecuteScriptTxResult;
+    };
     borrowRate: {
       params: SignExecuteContractMethodParams<{
         marketParams: MarketParams;
@@ -250,6 +264,15 @@ class Factory extends ContractFactory<
   }
 
   tests = {
+    initInterest: async (
+      params: TestContractParams<
+        DynamicRateTypes.Fields,
+        { marketParams: MarketParams; marketState: MarketState },
+        DynamicRateTypes.Maps
+      >
+    ): Promise<TestContractResult<bigint, DynamicRateTypes.Maps>> => {
+      return testMethod(this, "initInterest", params, getContractByCodeHash);
+    },
     borrowRate: async (
       params: TestContractParams<
         DynamicRateTypes.Fields,
@@ -370,8 +393,8 @@ class Factory extends ContractFactory<
 export const DynamicRate = new Factory(
   Contract.fromJson(
     DynamicRateContractJson,
-    "=6-5+9=3-2+c=1+41=1-2+8=1+1=2-1=2-1=1+141b0=2-2+8c=2-2+b8=2+d=1-1+4405=1-3=1-3+17=13-1+9=125-1+b=38+7a7e0214696e73657274206174206d617020706174683a2000=1866",
-    "9b39f65a2a444c2c1683d49e039121ea26aab683ecc648073e5d578d62847cf6",
+    "=6-2+7f=2-2+d4=2-1+fd=1+1=2-2=2-2+4e=2-2+aa=2-2+e9=2-1=1-4+5=3-1+1=1-2+31=4-1+e4450=13-1+b=101-1+9=32+7a7e0214696e73657274206174206d617020706174683a2000=2010",
+    "95b88680c2c8edb79d9f3ac9add6f08b7fced8db6d74b0f4635523ac10c6a64b",
     AllStructs
   )
 );
@@ -413,6 +436,17 @@ export class DynamicRateInstance extends ContractInstance {
   }
 
   view = {
+    initInterest: async (
+      params: DynamicRateTypes.CallMethodParams<"initInterest">
+    ): Promise<DynamicRateTypes.CallMethodResult<"initInterest">> => {
+      return callMethod(
+        DynamicRate,
+        this,
+        "initInterest",
+        params,
+        getContractByCodeHash
+      );
+    },
     borrowRate: async (
       params: DynamicRateTypes.CallMethodParams<"borrowRate">
     ): Promise<DynamicRateTypes.CallMethodResult<"borrowRate">> => {
@@ -537,6 +571,11 @@ export class DynamicRateInstance extends ContractInstance {
   };
 
   transact = {
+    initInterest: async (
+      params: DynamicRateTypes.SignExecuteMethodParams<"initInterest">
+    ): Promise<DynamicRateTypes.SignExecuteMethodResult<"initInterest">> => {
+      return signExecuteMethod(DynamicRate, this, "initInterest", params);
+    },
     borrowRate: async (
       params: DynamicRateTypes.SignExecuteMethodParams<"borrowRate">
     ): Promise<DynamicRateTypes.SignExecuteMethodResult<"borrowRate">> => {
