@@ -1,5 +1,5 @@
 /// Fixed Rate Interest Rate Model
-/// 
+///
 /// This contract implements a simple constant interest rate model where the borrow rate
 /// remains fixed regardless of market conditions. The rate can be set once by the admin
 /// and cannot be changed afterward.
@@ -13,48 +13,55 @@ Contract FixedRate(
 ) extends Constants() implements IFixedRate {
     // Events
     /// Emitted when the borrow rate is set
-    /// 
+    ///
     /// # Arguments
     /// * `setter` - Address that set the rate
     /// * `oldRate` - Previous rate value
     /// * `newRate` - New rate value
     event RateSet(setter: Address, oldRate: U256, newRate: U256)
-    
+
+    @using(preapprovedAssets = true, checkExternalCaller = false)
+    pub fn initInterest(marketParams: MarketParams, marketState: MarketState) -> U256 {
+        let _ = marketParams
+        let _ = marketState
+        return rate
+    }
+
     /// Returns the fixed borrow rate
-    /// 
+    ///
     /// This function returns the constant borrow rate that was set by the admin.
     /// The market parameters and state are unused in this model.
-    /// 
+    ///
     /// # Arguments
     /// * `marketParams` - Market parameters (unused)
     /// * `marketState` - Market state (unused)
-    /// 
+    ///
     /// # Returns
     /// The fixed borrow rate
-    @using(preapprovedAssets = true, checkExternalCaller = false)
+    @using(checkExternalCaller = false)
     pub fn borrowRate(marketParams: MarketParams, marketState: MarketState) -> U256 {
         // Fixed rate model, so we don't need to use marketParams and marketState
         let _ = marketParams
         let _ = marketState
         return rate
     }
-    
+
     /// Returns the current fixed rate
-    /// 
+    ///
     /// # Returns
     /// The current fixed borrow rate
     pub fn getRate() -> U256 {
         return rate
     }
-    
+
     /// Sets the borrow rate (can only be called once by admin)
-    /// 
+    ///
     /// This function allows the admin to set the fixed borrow rate. It can only be called once,
     /// and the rate must be within the maximum bounds defined in the Constants contract.
-    /// 
+    ///
     /// # Arguments
     /// * `newBorrowRate` - The new fixed rate to set
-    /// 
+    ///
     /// # Panics
     /// Panics if:
     /// - Called by any address other than the admin
@@ -65,14 +72,14 @@ Contract FixedRate(
         assert!(callerAddress!() == admin, ErrorCodes.NotAuthorized)
         assert!(!rateUpdated, ErrorCodes.RateAlreadySet)
         assert!(newBorrowRate <= MAX_BORROW_RATE, ErrorCodes.InvalidRate)
-        
+
         // Update the rate updated flag
         rateUpdated = true
-        
+
         // Update the rate with the new value
         rate = newBorrowRate
-        
+
         // Emit event for tracking
         emit RateSet(callerAddress!(), rate, newBorrowRate)
     }
-} 
+}

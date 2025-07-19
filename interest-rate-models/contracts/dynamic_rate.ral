@@ -21,6 +21,18 @@ Contract DynamicRate(
     event BorrowRateUpdate(id: ByteVec, avgBorrowRate: U256, newRateAtTarget: U256)
 
 
+    @using (preapprovedAssets = true, checkExternalCaller = false)
+    pub fn initInterest(marketParams: MarketParams, marketState: MarketState) -> U256 {
+        let _ = marketState
+        let id = calcMarketId(marketParams.loanToken, marketParams.collateralToken)
+        if (!rateAtTarget.contains!(id)) {
+            // Initialize rate at target for new market
+            rateAtTarget.insert!(id, 0i)
+        }
+        return toU256!(rateAtTarget[id])
+    }
+
+
     /// Calculates and updates the borrow rate based on current market conditions
     ///
     /// This function is called by the Linx protocol to update the borrow rate for a market.
@@ -35,7 +47,7 @@ Contract DynamicRate(
     ///
     /// # Panics
     /// Panics if called by any address other than the Linx protocol
-    @using(preapprovedAssets = true, checkExternalCaller = true, updateFields = true)
+    @using(checkExternalCaller = false, updateFields = true)
     pub fn borrowRate(marketParams: MarketParams, marketState: MarketState) -> U256 {
         let caller = callerAddress!()
         checkCaller!(caller == linx, ErrorCodes.NotAuthorized)
@@ -43,13 +55,8 @@ Contract DynamicRate(
         let id = calcMarketId(marketParams.loanToken, marketParams.collateralToken)
         let (avgRate, endRateAtTarget) = calculateBorrowRate(id, marketState)
 
-        if(!rateAtTarget.contains!(id)) {
-            rateAtTarget.insert!(caller, id, endRateAtTarget)
-        }
-
         rateAtTarget[id] = endRateAtTarget
 
-        // Emit event for tracking
         emit BorrowRateUpdate(id, avgRate, toU256!(endRateAtTarget))
 
         return avgRate

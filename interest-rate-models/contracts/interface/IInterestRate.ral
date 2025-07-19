@@ -1,19 +1,33 @@
 /// Base interface for interest rate models
-/// 
+///
 /// This interface defines the core functionality required for any interest rate model
 /// in the lending protocol. All interest rate models must implement this interface.
 Interface IInterestRate {
+    /// Initializes storage for a specific market in the interest rate model
+    ///
+    /// This function should be called once when a market is created to initialize
+    /// any state storage that the interest rate model needs for the market.
+    /// This is where the initial ALPH deposit for map entries should be handled.
+    ///
+    /// # Arguments
+    /// * `marketParams` - Market parameters including loan and collateral tokens
+    /// * `marketState` - Initial state of the market
+    ///
+    /// # Note
+    /// This function may require ALPH for map entry deposits on first call per market
+    @using(preapprovedAssets = true)
+    pub fn initInterest(marketParams: MarketParams, marketState: MarketState) -> U256
+
     /// Calculates the current borrow rate based on market parameters and state
-    /// 
+    ///
     /// This function should return the current borrow rate for a given market,
     /// taking into account the market parameters and current state.
-    /// 
+    ///
     /// # Arguments
     /// * `marketParams` - Market parameters including loan and collateral tokens
     /// * `marketState` - Current state of the market
-    /// 
+    ///
     /// # Returns
     /// The current borrow rate scaled by 10^18 (1% = 0.01 * 10^18)
-    @using(preapprovedAssets = true)
     pub fn borrowRate(marketParams: MarketParams, marketState: MarketState) -> U256
 }
