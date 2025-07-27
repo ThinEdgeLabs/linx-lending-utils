@@ -1,0 +1,15 @@
+// Interface defining the contract for interacting with the DIA Oracle.
+Interface IDIAOracle {
+    // Retrieves the value associated with a given key from the DIA Oracle.
+    //
+    // # Arguments
+    //
+    // * `key`: The key (typically a market identifier - `ALPH/USD`) to query.
+    //
+    // # Returns
+    //
+    // A tuple containing:
+    // * `U256`: The value associated with the key.
+    // * `U256`: The timestamp of when the value was last updated in the DIA Oracle in milliseconds.
+    pub fn getValue(key: ByteVec) -> (U256, U256)
+}
