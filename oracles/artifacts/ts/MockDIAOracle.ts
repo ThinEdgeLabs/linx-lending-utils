@@ -35,7 +35,13 @@ import {
 } from "@alephium/web3";
 import { default as MockDIAOracleContractJson } from "../MockDIAOracle.ral.json";
 import { getContractByCodeHash, registerContract } from "./contracts";
-import { DIAOracleValue, AllStructs } from "./types";
+import {
+  DIAOracleValue,
+  MarketParams,
+  MarketState,
+  Position,
+  AllStructs,
+} from "./types";
 import { RalphMap } from "@alephium/web3";
 
 // Custom types for the contract

@@ -12,5 +12,19 @@ import {
   HexString,
 } from "@alephium/web3";
 import { getContractByCodeHash } from "./contracts";
+import { default as CreateMarketAndAccrueInterestScriptJson } from "../lib/linx-lending-core/contracts/test/CreateMarketAndAccrueInterest.ral.json";
+import {
+  DIAOracleValue,
+  MarketParams,
+  MarketState,
+  Position,
+  AllStructs,
+} from "./types";
 
-import { DIAOracleValue, AllStructs } from "./types";
+export const CreateMarketAndAccrueInterest = new ExecutableScript<{
+  linx: HexString;
+  params: MarketParams;
+}>(
+  Script.fromJson(CreateMarketAndAccrueInterestScriptJson, "", AllStructs),
+  getContractByCodeHash
+);

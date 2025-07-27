@@ -1,0 +1,313 @@
+{
+  "version": "v4.0.0",
+  "name": "Market",
+  "bytecode": "0d0c18402e4057406f4087409f40b740cf40e7410641144122010000000608d349f97c3fa000a001a002a003a004a00502010000000507d321cb7c04ce02ce03ce04ce05ce0602010006060012d3fdc212cbb3ce01410c7b160016011602160316041605a105a104a103a102a101a10001070202000ad3bebfd083b3ce01410c7b1600ce021601ac01020202000ad3f1ab4760b3ce01410c7b1600ce021601ab01020202000ad3da307bf1b3ce01410c7b1600ce021601ab01070202000ad3962f6d77b3ce01410c7b1600ce021601ac01010202000ad30b2af0c6b3ce01410c7b1600ce031601ac01020202000ad3fc6a5fe3b3ce01410c7b1600ce031601ab01010303000ed35fff4416b3ce01410c7b1600ce031601ab1600ce021602ac010000000103d3f4d264f1ce0002010000000103d35729390ace0102",
+  "codeHash": "54a33eac32852f590a65ee64e1db00404b2274fe9c0036d4efbc52cf9938fa26",
+  "fieldsSig": {
+    "names": [
+      "id",
+      "linxContractId",
+      "params",
+      "state"
+    ],
+    "types": [
+      "ByteVec",
+      "ByteVec",
+      "MarketParams",
+      "MarketState"
+    ],
+    "isMutable": [
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  "eventsSig": [],
+  "functions": [
+    {
+      "name": "getMarketState",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "MarketState"
+      ]
+    },
+    {
+      "name": "getMarketParams",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "MarketParams"
+      ]
+    },
+    {
+      "name": "setMarketState",
+      "paramNames": [
+        "newState"
+      ],
+      "paramTypes": [
+        "MarketState"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "supply",
+      "paramNames": [
+        "supplier",
+        "assetsAmount"
+      ],
+      "paramTypes": [
+        "Address",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "withdraw",
+      "paramNames": [
+        "receiver",
+        "assetsAmount"
+      ],
+      "paramTypes": [
+        "Address",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "borrow",
+      "paramNames": [
+        "borrower",
+        "assetsAmount"
+      ],
+      "paramTypes": [
+        "Address",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "repay",
+      "paramNames": [
+        "repayee",
+        "assetsAmount"
+      ],
+      "paramTypes": [
+        "Address",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "supplyCollateral",
+      "paramNames": [
+        "supplier",
+        "assetsAmount"
+      ],
+      "paramTypes": [
+        "Address",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "withdrawCollateral",
+      "paramNames": [
+        "receiver",
+        "assetsAmount"
+      ],
+      "paramTypes": [
+        "Address",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "liquidate",
+      "paramNames": [
+        "liquidator",
+        "seizedAssets",
+        "repaidAssets"
+      ],
+      "paramTypes": [
+        "Address",
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "id",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "getLinxContractId",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    }
+  ],
+  "constants": [],
+  "enums": [
+    {
+      "name": "ErrorCodes",
+      "fields": [
+        {
+          "name": "NotAuthorized",
+          "value": {
+            "type": "U256",
+            "value": "0"
+          }
+        },
+        {
+          "name": "MarketExists",
+          "value": {
+            "type": "U256",
+            "value": "1"
+          }
+        },
+        {
+          "name": "InvalidRateModel",
+          "value": {
+            "type": "U256",
+            "value": "2"
+          }
+        },
+        {
+          "name": "InvalidLoanToValue",
+          "value": {
+            "type": "U256",
+            "value": "3"
+          }
+        },
+        {
+          "name": "InvalidOracle",
+          "value": {
+            "type": "U256",
+            "value": "4"
+          }
+        },
+        {
+          "name": "InvalidAsset",
+          "value": {
+            "type": "U256",
+            "value": "5"
+          }
+        },
+        {
+          "name": "AlreadyEnabled",
+          "value": {
+            "type": "U256",
+            "value": "6"
+          }
+        },
+        {
+          "name": "MarketDoesNotExist",
+          "value": {
+            "type": "U256",
+            "value": "7"
+          }
+        },
+        {
+          "name": "ExceedMaxFee",
+          "value": {
+            "type": "U256",
+            "value": "8"
+          }
+        },
+        {
+          "name": "ExceedMaxLoanToValue",
+          "value": {
+            "type": "U256",
+            "value": "9"
+          }
+        },
+        {
+          "name": "ZeroAddress",
+          "value": {
+            "type": "U256",
+            "value": "10"
+          }
+        },
+        {
+          "name": "InconsistentInput",
+          "value": {
+            "type": "U256",
+            "value": "11"
+          }
+        },
+        {
+          "name": "InsufficientBalance",
+          "value": {
+            "type": "U256",
+            "value": "12"
+          }
+        },
+        {
+          "name": "InsufficientLiquidity",
+          "value": {
+            "type": "U256",
+            "value": "13"
+          }
+        },
+        {
+          "name": "InsufficientCollateral",
+          "value": {
+            "type": "U256",
+            "value": "14"
+          }
+        },
+        {
+          "name": "HealthyPosition",
+          "value": {
+            "type": "U256",
+            "value": "15"
+          }
+        }
+      ]
+    }
+  ]
+}

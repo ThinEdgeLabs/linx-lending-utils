@@ -9,3 +9,23 @@ export interface DIAOracleValue extends Record<string, Val> {
   value: bigint;
   timestamp: bigint;
 }
+export interface MarketParams extends Record<string, Val> {
+  loanToken: HexString;
+  collateralToken: HexString;
+  oracle: HexString;
+  interestRateModel: HexString;
+  loanToValue: bigint;
+}
+export interface MarketState extends Record<string, Val> {
+  totalSupplyAssets: bigint;
+  totalSupplyShares: bigint;
+  totalBorrowAssets: bigint;
+  totalBorrowShares: bigint;
+  lastUpdate: bigint;
+  fee: bigint;
+}
+export interface Position extends Record<string, Val> {
+  supplyShares: bigint;
+  borrowShares: bigint;
+  collateral: bigint;
+}

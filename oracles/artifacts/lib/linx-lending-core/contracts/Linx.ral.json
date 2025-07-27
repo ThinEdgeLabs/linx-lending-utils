@@ -1,0 +1,1194 @@
+{
+  "version": "v4.0.0",
+  "name": "Linx",
+  "bytecode": "03402b0e1c4053408c40e04108413d418341dc41ff427a429d43cc44fb45b846da47bb48eb49d64c1f4d4b4d584d654d734d974dbb4ddf4e034e1a4e314e484e574e6b4ea94ecc4ee34ef84f344f7a4f8c4faf501050b1010000000103d3c7497323a00002010000000103d33c504baba00102010001010113d32ad11174140a5f5f6d61705f5f305f5f160044cbc5194c0204020c0d0d140a5f5f6d61705f5f305f5f160044cb010102010001010115d33ab7d821140a5f5f6d61705f5f315f5f16004044cbc5194c0204020c0d0d140a5f5f6d61705f5f315f5f16004044cb01010201000204034025d3812c17f91600160100161702140a5f5f6d61705f5f325f5f160244cbc5194c040c0c0c020c0d0d140a5f5f6d61705f5f325f5f160244cb1703160301010d0d0d160301010e0d0d1603010102010001020614d317fec0501600cb17011601c5194c070c0c0c0c0c0c020c13061601d449f97c3f0201000103051cd38cc6881e1600cb17011601c5194c0fca7a494d470d132162170216021602160216020c020c111601d421cb7c040201030102001cd313cea208b417011601a000450c7b140a5f5f6d61705f5f305f5f160044cbc51913067b1601d1a2140a5f5f6d61705f5f305f5f160044b103d201010916005e01030102004023d372546995b417011601a000450c7b140a5f5f6d61705f5f315f5f16004044cbc51913067b160013c40de0b6b3a76400003113097b1601d1a2140a5f5f6d61705f5f315f5f16004044b103d201010a16005e010001030010d37980d90fb417011601a000450c7ba00017021600a10006160016025f0103060f004039d3cb95fc36b417061606a000450c7b160513c403782dace9d900003213087b16001601001517071607cb17081608c513077b0c13061608d449f97c3f170e170d170c170b170a1709160e16053013067b160700141605170e1609160a160b160c160d160e13060c1608d4fdc212cb07160716055f010001030010d3813d2017b417011601a000450c7ba00117021600a10108160016025f0103051400409ad300788df41600c5117b1601c5117b1603c50e7b1602c5107b16001601001517051605cbc5190d7b140a5f5f6d61705f5f305f5f160344cbc50e7b0c0d0d140a5f5f6d61705f5f305f5f160344cb01010e7b140a5f5f6d61705f5f315f5f16044044cbc50f7b0c0d0d140a5f5f6d61705f5f315f5f16044044cb01010f7b5617060c0c0c0c16060c170c170b170a170917081707b4170db1170e1605160e16001601160216031604130764160716081609160a160b160c1306641710170f16051711160dd1a21611ce00160f1610c11712160dd1a216001601160216031604160716081609160a160b160c130b0d1603d4cb19040418051605161216001601160216031604751605a00100161713160dd1a2140a5f5f6d61705f5f325f5f161344b10c0c0cd201030103081700408bd304a20cb7160016010015170816081607001617091608cb170a160ac513077b160516060022130b7b1607ca46130a7bb4170b160800140c1306160ad449f97c3f17111710170f170e170d170c160517121606171316050c334c061605160c160d001817134a051606160c160d001b17120c0c0c171617151714140a5f5f6d61705f5f325f5f160944cbc5194c0b160bd1a2140a5f5f6d61705f5f325f5f160944b1161416151616d201030c0d0d140a5f5f6d61705f5f325f5f160944cb010116132a0c0e0c140a5f5f6d61705f5f325f5f160944cb0102160c16122a170c160d16132a170d160c160d160e160f1610161113060c160ad4fdc212cb160b7a13c3038d7ea4c68000a216001612a3160b16120e0c160ad4bebfd08312061608160b160716121613730103070b004053d32af3aabc160016010015170716071606001617081607cb17091609c513077b16050c30130b7b1606ca46130a7bb4170a140a5f5f6d61705f5f325f5f160844cbc5194c0b160ad1a2140a5f5f6d61705f5f325f5f160844b10c0c0cd201030e0d0d140a5f5f6d61705f5f325f5f160844cb010116052a0e0e0c140a5f5f6d61705f5f325f5f160844cb0102160a7a13c3038d7ea4c68000a216011605a3160a16050e0c1609d40b2af0c6120a1607160a160616056101030915004089d3b9f7ff261600160100151709160916070016170ab4170b1609cb170c160cc513077b160516060022130b7b1608ca46130a7b140a5f5f6d61705f5f325f5f160a44cbc5130c7b160700260c7b160900140c1306160cd449f97c3f171217111710170f170e170d160517131606171416050c334c061605160d160e001a17144a051606160d160e001917130c0d0d140a5f5f6d61705f5f325f5f160a44cb0101161434130c7b0c0d0d140a5f5f6d61705f5f325f5f160a44cb010116142b0c0e0c140a5f5f6d61705f5f325f5f160a44cb0102160d16132b170d160e16142b170e160f160d32130d7b160d160e160f16101611161213060c160cd4fdc212cb160816130e0c160cd4f1ab476012071609160b16071608161316147401030812004068d359e16c4b16001601001517081608160600161709b4170a1608cb170b160bc513077b16050c30130b7b1607ca46130a7b140a5f5f6d61705f5f325f5f160944cbc5130c7b160600260c7b160800140e0d0d140a5f5f6d61705f5f325f5f160944cb0101160534130c7b0e0d0d140a5f5f6d61705f5f325f5f160944cb010116052b0e0e0c140a5f5f6d61705f5f325f5f160944cb01020c11160bd421cb7c041710170f170e170d170c0c0d160ed45dd91db71711160816091611002a130e7b160716050e0c160bd4fc6a5fe3120b1608160a160616071605730103091b004091d359b521f71600160100151709160916070016170ab4170b1609cb170c160cc513077b160516060022130b7b1608ca46130a7b140a5f5f6d61705f5f325f5f160a44cbc5130c7b160700260c7b160900140c1306160cd449f97c3f171217111710170f170e170d160517131606171416050c334c061605160f1610001a17144a051606160f1610001917130d0d0d140a5f5f6d61705f5f325f5f160a44cb010116142a0d0e0c140a5f5f6d61705f5f325f5f160a44cb0102160f16132a170f161016142a1710160d160e160f16101611161213060c160cd4fdc212cb0c11160cd421cb7c04171917181717171617150c0d1617d45dd91db7171a1609160a161a002a130e7b160f160d32130d7b160816130e0c160cd4da307bf112081609160b16071608161316147401030814004070d3b4fc3aab160016010015170816081607001617091608cb170a160ac513077b160516060022130b7b1607ca46130a7bb4170b160800140c1306160ad449f97c3f17111710170f170e170d170c160517121606171316050c334c061605160e160f001817134a051606160e160f001b17120d0d0d140a5f5f6d61705f5f325f5f160944cb010116132b0d0e0c140a5f5f6d61705f5f325f5f160944cb0102160e16120023170e160f16132b170f160c160d160e160f1610161113060c160ad4fdc212cb160b16001612a3160b16120e0c160ad4962f6d7712091608160b1607161216137301030840200040f5d37edfb04c160016010015170816081605001617091608cb170a160ac513077b160616070022130b7b140a5f5f6d61705f5f325f5f160944cbc5130c7bb4170b160800140c11160ad421cb7c041710170f170e170d170c0c0d160ed45dd91db71711160816091611002a19130f7b0c1306160ad449f97c3f171717161715171417131712160617181607171912c40ff59ee833b300003d13c40de0b6b3a764000013c40de0b6b3a764000012c40429d069189e00003d13c40de0b6b3a764000016100023001c0023001d0024171a16060c334c0e1606161112c40de0b6b3a76400003d0020171b161b161a001e16141615001a17194a0d1607161416150019171c161c161a001c12c40de0b6b3a76400003d1611001f1718161916141615001b171d0d0d0d140a5f5f6d61705f5f325f5f160944cb010116192b0d0e0c140a5f5f6d61705f5f325f5f160944cb01020e0d0d140a5f5f6d61705f5f325f5f160944cb010116182b0e0e0c140a5f5f6d61705f5f325f5f160944cb01020c171e0c171f1614161d00231714161516192b17150e0d0d140a5f5f6d61705f5f325f5f160944cb01010c2f4c40250d0d0d140a5f5f6d61705f5f325f5f160944cb0101171e1614161e16141615001b0024171f1614161f2b17141612161f2b17121615161e2b17150c0d0e0c140a5f5f6d61705f5f325f5f160944cb010216121613161416151616161713060c160ad4fdc212cb160b13c3038d7ea4c680000e2ca2160b1618161d0f0c160ad45fff4416120c1608160b1605161d16191618161f161e760100011600408dd332a1a6651600cb17011601c513077b160117020c111602d421cb7c04170717061705170417030c13061602d449f97c3f170d170c170b170a1709170856170e160e160c2b1343e82d170f160f0c2f4c01021603160416051606160716081609160a160b160c160d130b0d1606d4013076891710160a1610160f0021001c1711160a16112a170a160816112a1708160e170c0c1712160d0c304c402d1611160d001c1713160816132b1714161316141609001817121600a00100161715140a5f5f6d61705f5f325f5f161544cbc54c160c0d0d140a5f5f6d61705f5f325f5f161544cb010116122a0c0e0c140a5f5f6d61705f5f325f5f161544cb0102160916122a170916081609160a160b160c160d13060c1602d4fdc212cb120d16001610161116126100000202010516001601444f020000020201051600160147440200000202010616004716014744020000030401110c170316000c334c091600160213800f42402a16010d2a001f17031603020000030401110c170316000c334c09160016010d2a160213800f42402a001f17031603020000030401110c170316000c334c091600160213800f42402a16010d2a002017031603020000030401110c170316000c334c09160016010d2a160213800f42402a002017031603020000020201051600160113c40de0b6b3a7640000001f02000002020105160013c40de0b6b3a76400001601001f02000002020105160013c40de0b6b3a76400001601002002000003030106160016012c16022d0200000303010a160016012c16020d2b2a16022d02000002050118160016012c1702160216020e13c40de0b6b3a76400002c001f1703160316020f13c40de0b6b3a76400002c001f1704160216032a16042a0200000202011616000c2f7a4c041816010c307a4b0a1816000c307a4c041816010c2f0200000202010b16001601334c05160016012b024a020c0200000202010916001601314c031600024a021601020000020401402016011312314c0b130a131216012b831702160016022c024a1116011312334c0b130a160113122b831703160016032d024a0216000200000103011ed6170116001601454c0203021600160100171702140a5f5f6d61705f5f335f5f160244cbc5194c0204020c0d0d140a5f5f6d61705f5f335f5f160244cb010102010002020105d3ae0ae1e516001601001502010001020113d3c002bf181600cb17011601c5194c09ca7a494d470d1321620216010201030204004023d3067a105bb417021602160000171703140a5f5f6d61705f5f335f5f160344cbc5194c07ca140a5f5f6d61705f5f335f5f160344b11601d2010116010c0e0c140a5f5f6d61705f5f335f5f160344cb0102120e160016021601600000031701404c0c0d0d140a5f5f6d61705f5f325f5f160144cb1716161601010d0d0d161601010e0d0d161601011705170417031600cb17060c13061606d449f97c3f170c170b170a1709170817070c111606d421cb7c0417111710170f170e170d16041609160a001b171216120c0d160d01020025171316050c0d160e0102002517141614160212c40de0b6b3a76400003d001f1611001c1715161516133402",
+  "codeHash": "9252a276f9bf00680cf990ecf4708627762215683b7dec886842d7f0bf5b7d67",
+  "fieldsSig": {
+    "names": [
+      "marketTemplate",
+      "owner",
+      "feeRecipient"
+    ],
+    "types": [
+      "Market",
+      "Address",
+      "Address"
+    ],
+    "isMutable": [
+      false,
+      true,
+      true
+    ]
+  },
+  "eventsSig": [
+    {
+      "name": "MarketCreated",
+      "fieldNames": [
+        "marketId",
+        "marketContractId",
+        "loanToken",
+        "collateralToken",
+        "oracle",
+        "interestRateModel",
+        "loanToValue"
+      ],
+      "fieldTypes": [
+        "ByteVec",
+        "ByteVec",
+        "ByteVec",
+        "ByteVec",
+        "ByteVec",
+        "ByteVec",
+        "U256"
+      ]
+    },
+    {
+      "name": "SetOwner",
+      "fieldNames": [
+        "newOwner",
+        "oldOwner"
+      ],
+      "fieldTypes": [
+        "Address",
+        "Address"
+      ]
+    },
+    {
+      "name": "SetFee",
+      "fieldNames": [
+        "id",
+        "newFee"
+      ],
+      "fieldTypes": [
+        "ByteVec",
+        "U256"
+      ]
+    },
+    {
+      "name": "SetFeeRecipient",
+      "fieldNames": [
+        "newFeeRecipient",
+        "oldFeeRecipient"
+      ],
+      "fieldTypes": [
+        "Address",
+        "Address"
+      ]
+    },
+    {
+      "name": "EnabledRateModel",
+      "fieldNames": [
+        "interestRateModel"
+      ],
+      "fieldTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "EnabledLoanToValue",
+      "fieldNames": [
+        "loanToValue"
+      ],
+      "fieldTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "Supply",
+      "fieldNames": [
+        "marketId",
+        "caller",
+        "onBehalf",
+        "assets",
+        "shares"
+      ],
+      "fieldTypes": [
+        "ByteVec",
+        "Address",
+        "Address",
+        "U256",
+        "U256"
+      ]
+    },
+    {
+      "name": "Withdraw",
+      "fieldNames": [
+        "marketId",
+        "caller",
+        "onBehalf",
+        "receiver",
+        "assets",
+        "shares"
+      ],
+      "fieldTypes": [
+        "ByteVec",
+        "Address",
+        "Address",
+        "Address",
+        "U256",
+        "U256"
+      ]
+    },
+    {
+      "name": "Borrow",
+      "fieldNames": [
+        "marketId",
+        "caller",
+        "onBehalf",
+        "receiver",
+        "assets",
+        "shares"
+      ],
+      "fieldTypes": [
+        "ByteVec",
+        "Address",
+        "Address",
+        "Address",
+        "U256",
+        "U256"
+      ]
+    },
+    {
+      "name": "Repay",
+      "fieldNames": [
+        "marketId",
+        "caller",
+        "onBehalf",
+        "assets",
+        "shares"
+      ],
+      "fieldTypes": [
+        "ByteVec",
+        "Address",
+        "Address",
+        "U256",
+        "U256"
+      ]
+    },
+    {
+      "name": "SupplyCollateral",
+      "fieldNames": [
+        "marketId",
+        "caller",
+        "onBehalf",
+        "assets"
+      ],
+      "fieldTypes": [
+        "ByteVec",
+        "Address",
+        "Address",
+        "U256"
+      ]
+    },
+    {
+      "name": "WithdrawCollateral",
+      "fieldNames": [
+        "marketId",
+        "caller",
+        "onBehalf",
+        "receiver",
+        "assets"
+      ],
+      "fieldTypes": [
+        "ByteVec",
+        "Address",
+        "Address",
+        "Address",
+        "U256"
+      ]
+    },
+    {
+      "name": "Liquidate",
+      "fieldNames": [
+        "marketId",
+        "caller",
+        "borrower",
+        "repaidAssets",
+        "repaidShares",
+        "seizedAssets",
+        "badDebtAssets",
+        "badDebtShares"
+      ],
+      "fieldTypes": [
+        "ByteVec",
+        "Address",
+        "Address",
+        "U256",
+        "U256",
+        "U256",
+        "U256",
+        "U256"
+      ]
+    },
+    {
+      "name": "AccrueInterest",
+      "fieldNames": [
+        "marketId",
+        "prevBorrowRate",
+        "interest",
+        "feeShares"
+      ],
+      "fieldTypes": [
+        "ByteVec",
+        "U256",
+        "U256",
+        "U256"
+      ]
+    },
+    {
+      "name": "SetAuthorized",
+      "fieldNames": [
+        "users",
+        "onBehalf",
+        "status"
+      ],
+      "fieldTypes": [
+        "Address",
+        "Address",
+        "Bool"
+      ]
+    }
+  ],
+  "functions": [
+    {
+      "name": "owner",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "Address"
+      ]
+    },
+    {
+      "name": "feeRecipient",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "Address"
+      ]
+    },
+    {
+      "name": "isRateModelEnabled",
+      "paramNames": [
+        "interestRateModel"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": [
+        "Bool"
+      ]
+    },
+    {
+      "name": "isLoanToValueEnabled",
+      "paramNames": [
+        "loanToValue"
+      ],
+      "paramTypes": [
+        "U256"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": [
+        "Bool"
+      ]
+    },
+    {
+      "name": "position",
+      "paramNames": [
+        "marketId",
+        "user"
+      ],
+      "paramTypes": [
+        "ByteVec",
+        "Address"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "Position"
+      ]
+    },
+    {
+      "name": "market",
+      "paramNames": [
+        "marketId"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": [
+        "MarketState"
+      ]
+    },
+    {
+      "name": "marketParamsById",
+      "paramNames": [
+        "marketId"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": [
+        "MarketParams"
+      ]
+    },
+    {
+      "name": "enableRateModel",
+      "paramNames": [
+        "interestRateModel"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "enableLoanToValue",
+      "paramNames": [
+        "loanToValue"
+      ],
+      "paramTypes": [
+        "U256"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "setOwner",
+      "paramNames": [
+        "newOwner"
+      ],
+      "paramTypes": [
+        "Address"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "setFee",
+      "paramNames": [
+        "market",
+        "fee"
+      ],
+      "paramTypes": [
+        "MarketParams",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "setFeeRecipient",
+      "paramNames": [
+        "newFeeRecipient"
+      ],
+      "paramTypes": [
+        "Address"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "createMarket",
+      "paramNames": [
+        "market"
+      ],
+      "paramTypes": [
+        "MarketParams"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "supply",
+      "paramNames": [
+        "market",
+        "assets",
+        "shares",
+        "onBehalf"
+      ],
+      "paramTypes": [
+        "MarketParams",
+        "U256",
+        "U256",
+        "Address"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "supplyCollateral",
+      "paramNames": [
+        "market",
+        "assets",
+        "onBehalf"
+      ],
+      "paramTypes": [
+        "MarketParams",
+        "U256",
+        "Address"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "withdraw",
+      "paramNames": [
+        "market",
+        "assets",
+        "shares",
+        "onBehalf",
+        "receiver"
+      ],
+      "paramTypes": [
+        "MarketParams",
+        "U256",
+        "U256",
+        "Address",
+        "Address"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "withdrawCollateral",
+      "paramNames": [
+        "market",
+        "assets",
+        "onBehalf",
+        "receiver"
+      ],
+      "paramTypes": [
+        "MarketParams",
+        "U256",
+        "Address",
+        "Address"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "borrow",
+      "paramNames": [
+        "market",
+        "assets",
+        "shares",
+        "onBehalf",
+        "receiver"
+      ],
+      "paramTypes": [
+        "MarketParams",
+        "U256",
+        "U256",
+        "Address",
+        "Address"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "repay",
+      "paramNames": [
+        "market",
+        "assets",
+        "shares",
+        "onBehalf"
+      ],
+      "paramTypes": [
+        "MarketParams",
+        "U256",
+        "U256",
+        "Address"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "liquidate",
+      "paramNames": [
+        "market",
+        "borrower",
+        "seizedAssets",
+        "repaidShares"
+      ],
+      "paramTypes": [
+        "MarketParams",
+        "Address",
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "accrueInterest",
+      "paramNames": [
+        "marketId"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "calcMarketId",
+      "paramNames": [
+        "loanToken",
+        "collateralToken"
+      ],
+      "paramTypes": [
+        "ByteVec",
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "createPositionKey",
+      "paramNames": [
+        "marketId",
+        "user"
+      ],
+      "paramTypes": [
+        "ByteVec",
+        "Address"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "createAuthKey",
+      "paramNames": [
+        "onBehalf",
+        "user"
+      ],
+      "paramTypes": [
+        "Address",
+        "Address"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "toSharesDown",
+      "paramNames": [
+        "assets",
+        "totalAssets",
+        "totalShares"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "toAssetsDown",
+      "paramNames": [
+        "shares",
+        "totalAssets",
+        "totalShares"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "toSharesUp",
+      "paramNames": [
+        "assets",
+        "totalAssets",
+        "totalShares"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "toAssetsUp",
+      "paramNames": [
+        "shares",
+        "totalAssets",
+        "totalShares"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "wMulDown",
+      "paramNames": [
+        "x",
+        "y"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "wDivDown",
+      "paramNames": [
+        "x",
+        "y"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "wDivUp",
+      "paramNames": [
+        "x",
+        "y"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "mulDivDown",
+      "paramNames": [
+        "x",
+        "y",
+        "d"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "mulDivUp",
+      "paramNames": [
+        "x",
+        "y",
+        "d"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "wTaylorCompounded",
+      "paramNames": [
+        "x",
+        "n"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "exactlyOneZero",
+      "paramNames": [
+        "a",
+        "b"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "Bool"
+      ]
+    },
+    {
+      "name": "zeroFloorSub",
+      "paramNames": [
+        "x",
+        "y"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "min",
+      "paramNames": [
+        "a",
+        "b"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "toBaseUnits",
+      "paramNames": [
+        "amount",
+        "tokenDecimals"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "isAuthorized",
+      "paramNames": [
+        "onBehalf"
+      ],
+      "paramTypes": [
+        "Address"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": [
+        "Bool"
+      ]
+    },
+    {
+      "name": "marketId",
+      "paramNames": [
+        "loanToken",
+        "collateralToken"
+      ],
+      "paramTypes": [
+        "ByteVec",
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "marketContract",
+      "paramNames": [
+        "marketId"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "setAuthorized",
+      "paramNames": [
+        "user",
+        "status"
+      ],
+      "paramTypes": [
+        "Address",
+        "Bool"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "isHealthyBorrow",
+      "paramNames": [
+        "marketId",
+        "positionKey",
+        "collateralPrice"
+      ],
+      "paramTypes": [
+        "ByteVec",
+        "ByteVec",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false
+      ],
+      "returnTypes": [
+        "Bool"
+      ]
+    }
+  ],
+  "constants": [
+    {
+      "name": "MAX_FEE",
+      "value": {
+        "type": "U256",
+        "value": "250000000000000000"
+      }
+    },
+    {
+      "name": "MAX_LIQUIDATION_INCENTIVE_FACTOR",
+      "value": {
+        "type": "I256",
+        "value": "1150000000000000000"
+      }
+    },
+    {
+      "name": "LIQUIDATION_CURSOR",
+      "value": {
+        "type": "I256",
+        "value": "300000000000000000"
+      }
+    },
+    {
+      "name": "ORACLE_PRICE_SCALE",
+      "value": {
+        "type": "I256",
+        "value": "1000000000000000000"
+      }
+    },
+    {
+      "name": "VIRTUAL_SHARES",
+      "value": {
+        "type": "U256",
+        "value": "1000000"
+      }
+    },
+    {
+      "name": "VIRTUAL_ASSETS",
+      "value": {
+        "type": "U256",
+        "value": "1"
+      }
+    },
+    {
+      "name": "WAD",
+      "value": {
+        "type": "U256",
+        "value": "1000000000000000000"
+      }
+    }
+  ],
+  "enums": [
+    {
+      "name": "ErrorCodes",
+      "fields": [
+        {
+          "name": "NotAuthorized",
+          "value": {
+            "type": "U256",
+            "value": "0"
+          }
+        },
+        {
+          "name": "MarketExists",
+          "value": {
+            "type": "U256",
+            "value": "1"
+          }
+        },
+        {
+          "name": "InvalidRateModel",
+          "value": {
+            "type": "U256",
+            "value": "2"
+          }
+        },
+        {
+          "name": "InvalidLoanToValue",
+          "value": {
+            "type": "U256",
+            "value": "3"
+          }
+        },
+        {
+          "name": "InvalidOracle",
+          "value": {
+            "type": "U256",
+            "value": "4"
+          }
+        },
+        {
+          "name": "InvalidAsset",
+          "value": {
+            "type": "U256",
+            "value": "5"
+          }
+        },
+        {
+          "name": "AlreadyEnabled",
+          "value": {
+            "type": "U256",
+            "value": "6"
+          }
+        },
+        {
+          "name": "MarketDoesNotExist",
+          "value": {
+            "type": "U256",
+            "value": "7"
+          }
+        },
+        {
+          "name": "ExceedMaxFee",
+          "value": {
+            "type": "U256",
+            "value": "8"
+          }
+        },
+        {
+          "name": "ExceedMaxLoanToValue",
+          "value": {
+            "type": "U256",
+            "value": "9"
+          }
+        },
+        {
+          "name": "ZeroAddress",
+          "value": {
+            "type": "U256",
+            "value": "10"
+          }
+        },
+        {
+          "name": "InconsistentInput",
+          "value": {
+            "type": "U256",
+            "value": "11"
+          }
+        },
+        {
+          "name": "InsufficientBalance",
+          "value": {
+            "type": "U256",
+            "value": "12"
+          }
+        },
+        {
+          "name": "InsufficientLiquidity",
+          "value": {
+            "type": "U256",
+            "value": "13"
+          }
+        },
+        {
+          "name": "InsufficientCollateral",
+          "value": {
+            "type": "U256",
+            "value": "14"
+          }
+        },
+        {
+          "name": "HealthyPosition",
+          "value": {
+            "type": "U256",
+            "value": "15"
+          }
+        }
+      ]
+    }
+  ],
+  "mapsSig": {
+    "names": [
+      "isRateModelEnabled",
+      "isLoanToValueEnabled",
+      "marketPositions",
+      "authorizedUsers"
+    ],
+    "types": [
+      "Map[ByteVec,Bool]",
+      "Map[U256,Bool]",
+      "Map[ByteVec,Position]",
+      "Map[ByteVec,Bool]"
+    ]
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "version": "v4.0.0",
+  "name": "OracleMock",
+  "bytecode": "000115010000000107d35dd91db71343e8130a1312832c02",
+  "codeHash": "129659a654ca07b1f400f291b61c5a0112d6e0536920c8f4654d2c74679954d8",
+  "fieldsSig": {
+    "names": [],
+    "types": [],
+    "isMutable": []
+  },
+  "eventsSig": [],
+  "functions": [
+    {
+      "name": "price",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "U256"
+      ]
+    }
+  ],
+  "constants": [],
+  "enums": []
+}

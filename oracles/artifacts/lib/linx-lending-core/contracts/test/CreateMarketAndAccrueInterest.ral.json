@@ -1,0 +1,28 @@
+{
+  "version": "v4.0.0",
+  "name": "CreateMarketAndAccrueInterest",
+  "bytecodeTemplate": "010103000700402a{1}{2}{3}{4}{5}17041703170217011700b417051605d10e2cd10e2c2aa216001601160216031604110c{0}010c160016010e0d{0}0127170616060d0c{0}0114",
+  "fieldsSig": {
+    "names": [
+      "linx",
+      "params"
+    ],
+    "types": [
+      "Linx",
+      "MarketParams"
+    ],
+    "isMutable": [
+      false,
+      false
+    ]
+  },
+  "functions": [
+    {
+      "name": "main",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": []
+    }
+  ]
+}

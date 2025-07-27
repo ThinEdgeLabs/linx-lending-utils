@@ -4,3 +4,6 @@
 [submodule "oracles/contracts/lib/linx-ralph-libs"]
 	path = oracles/contracts/lib/linx-ralph-libs
 	url = git@github.com:ThinEdgeLabs/linx-ralph-libs.git
+[submodule "oracles/contracts/lib/linx-lending-core"]
+	path = oracles/contracts/lib/linx-lending-core
+	url = git@github.com:ThinEdgeLabs/linx-lending-core.git

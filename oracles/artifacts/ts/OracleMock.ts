@@ -33,19 +33,19 @@ import {
   encodeContractFields,
   Narrow,
 } from "@alephium/web3";
-import { default as DIAOracleWrapperContractJson } from "../DIAOracleWrapper.ral.json";
+import { default as OracleMockContractJson } from "../lib/linx-lending-core/contracts/test/OracleMock.ral.json";
 import { getContractByCodeHash, registerContract } from "./contracts";
-import { DIAOracleValue, AllStructs } from "./types";
+import {
+  DIAOracleValue,
+  MarketParams,
+  MarketState,
+  Position,
+  AllStructs,
+} from "./types";
 
 // Custom types for the contract
-export namespace DIAOracleWrapperTypes {
-  export type Fields = {
-    diaOracleAddress: Address;
-    marketId: HexString;
-    heartbeatInterval: bigint;
-  };
-
-  export type State = ContractState<Fields>;
+export namespace OracleMockTypes {
+  export type State = Omit<ContractState<any>, "fields">;
 
   export interface CallMethodTable {
     price: {
@@ -81,71 +81,63 @@ export namespace DIAOracleWrapperTypes {
     SignExecuteMethodTable[T]["result"];
 }
 
-class Factory extends ContractFactory<
-  DIAOracleWrapperInstance,
-  DIAOracleWrapperTypes.Fields
-> {
-  encodeFields(fields: DIAOracleWrapperTypes.Fields) {
-    return encodeContractFields(
-      addStdIdToFields(this.contract, fields),
-      this.contract.fieldsSig,
-      AllStructs
-    );
+class Factory extends ContractFactory<OracleMockInstance, {}> {
+  encodeFields() {
+    return encodeContractFields({}, this.contract.fieldsSig, AllStructs);
   }
 
-  consts = { PRECISION: BigInt("24"), ErrorCodes: { StalePrice: BigInt("0") } };
-
-  at(address: string): DIAOracleWrapperInstance {
-    return new DIAOracleWrapperInstance(address);
+  at(address: string): OracleMockInstance {
+    return new OracleMockInstance(address);
   }
 
   tests = {
     price: async (
-      params: Omit<
-        TestContractParamsWithoutMaps<DIAOracleWrapperTypes.Fields, never>,
-        "args"
+      params?: Omit<
+        TestContractParamsWithoutMaps<never, never>,
+        "args" | "initialFields"
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
-      return testMethod(this, "price", params, getContractByCodeHash);
+      return testMethod(
+        this,
+        "price",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
     },
   };
 
-  stateForTest(
-    initFields: DIAOracleWrapperTypes.Fields,
-    asset?: Asset,
-    address?: string
-  ) {
+  stateForTest(initFields: {}, asset?: Asset, address?: string) {
     return this.stateForTest_(initFields, asset, address, undefined);
   }
 }
 
 // Use this object to test and deploy the contract
-export const DIAOracleWrapper = new Factory(
+export const OracleMock = new Factory(
   Contract.fromJson(
-    DIAOracleWrapperContractJson,
+    OracleMockContractJson,
     "",
-    "e0e94814954464a641c01c396a1a58c8604aff3170fdd7149fc5ac7436ef7cd0",
+    "129659a654ca07b1f400f291b61c5a0112d6e0536920c8f4654d2c74679954d8",
     AllStructs
   )
 );
-registerContract(DIAOracleWrapper);
+registerContract(OracleMock);
 
 // Use this class to interact with the blockchain
-export class DIAOracleWrapperInstance extends ContractInstance {
+export class OracleMockInstance extends ContractInstance {
   constructor(address: Address) {
     super(address);
   }
 
-  async fetchState(): Promise<DIAOracleWrapperTypes.State> {
-    return fetchContractState(DIAOracleWrapper, this);
+  async fetchState(): Promise<OracleMockTypes.State> {
+    return fetchContractState(OracleMock, this);
   }
 
   view = {
     price: async (
-      params?: DIAOracleWrapperTypes.CallMethodParams<"price">
-    ): Promise<DIAOracleWrapperTypes.CallMethodResult<"price">> => {
+      params?: OracleMockTypes.CallMethodParams<"price">
+    ): Promise<OracleMockTypes.CallMethodResult<"price">> => {
       return callMethod(
-        DIAOracleWrapper,
+        OracleMock,
         this,
         "price",
         params === undefined ? {} : params,
@@ -156,25 +148,25 @@ export class DIAOracleWrapperInstance extends ContractInstance {
 
   transact = {
     price: async (
-      params: DIAOracleWrapperTypes.SignExecuteMethodParams<"price">
-    ): Promise<DIAOracleWrapperTypes.SignExecuteMethodResult<"price">> => {
-      return signExecuteMethod(DIAOracleWrapper, this, "price", params);
+      params: OracleMockTypes.SignExecuteMethodParams<"price">
+    ): Promise<OracleMockTypes.SignExecuteMethodResult<"price">> => {
+      return signExecuteMethod(OracleMock, this, "price", params);
     },
   };
 
-  async multicall<Calls extends DIAOracleWrapperTypes.MultiCallParams>(
+  async multicall<Calls extends OracleMockTypes.MultiCallParams>(
     calls: Calls
-  ): Promise<DIAOracleWrapperTypes.MultiCallResults<Calls>>;
-  async multicall<Callss extends DIAOracleWrapperTypes.MultiCallParams[]>(
+  ): Promise<OracleMockTypes.MultiCallResults<Calls>>;
+  async multicall<Callss extends OracleMockTypes.MultiCallParams[]>(
     callss: Narrow<Callss>
-  ): Promise<DIAOracleWrapperTypes.MulticallReturnType<Callss>>;
+  ): Promise<OracleMockTypes.MulticallReturnType<Callss>>;
   async multicall<
     Callss extends
-      | DIAOracleWrapperTypes.MultiCallParams
-      | DIAOracleWrapperTypes.MultiCallParams[]
+      | OracleMockTypes.MultiCallParams
+      | OracleMockTypes.MultiCallParams[]
   >(callss: Callss): Promise<unknown> {
     return await multicallMethods(
-      DIAOracleWrapper,
+      OracleMock,
       this,
       callss,
       getContractByCodeHash
