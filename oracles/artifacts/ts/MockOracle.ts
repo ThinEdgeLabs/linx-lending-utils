@@ -33,7 +33,7 @@ import {
   encodeContractFields,
   Narrow,
 } from "@alephium/web3";
-import { default as MockDIAOracleContractJson } from "../MockDIAOracle.ral.json";
+import { default as MockOracleContractJson } from "../MockOracle.ral.json";
 import { getContractByCodeHash, registerContract } from "./contracts";
 import {
   DIAOracleValue,
@@ -45,7 +45,7 @@ import {
 import { RalphMap } from "@alephium/web3";
 
 // Custom types for the contract
-export namespace MockDIAOracleTypes {
+export namespace MockOracleTypes {
   export type State = Omit<ContractState<any>, "fields">;
   export type PriceSetEvent = ContractEvent<{
     key: HexString;
@@ -100,15 +100,15 @@ export namespace MockDIAOracleTypes {
   export type Maps = { prices?: Map<HexString, DIAOracleValue> };
 }
 
-class Factory extends ContractFactory<MockDIAOracleInstance, {}> {
+class Factory extends ContractFactory<MockOracleInstance, {}> {
   encodeFields() {
     return encodeContractFields({}, this.contract.fieldsSig, AllStructs);
   }
 
   eventIndex = { PriceSet: 0 };
 
-  at(address: string): MockDIAOracleInstance {
-    return new MockDIAOracleInstance(address);
+  at(address: string): MockOracleInstance {
+    return new MockOracleInstance(address);
   }
 
   tests = {
@@ -117,21 +117,19 @@ class Factory extends ContractFactory<MockDIAOracleInstance, {}> {
         TestContractParams<
           never,
           { key: HexString; price: bigint },
-          MockDIAOracleTypes.Maps
+          MockOracleTypes.Maps
         >,
         "initialFields"
       >
-    ): Promise<TestContractResult<null, MockDIAOracleTypes.Maps>> => {
+    ): Promise<TestContractResult<null, MockOracleTypes.Maps>> => {
       return testMethod(this, "setPrice", params, getContractByCodeHash);
     },
     getValue: async (
       params: Omit<
-        TestContractParams<never, { key: HexString }, MockDIAOracleTypes.Maps>,
+        TestContractParams<never, { key: HexString }, MockOracleTypes.Maps>,
         "initialFields"
       >
-    ): Promise<
-      TestContractResult<[bigint, bigint], MockDIAOracleTypes.Maps>
-    > => {
+    ): Promise<TestContractResult<[bigint, bigint], MockOracleTypes.Maps>> => {
       return testMethod(this, "getValue", params, getContractByCodeHash);
     },
   };
@@ -140,39 +138,39 @@ class Factory extends ContractFactory<MockDIAOracleInstance, {}> {
     initFields: {},
     asset?: Asset,
     address?: string,
-    maps?: MockDIAOracleTypes.Maps
+    maps?: MockOracleTypes.Maps
   ) {
     return this.stateForTest_(initFields, asset, address, maps);
   }
 }
 
 // Use this object to test and deploy the contract
-export const MockDIAOracle = new Factory(
+export const MockOracle = new Factory(
   Contract.fromJson(
-    MockDIAOracleContractJson,
+    MockOracleContractJson,
     "=6-2+55=2-2+91=11-1+a=76+7a7e0214696e73657274206174206d617020706174683a2000=152",
     "55e3be8289094ade1e893c234b1e0ec1d0169afb728c008cb311d325c6c306f6",
     AllStructs
   )
 );
-registerContract(MockDIAOracle);
+registerContract(MockOracle);
 
 // Use this class to interact with the blockchain
-export class MockDIAOracleInstance extends ContractInstance {
+export class MockOracleInstance extends ContractInstance {
   constructor(address: Address) {
     super(address);
   }
 
   maps = {
     prices: new RalphMap<HexString, DIAOracleValue>(
-      MockDIAOracle.contract,
+      MockOracle.contract,
       this.contractId,
       "prices"
     ),
   };
 
-  async fetchState(): Promise<MockDIAOracleTypes.State> {
-    return fetchContractState(MockDIAOracle, this);
+  async fetchState(): Promise<MockOracleTypes.State> {
+    return fetchContractState(MockOracle, this);
   }
 
   async getContractEventsCurrentCount(): Promise<number> {
@@ -180,11 +178,11 @@ export class MockDIAOracleInstance extends ContractInstance {
   }
 
   subscribePriceSetEvent(
-    options: EventSubscribeOptions<MockDIAOracleTypes.PriceSetEvent>,
+    options: EventSubscribeOptions<MockOracleTypes.PriceSetEvent>,
     fromCount?: number
   ): EventSubscription {
     return subscribeContractEvent(
-      MockDIAOracle.contract,
+      MockOracle.contract,
       this,
       options,
       "PriceSet",
@@ -194,10 +192,10 @@ export class MockDIAOracleInstance extends ContractInstance {
 
   view = {
     setPrice: async (
-      params: MockDIAOracleTypes.CallMethodParams<"setPrice">
-    ): Promise<MockDIAOracleTypes.CallMethodResult<"setPrice">> => {
+      params: MockOracleTypes.CallMethodParams<"setPrice">
+    ): Promise<MockOracleTypes.CallMethodResult<"setPrice">> => {
       return callMethod(
-        MockDIAOracle,
+        MockOracle,
         this,
         "setPrice",
         params,
@@ -205,10 +203,10 @@ export class MockDIAOracleInstance extends ContractInstance {
       );
     },
     getValue: async (
-      params: MockDIAOracleTypes.CallMethodParams<"getValue">
-    ): Promise<MockDIAOracleTypes.CallMethodResult<"getValue">> => {
+      params: MockOracleTypes.CallMethodParams<"getValue">
+    ): Promise<MockOracleTypes.CallMethodResult<"getValue">> => {
       return callMethod(
-        MockDIAOracle,
+        MockOracle,
         this,
         "getValue",
         params,
@@ -219,30 +217,30 @@ export class MockDIAOracleInstance extends ContractInstance {
 
   transact = {
     setPrice: async (
-      params: MockDIAOracleTypes.SignExecuteMethodParams<"setPrice">
-    ): Promise<MockDIAOracleTypes.SignExecuteMethodResult<"setPrice">> => {
-      return signExecuteMethod(MockDIAOracle, this, "setPrice", params);
+      params: MockOracleTypes.SignExecuteMethodParams<"setPrice">
+    ): Promise<MockOracleTypes.SignExecuteMethodResult<"setPrice">> => {
+      return signExecuteMethod(MockOracle, this, "setPrice", params);
     },
     getValue: async (
-      params: MockDIAOracleTypes.SignExecuteMethodParams<"getValue">
-    ): Promise<MockDIAOracleTypes.SignExecuteMethodResult<"getValue">> => {
-      return signExecuteMethod(MockDIAOracle, this, "getValue", params);
+      params: MockOracleTypes.SignExecuteMethodParams<"getValue">
+    ): Promise<MockOracleTypes.SignExecuteMethodResult<"getValue">> => {
+      return signExecuteMethod(MockOracle, this, "getValue", params);
     },
   };
 
-  async multicall<Calls extends MockDIAOracleTypes.MultiCallParams>(
+  async multicall<Calls extends MockOracleTypes.MultiCallParams>(
     calls: Calls
-  ): Promise<MockDIAOracleTypes.MultiCallResults<Calls>>;
-  async multicall<Callss extends MockDIAOracleTypes.MultiCallParams[]>(
+  ): Promise<MockOracleTypes.MultiCallResults<Calls>>;
+  async multicall<Callss extends MockOracleTypes.MultiCallParams[]>(
     callss: Narrow<Callss>
-  ): Promise<MockDIAOracleTypes.MulticallReturnType<Callss>>;
+  ): Promise<MockOracleTypes.MulticallReturnType<Callss>>;
   async multicall<
     Callss extends
-      | MockDIAOracleTypes.MultiCallParams
-      | MockDIAOracleTypes.MultiCallParams[]
+      | MockOracleTypes.MultiCallParams
+      | MockOracleTypes.MultiCallParams[]
   >(callss: Callss): Promise<unknown> {
     return await multicallMethods(
-      MockDIAOracle,
+      MockOracle,
       this,
       callss,
       getContractByCodeHash

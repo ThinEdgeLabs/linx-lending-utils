@@ -49,6 +49,10 @@ export namespace LinxDiaOracleTypes {
     diaOracleContractId: HexString;
     baseMarketId: HexString;
     quoteMarketId: HexString;
+    baseMarketDecimals: bigint;
+    quoteMarketDecimals: bigint;
+    baseTokenDecimals: bigint;
+    quoteTokenDecimals: bigint;
     scaleFactor: bigint;
     heartbeatInterval: bigint;
   };
@@ -99,6 +103,10 @@ export namespace LinxDiaOracleTypes {
     toBaseUnits: {
       params: CallContractParams<{ amount: bigint; tokenDecimals: bigint }>;
       result: CallContractResult<bigint>;
+    };
+    init: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
     };
   }
   export type CallMethodParams<T extends keyof CallMethodTable> =
@@ -171,6 +179,10 @@ export namespace LinxDiaOracleTypes {
         amount: bigint;
         tokenDecimals: bigint;
       }>;
+      result: SignExecuteScriptTxResult;
+    };
+    init: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
       result: SignExecuteScriptTxResult;
     };
   }
@@ -295,6 +307,14 @@ class Factory extends ContractFactory<
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(this, "toBaseUnits", params, getContractByCodeHash);
     },
+    init: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<LinxDiaOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "init", params, getContractByCodeHash);
+    },
   };
 
   stateForTest(
@@ -311,7 +331,7 @@ export const LinxDiaOracle = new Factory(
   Contract.fromJson(
     LinxDiaOracleContractJson,
     "",
-    "e85c078ea231c583be3affe4093328848c77995d7ae1e88d3aa2a5bd401d7baa",
+    "948edfd27c4f812a97d69ad6db5c10f57f7b825c631a23da899f7a611e3f6d5d",
     AllStructs
   )
 );
@@ -449,6 +469,17 @@ export class LinxDiaOracleInstance extends ContractInstance {
         getContractByCodeHash
       );
     },
+    init: async (
+      params?: LinxDiaOracleTypes.CallMethodParams<"init">
+    ): Promise<LinxDiaOracleTypes.CallMethodResult<"init">> => {
+      return callMethod(
+        LinxDiaOracle,
+        this,
+        "init",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
   };
 
   transact = {
@@ -515,6 +546,11 @@ export class LinxDiaOracleInstance extends ContractInstance {
       params: LinxDiaOracleTypes.SignExecuteMethodParams<"toBaseUnits">
     ): Promise<LinxDiaOracleTypes.SignExecuteMethodResult<"toBaseUnits">> => {
       return signExecuteMethod(LinxDiaOracle, this, "toBaseUnits", params);
+    },
+    init: async (
+      params: LinxDiaOracleTypes.SignExecuteMethodParams<"init">
+    ): Promise<LinxDiaOracleTypes.SignExecuteMethodResult<"init">> => {
+      return signExecuteMethod(LinxDiaOracle, this, "init", params);
     },
   };
 

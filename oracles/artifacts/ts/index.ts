@@ -7,7 +7,7 @@ export * from "./IrmMock";
 export * from "./Linx";
 export * from "./LinxDiaOracle";
 export * from "./Market";
-export * from "./MockDIAOracle";
+export * from "./MockOracle";
 export * from "./OracleMock";
 export * from "./TestHelper";
 export * from "./TestToken";
