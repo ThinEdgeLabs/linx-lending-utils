@@ -14,7 +14,7 @@ const compat = new FlatCompat({
 })
 
 export default defineConfig([
-  globalIgnores(['**/dist/', '**/templates/', 'eslint.config.ts']),
+  globalIgnores(['**/dist/', '**/templates/', 'eslint.config.ts', 'contracts/*']),
   {
     extends: compat.extends('prettier', 'plugin:prettier/recommended', 'plugin:@typescript-eslint/recommended'),
 
