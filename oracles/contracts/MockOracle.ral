@@ -8,7 +8,7 @@ struct DIAOracleValue {
 
 // A mock implementation of DIA Oracle contract for testing purposes.
 // This contract allows setting and retrieving price values for specific keys.
-Contract MockDIAOracle() {
+Contract MockOracle() {
     // A mapping to store price values and their timestamps for different keys.
     // The first key is the address of the entity that set the price, and the second key
     // is the market identifier.

@@ -1,0 +1,40 @@
+// A wrapper contract for the DIA Oracle, implementing the `IOracle` interface.
+// This contract fetches price data from a specific DIA Oracle for a given market
+// and ensures the data is not stale based on a defined heartbeat interval.
+Contract LinxDiaOracle(
+    diaOracleContractId: ByteVec, // The address of the DIA Oracle contract to query
+    baseMarketId: ByteVec,        // The base asset market identifier (e.g., "BTC/USD")
+    quoteMarketId: ByteVec,       // The quote asset market identifier (e.g., "USDT/USD")
+    baseMarketDecimals: U256,     // The number of decimals for the base asset price (e.g., 6 for BTC/USD)
+    quoteMarketDecimals: U256,    // The number of decimals for the quote asset price (e.g., 6 for USDT/USD)
+    baseTokenDecimals: U256,      // The number of decimals for the base token (e.g., 18 for WBTC)
+    quoteTokenDecimals: U256,     // The number of decimals for the quote token (e.g., 6 for USDT)
+    mut scaleFactor: U256,        // The scaling factor
+    heartbeatInterval: U256       // Interval in milliseconds to consider the price data fresh
+) extends MathUtils() implements IOracle  {
+    enum ErrorCodes {
+        StalePrice = 0
+    }
+
+    @using(checkExternalCaller = false, updateFields = true)
+    pub fn init() -> () {
+        scaleFactor = 10 ** (36 + quoteTokenDecimals + quoteMarketDecimals - baseTokenDecimals - baseMarketDecimals)
+    }
+
+    // Retrieves the price from the underlying DIA Oracle for the configured market.
+    //
+    // # Reverts
+    //
+    // Reverts with `ErrorCodes.StalePrice` if the timestamp of the fetched price
+    // is older than the current block timestamp minus the `heartbeatInterval`.
+    @using(checkExternalCaller = false)
+    pub fn price() -> U256 {
+        let (basePrice, baseTimestamp) = IDIAOracle(diaOracleContractId).getValue(baseMarketId)
+        assert!(blockTimeStamp!() - baseTimestamp <= heartbeatInterval, ErrorCodes.StalePrice)
+
+        let (quotePrice, quoteTimestamp) = IDIAOracle(diaOracleContractId).getValue(quoteMarketId)
+        assert!(blockTimeStamp!() - quoteTimestamp <= heartbeatInterval, ErrorCodes.StalePrice)
+
+        return mulDivDown(scaleFactor, basePrice, quotePrice)
+    }
+}
