@@ -1,6 +1,6 @@
 import { web3, ONE_ALPH } from '@alephium/web3'
 import { PrivateKeyWallet } from '@alephium/web3-wallet'
-import { MockDIAOracle } from '../../artifacts/ts'
+import { MockOracle } from '../../artifacts/ts'
 import { getSigner } from '@alephium/web3-test'
 import { HUNDRED_ALPH, KEY, PRICE, setPrice } from '../utils'
 
@@ -17,7 +17,7 @@ describe('MockOracle', () => {
   })
 
   /**
-   * Tests the functionality of the `setPrice` function, which interacts with the MockDIAOracle
+   * Tests the functionality of the `setPrice` function, which interacts with the MockOracle
    * to set a price for a given key. It verifies that the transaction is successful,
    * emits the 'PriceSet' event with the correct fields, and updates the `prices` map.
    */
@@ -39,7 +39,7 @@ describe('MockOracle', () => {
   })
 
   /**
-   * Tests the functionality to retrieve a price from the MockDIAOracle using the `getValue` view function.
+   * Tests the functionality to retrieve a price from the MockOracle using the `getValue` view function.
    * It first sets a price using the `setPrice` function and then calls `getValue` with the same key.
    * It verifies that the returned value and timestamp match the set price and the timestamp of the
    * 'PriceSet' event.
@@ -57,7 +57,7 @@ describe('MockOracle', () => {
     expect(set).toBeDefined()
     expect(fields).toEqual({ key: KEY, price: PRICE, timestamp: setPriceTimestamp })
 
-    const view = await MockDIAOracle.tests.getValue({
+    const view = await MockOracle.tests.getValue({
       initialMaps: maps,
       args: { key: KEY },
       inputAssets: [{ address: signer.address, asset: { alphAmount: ONE_ALPH * 100n } }]

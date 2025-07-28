@@ -1,12 +1,12 @@
 import { Address, ONE_ALPH, stringToHex } from '@alephium/web3'
-import { MockDIAOracle } from '../artifacts/ts'
+import { MockOracle } from '../artifacts/ts'
 
 export const KEY = stringToHex('ALPH/USD')
 export const PRICE = BigInt(0.37122630952673946 * 10 ** 18)
 export const HUNDRED_ALPH = ONE_ALPH * 100n
 
 export async function setPrice(address: Address) {
-  return await MockDIAOracle.tests.setPrice({
+  return await MockOracle.tests.setPrice({
     initialMaps: {},
     args: { key: KEY, price: PRICE },
     inputAssets: [{ address, asset: { alphAmount: HUNDRED_ALPH } }]
