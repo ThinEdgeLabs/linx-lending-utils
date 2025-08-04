@@ -9,8 +9,8 @@ Contract LinxDiaOracle(
     quoteMarketDecimals: U256,    // The number of decimals for the quote asset price (e.g., 6 for USDT/USD)
     baseTokenDecimals: U256,      // The number of decimals for the base token (e.g., 18 for WBTC)
     quoteTokenDecimals: U256,     // The number of decimals for the quote token (e.g., 6 for USDT)
-    mut scaleFactor: U256,        // The scaling factor
-    heartbeatInterval: U256       // Interval in milliseconds to consider the price data fresh
+    heartbeatInterval: U256,      // Interval in milliseconds to consider the price data fresh
+    mut scaleFactor: U256         // The scaling factor
 ) extends MathUtils() implements IOracle  {
     enum ErrorCodes {
         StalePrice = 0

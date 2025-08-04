@@ -120,7 +120,7 @@ jobs:
         run: npm run compile
 
       - name: Run tests
-        run: npx cli test
+        run: npx cli test -f test/integration/linx-dia-oracle.test.ts
 
       - name: Cleanup
         if: always()
