@@ -1,11 +1,4 @@
-import {
-  web3,
-  DUST_AMOUNT,
-  groupOfAddress,
-  SignerProvider,
-  addressFromContractId,
-  MAP_ENTRY_DEPOSIT
-} from '@alephium/web3'
+import { web3, DUST_AMOUNT, SignerProvider, addressFromContractId, MAP_ENTRY_DEPOSIT } from '@alephium/web3'
 import { testNodeWallet, randomContractId } from '@alephium/web3-test'
 import { DynamicRate } from '../../artifacts/ts'
 import { describe, it, expect, beforeAll, jest } from '@jest/globals'
