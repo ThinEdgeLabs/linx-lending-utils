@@ -2,7 +2,6 @@ import { Deployer, DeployFunction, Network } from '@alephium/cli'
 import { Settings } from '../alephium.config'
 import { DynamicRate } from '../artifacts/ts'
 
-// Deploy the DynamicRate contract
 const deployDynamicRate: DeployFunction<Settings> = async (
   deployer: Deployer,
   network: Network<Settings>

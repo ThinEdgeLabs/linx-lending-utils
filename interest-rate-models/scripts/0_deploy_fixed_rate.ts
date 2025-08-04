@@ -2,8 +2,6 @@ import { Deployer, DeployFunction, Network } from '@alephium/cli'
 import { Settings } from '../alephium.config'
 import { FixedRate } from '../artifacts/ts'
 
-// This deploy function will be called by cli deployment tool automatically
-// Note that deployment scripts should prefixed with numbers (starting from 0)
 const deployFixedRate: DeployFunction<Settings> = async (
   deployer: Deployer,
   network: Network<Settings>

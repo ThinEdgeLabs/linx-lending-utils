@@ -3,17 +3,14 @@ import { expectAssertionError, testNodeWallet, randomContractId, randomContractA
 import { DynamicRate, DynamicRateTypes } from '../../artifacts/ts'
 import { describe, it, expect, beforeAll, jest } from '@jest/globals'
 
-// Increase timeout for all tests in this file
 jest.setTimeout(15000)
 
 describe('dynamic rate unit tests', () => {
   let testContractAddress: string
   let testParamsFixture: TestContractParams<DynamicRateTypes.Fields, NamedVals>
-  //let dynamicRate: any
   let linxAddress: string
   let testContractId: string
 
-  // We initialize the fixture variables before all tests
   beforeAll(async () => {
     web3.setCurrentNodeProvider('http://127.0.0.1:22973', undefined, fetch)
 
@@ -23,7 +20,6 @@ describe('dynamic rate unit tests', () => {
     const account = accounts[0]
     await signer.setSelectedAccount(account.address)
     linxAddress = account.address
-    //dynamicRate = deployments.getInstance(DynamicRate, testGroup)
     testContractAddress = randomContractAddress()
 
     testContractId = randomContractId()
