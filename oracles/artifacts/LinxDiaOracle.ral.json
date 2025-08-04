@@ -12,8 +12,8 @@
       "quoteMarketDecimals",
       "baseTokenDecimals",
       "quoteTokenDecimals",
-      "scaleFactor",
-      "heartbeatInterval"
+      "heartbeatInterval",
+      "scaleFactor"
     ],
     "types": [
       "ByteVec",
@@ -34,8 +34,8 @@
       false,
       false,
       false,
-      true,
-      false
+      false,
+      true
     ]
   },
   "eventsSig": [],

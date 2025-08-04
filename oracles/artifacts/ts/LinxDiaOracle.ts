@@ -53,8 +53,8 @@ export namespace LinxDiaOracleTypes {
     quoteMarketDecimals: bigint;
     baseTokenDecimals: bigint;
     quoteTokenDecimals: bigint;
-    scaleFactor: bigint;
     heartbeatInterval: bigint;
+    scaleFactor: bigint;
   };
 
   export type State = ContractState<Fields>;
