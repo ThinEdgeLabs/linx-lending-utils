@@ -1,66 +1,38 @@
-import { web3, TestContractParams, groupOfAddress } from '@alephium/web3'
-import { testAddress, expectAssertionError, testNodeWallet, randomContractId } from '@alephium/web3-test'
-import { FixedRate, FixedRateInstance, FixedRateTypes } from '../../artifacts/ts'
-import { describe, it, expect, beforeAll, beforeEach } from '@jest/globals'
-import { deployToDevnet } from '@alephium/cli'
+import { web3, TestContractParams, ONE_ALPH } from '@alephium/web3'
+import {
+  testAddress,
+  expectAssertionError,
+  testNodeWallet,
+  randomContractId,
+  randomContractAddress,
+  getSigner
+} from '@alephium/web3-test'
+import { FixedRate, FixedRateTypes } from '../../artifacts/ts'
+import { describe, it, expect, beforeAll } from '@jest/globals'
 
 describe('unit tests', () => {
-  let testContractAddress: string
   let testParamsFixture: TestContractParams<FixedRateTypes.Fields, { newBorrowRate: bigint }>
-  let fixedRate: FixedRateInstance
   let testContractId: string
 
-  // We initialize the fixture variables before all tests
   beforeAll(async () => {
     web3.setCurrentNodeProvider('http://127.0.0.1:22973', undefined, fetch)
 
-    // Deploy the contract to devnet
-    const deployments = await deployToDevnet()
     const signer = await testNodeWallet()
     const account = (await signer.getAccounts())[0]
     await signer.setSelectedAccount(account.address)
-    const testGroup = groupOfAddress(account.address)
 
-    fixedRate = deployments.getInstance(FixedRate, testGroup)!
-    testContractAddress = fixedRate.address
     testContractId = randomContractId()
 
     testParamsFixture = {
-      // Use the actual deployed contract address
-      contractAddress: testContractAddress,
-      // assets owned by the test contract before a test
+      contractAddress: randomContractAddress(),
       initialAsset: { alphAmount: 10n ** 18n },
-      // initial state of the test contract
       initialFields: {
         admin: testAddress,
-        rate: 100000000000000000n, // 0.1 * 10^18 = 10% in Wei format
+        rate: 100000000000000000n,
         rateUpdated: false
       },
-      // arguments to test the target function of the test contract
       args: { newBorrowRate: 50000000000000000n }, // 0.05 * 10^18 = 5%
-      // assets owned by the caller of the function
       inputAssets: [{ address: testAddress, asset: { alphAmount: 10n ** 18n } }]
-    }
-  })
-
-  // Reset the contract state before each test
-  beforeEach(async () => {
-    // Get current state
-    const state = await fixedRate.fetchState()
-
-    // If the rate has been updated, reset it by deploying a new instance
-    if (state.fields.rateUpdated) {
-      const deployments = await deployToDevnet()
-      const signer = await testNodeWallet()
-      const account = (await signer.getAccounts())[0]
-      await signer.setSelectedAccount(account.address)
-      const testGroup = groupOfAddress(account.address)
-
-      fixedRate = deployments.getInstance(FixedRate, testGroup)!
-      testContractAddress = fixedRate.address
-
-      // Update the testParamsFixture with the new address
-      testParamsFixture.contractAddress = testContractAddress
     }
   })
 
@@ -72,7 +44,6 @@ describe('unit tests', () => {
 
     const testResult = await FixedRate.tests.getRate(testParams)
 
-    // Check the return value
     expect(testResult.returns).toEqual(100000000000000000n)
 
     // Verify contract state remains unchanged
@@ -83,14 +54,17 @@ describe('unit tests', () => {
   })
 
   it('test setBorrowRate success', async () => {
+    console.log(testParamsFixture)
     const testParams = {
       ...testParamsFixture,
+      initialFields: {
+        ...testParamsFixture.initialFields
+      },
       args: { newBorrowRate: 50000000000000000n }
     }
 
     const testResult = await FixedRate.tests.setBorrowRate(testParams)
 
-    // Check the return value
     expect(testResult.returns).toEqual(null)
 
     // Verify contract state was updated
@@ -109,27 +83,18 @@ describe('unit tests', () => {
   })
 
   it('test setBorrowRate fails when already updated', async () => {
-    // First set the rate to make rateUpdated true
-    const initialParams = {
-      ...testParamsFixture,
-      args: { newBorrowRate: 50000000000000000n }
-    }
-    await FixedRate.tests.setBorrowRate(initialParams)
-
-    // Now try to set it again
     const testParams = {
       ...testParamsFixture,
       initialFields: {
         ...testParamsFixture.initialFields,
-        rateUpdated: true
+        rateUpdated: true // Already updated
       },
       args: { newBorrowRate: 70000000000000000n }
     }
 
-    // Test that assertion fails with the RateAlreadySet error code
-    await expectAssertionError(
+    expectAssertionError(
       FixedRate.tests.setBorrowRate(testParams),
-      testContractAddress,
+      testParamsFixture.contractAddress!,
       Number(FixedRate.consts.ErrorCodes.RateAlreadySet)
     )
   })
@@ -140,31 +105,24 @@ describe('unit tests', () => {
       args: { newBorrowRate: 100000000000000000001n } // > MAX_BORROW_RATE (1e20)
     }
 
-    // Test that assertion fails with the InvalidRate error code
-    await expectAssertionError(
+    expectAssertionError(
       FixedRate.tests.setBorrowRate(testParams),
-      testContractAddress,
+      testParamsFixture.contractAddress!,
       Number(FixedRate.consts.ErrorCodes.InvalidRate)
     )
   })
 
   it('test setBorrowRate fails when caller is not admin', async () => {
-    // Create a signer with a different address
-    const signer = await testNodeWallet()
-    const accounts = await signer.getAccounts()
-    // Find an account different from the admin
-    const notAdminAccount = accounts.find((acc) => acc.address !== testAddress) || accounts[1]
-    const notAdmin = notAdminAccount.address
+    const notOwner = await getSigner(10n * ONE_ALPH)
 
     const testParams = {
       ...testParamsFixture,
-      inputAssets: [{ address: notAdmin, asset: { alphAmount: 10n ** 18n } }]
+      inputAssets: [{ address: notOwner.address, asset: { alphAmount: 10n ** 18n } }]
     }
 
-    // Test that assertion fails with the NotAdmin error code
-    await expectAssertionError(
+    expectAssertionError(
       FixedRate.tests.setBorrowRate(testParams),
-      testContractAddress,
+      testParamsFixture.contractAddress!,
       Number(FixedRate.consts.ErrorCodes.NotAuthorized)
     )
   })

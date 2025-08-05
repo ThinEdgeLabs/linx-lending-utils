@@ -7,9 +7,9 @@ async function deployFixedRate(signer) {
   const address = (await signer.getSelectedAccount()).address
   const result = await FixedRate.deploy(signer, {
     initialFields: {
-      rate: 50000000000000000n, // 5% (0.05 * 10^18)
+      rate: 0n,
       admin: address,
-      rateUpdated: true
+      rateUpdated: false
     }
   })
   console.log(`FixedRate deployed at: ${result.contractInstance.contractId}`)
