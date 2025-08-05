@@ -1,9 +1,13 @@
-import { web3, TestContractParams, NamedVals } from '@alephium/web3'
-import { expectAssertionError, testNodeWallet, randomContractId, randomContractAddress } from '@alephium/web3-test'
+import { web3, TestContractParams, NamedVals, ONE_ALPH } from '@alephium/web3'
+import {
+  expectAssertionError,
+  testNodeWallet,
+  randomContractId,
+  randomContractAddress,
+  getSigner
+} from '@alephium/web3-test'
 import { DynamicRate, DynamicRateTypes } from '../../artifacts/ts'
-import { describe, it, expect, beforeAll, jest } from '@jest/globals'
-
-jest.setTimeout(15000)
+import { describe, it, expect, beforeAll } from '@jest/globals'
 
 describe('dynamic rate unit tests', () => {
   let testContractAddress: string
@@ -14,7 +18,6 @@ describe('dynamic rate unit tests', () => {
   beforeAll(async () => {
     web3.setCurrentNodeProvider('http://127.0.0.1:22973', undefined, fetch)
 
-    // Deploy the contract to devnet
     const signer = await testNodeWallet()
     const accounts = await signer.getAccounts()
     const account = accounts[0]
@@ -25,16 +28,12 @@ describe('dynamic rate unit tests', () => {
     testContractId = randomContractId()
 
     testParamsFixture = {
-      // Assets owned by the test contract before a test
       initialAsset: { alphAmount: 10n ** 18n },
-      // Initial state of the test contract
       initialFields: {
         linx: linxAddress
       },
       contractAddress: testContractAddress,
-      // Assets owned by the caller of the function
       inputAssets: [{ address: linxAddress, asset: { alphAmount: 10n ** 18n } }],
-      // Empty test args will be overridden in each test
       args: {}
     }
   })
@@ -49,7 +48,7 @@ describe('dynamic rate unit tests', () => {
     }
 
     const marketState = {
-      totalSupplyAssets: 100n * 10n ** 18n, // 100 tokens
+      totalSupplyAssets: 100n * 10n ** 18n,
       totalSupplyShares: 100n * 10n ** 18n,
       totalBorrowAssets: 50n * 10n ** 18n, // 50% utilization
       totalBorrowShares: 50n * 10n ** 18n,
@@ -62,13 +61,19 @@ describe('dynamic rate unit tests', () => {
       args: {
         marketParams,
         marketState
+      },
+      initialFields: {
+        linx: linxAddress
+      },
+      initialMaps: {
+        rateAtTarget: new Map<string, bigint>()
       }
     }
 
-    const testResult = await DynamicRate.tests.borrowRate(testParams)
+    const state = await DynamicRate.tests.initInterest(testParams)
+    const testResult = await DynamicRate.tests.borrowRate({ ...testParams, initialMaps: state.maps })
 
     // For first interaction, should return the initial rate at target
-    // with appropriate curve adjustment based on utilization
     expect(testResult.returns).toBeDefined()
     expect(testResult.returns > 0n).toBeTruthy()
   })
@@ -91,13 +96,7 @@ describe('dynamic rate unit tests', () => {
       fee: 0n
     }
 
-    // Get an actual wallet address that's different from linx
-    const signer = await testNodeWallet()
-    const accounts = await signer.getAccounts()
-    // Find an account different from linx
-    const unauthorizedAccount = accounts.find((acc) => acc.address !== linxAddress) || accounts[0]
-    const unauthorizedAddress = unauthorizedAccount.address
-    console.log(testParamsFixture)
+    const unauthorizedAddress = (await getSigner(ONE_ALPH)).address
     const testParams = {
       ...testParamsFixture,
       inputAssets: [{ address: unauthorizedAddress, asset: { alphAmount: 10n ** 18n } }],
@@ -140,14 +139,14 @@ describe('dynamic rate unit tests', () => {
       }
     }
 
-    const testResult = await DynamicRate.tests.borrowRate(testParams)
+    const state = await DynamicRate.tests.initInterest(testParams)
+    const testResult = await DynamicRate.tests.borrowRate({ ...testParams, initialMaps: state.maps })
 
-    // Check the return value
     expect(testResult.returns).toBeDefined()
     expect(testResult.returns > 0n).toBeTruthy()
 
     // Check that we've emitted a BorrowRateUpdate event
-    expect(testResult.events.length).toEqual(2)
+    expect(testResult.events.length).toEqual(1)
     const borrowRateEvent = testResult.events.find((event) => event.name === 'BorrowRateUpdate')
     expect(borrowRateEvent).toBeDefined()
     const event = borrowRateEvent as DynamicRateTypes.BorrowRateUpdateEvent
@@ -181,7 +180,8 @@ describe('dynamic rate unit tests', () => {
       }
     }
 
-    const testResultHigh = await DynamicRate.tests.borrowRate(testParams)
+    const state = await DynamicRate.tests.initInterest(testParams)
+    const testResultHigh = await DynamicRate.tests.borrowRate({ ...testParams, initialMaps: state.maps })
 
     // Now test with lower utilization to compare
     const marketStateWithLowUtilization = {
@@ -197,7 +197,7 @@ describe('dynamic rate unit tests', () => {
       }
     }
 
-    const testResultLow = await DynamicRate.tests.borrowRate(testParamsLow)
+    const testResultLow = await DynamicRate.tests.borrowRate({ ...testParamsLow, initialMaps: state.maps })
 
     // High utilization should give higher rate
     expect(testResultHigh.returns > testResultLow.returns).toBeTruthy()
@@ -213,7 +213,7 @@ describe('dynamic rate unit tests', () => {
     }
 
     const marketState = {
-      totalSupplyAssets: 0n, // Zero supply
+      totalSupplyAssets: 0n,
       totalSupplyShares: 0n,
       totalBorrowAssets: 0n,
       totalBorrowShares: 0n,
@@ -230,7 +230,8 @@ describe('dynamic rate unit tests', () => {
     }
 
     // Should not revert with division by zero
-    const testResult = await DynamicRate.tests.borrowRate(testParams)
+    const state = await DynamicRate.tests.initInterest(testParams)
+    const testResult = await DynamicRate.tests.borrowRate({ ...testParams, initialMaps: state.maps })
     expect(testResult.returns).toBeDefined()
   })
 
@@ -260,7 +261,8 @@ describe('dynamic rate unit tests', () => {
       }
     }
 
-    const initialResult = await DynamicRate.tests.borrowRate(initialTestParams)
+    const state = await DynamicRate.tests.initInterest(initialTestParams)
+    const initialResult = await DynamicRate.tests.borrowRate({ ...initialTestParams, initialMaps: state.maps })
 
     // Now simulate passage of time and changed utilization
     const laterMarketState = {
@@ -277,7 +279,7 @@ describe('dynamic rate unit tests', () => {
       }
     }
 
-    const laterResult = await DynamicRate.tests.borrowRate(laterTestParams)
+    const laterResult = await DynamicRate.tests.borrowRate({ ...laterTestParams, initialMaps: state.maps })
 
     // Rates should adjust over time, with higher utilization leading to higher rates
     expect(laterResult.returns > initialResult.returns).toBeTruthy()
