@@ -35,7 +35,7 @@ import {
 } from "@alephium/web3";
 import { default as FixedRateContractJson } from "../FixedRate.ral.json";
 import { getContractByCodeHash, registerContract } from "./contracts";
-import { MarketParams, MarketState, AllStructs } from "./types";
+import * as types from "./types";
 
 // Custom types for the contract
 export namespace FixedRateTypes {
@@ -56,15 +56,22 @@ export namespace FixedRateTypes {
   export interface CallMethodTable {
     initInterest: {
       params: CallContractParams<{
-        marketParams: MarketParams;
-        marketState: MarketState;
+        marketParams: types.MarketParams;
+        marketState: types.MarketState;
       }>;
       result: CallContractResult<bigint>;
     };
     borrowRate: {
       params: CallContractParams<{
-        marketParams: MarketParams;
-        marketState: MarketState;
+        marketParams: types.MarketParams;
+        marketState: types.MarketState;
+      }>;
+      result: CallContractResult<bigint>;
+    };
+    borrowRateView: {
+      params: CallContractParams<{
+        marketParams: types.MarketParams;
+        marketState: types.MarketState;
       }>;
       result: CallContractResult<bigint>;
     };
@@ -96,15 +103,22 @@ export namespace FixedRateTypes {
   export interface SignExecuteMethodTable {
     initInterest: {
       params: SignExecuteContractMethodParams<{
-        marketParams: MarketParams;
-        marketState: MarketState;
+        marketParams: types.MarketParams;
+        marketState: types.MarketState;
       }>;
       result: SignExecuteScriptTxResult;
     };
     borrowRate: {
       params: SignExecuteContractMethodParams<{
-        marketParams: MarketParams;
-        marketState: MarketState;
+        marketParams: types.MarketParams;
+        marketState: types.MarketState;
+      }>;
+      result: SignExecuteScriptTxResult;
+    };
+    borrowRateView: {
+      params: SignExecuteContractMethodParams<{
+        marketParams: types.MarketParams;
+        marketState: types.MarketState;
       }>;
       result: SignExecuteScriptTxResult;
     };
@@ -131,7 +145,7 @@ class Factory extends ContractFactory<
     return encodeContractFields(
       addStdIdToFields(this.contract, fields),
       this.contract.fieldsSig,
-      AllStructs
+      types.AllStructs
     );
   }
 
@@ -166,7 +180,7 @@ class Factory extends ContractFactory<
     initInterest: async (
       params: TestContractParamsWithoutMaps<
         FixedRateTypes.Fields,
-        { marketParams: MarketParams; marketState: MarketState }
+        { marketParams: types.MarketParams; marketState: types.MarketState }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(this, "initInterest", params, getContractByCodeHash);
@@ -174,10 +188,18 @@ class Factory extends ContractFactory<
     borrowRate: async (
       params: TestContractParamsWithoutMaps<
         FixedRateTypes.Fields,
-        { marketParams: MarketParams; marketState: MarketState }
+        { marketParams: types.MarketParams; marketState: types.MarketState }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(this, "borrowRate", params, getContractByCodeHash);
+    },
+    borrowRateView: async (
+      params: TestContractParamsWithoutMaps<
+        FixedRateTypes.Fields,
+        { marketParams: types.MarketParams; marketState: types.MarketState }
+      >
+    ): Promise<TestContractResultWithoutMaps<bigint>> => {
+      return testMethod(this, "borrowRateView", params, getContractByCodeHash);
     },
     getRate: async (
       params: Omit<
@@ -211,8 +233,8 @@ export const FixedRate = new Factory(
   Contract.fromJson(
     FixedRateContractJson,
     "",
-    "3ae6d244736365183710cae05d92c1fa32212b83db5c8a355ed3c10a0d02d009",
-    AllStructs
+    "7b26fa63f2c0192a42d9176efc2144fa4d1edae6187fcfcf62e8cfba14f11124",
+    types.AllStructs
   )
 );
 registerContract(FixedRate);
@@ -267,6 +289,17 @@ export class FixedRateInstance extends ContractInstance {
         getContractByCodeHash
       );
     },
+    borrowRateView: async (
+      params: FixedRateTypes.CallMethodParams<"borrowRateView">
+    ): Promise<FixedRateTypes.CallMethodResult<"borrowRateView">> => {
+      return callMethod(
+        FixedRate,
+        this,
+        "borrowRateView",
+        params,
+        getContractByCodeHash
+      );
+    },
     getRate: async (
       params?: FixedRateTypes.CallMethodParams<"getRate">
     ): Promise<FixedRateTypes.CallMethodResult<"getRate">> => {
@@ -301,6 +334,11 @@ export class FixedRateInstance extends ContractInstance {
       params: FixedRateTypes.SignExecuteMethodParams<"borrowRate">
     ): Promise<FixedRateTypes.SignExecuteMethodResult<"borrowRate">> => {
       return signExecuteMethod(FixedRate, this, "borrowRate", params);
+    },
+    borrowRateView: async (
+      params: FixedRateTypes.SignExecuteMethodParams<"borrowRateView">
+    ): Promise<FixedRateTypes.SignExecuteMethodResult<"borrowRateView">> => {
+      return signExecuteMethod(FixedRate, this, "borrowRateView", params);
     },
     getRate: async (
       params: FixedRateTypes.SignExecuteMethodParams<"getRate">

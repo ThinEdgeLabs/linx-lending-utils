@@ -35,7 +35,7 @@ import {
 } from "@alephium/web3";
 import { default as DynamicRateContractJson } from "../DynamicRate.ral.json";
 import { getContractByCodeHash, registerContract } from "./contracts";
-import { MarketParams, MarketState, AllStructs } from "./types";
+import * as types from "./types";
 import { RalphMap } from "@alephium/web3";
 
 // Custom types for the contract
@@ -55,22 +55,22 @@ export namespace DynamicRateTypes {
   export interface CallMethodTable {
     initInterest: {
       params: CallContractParams<{
-        marketParams: MarketParams;
-        marketState: MarketState;
+        marketParams: types.MarketParams;
+        marketState: types.MarketState;
       }>;
       result: CallContractResult<bigint>;
     };
     borrowRate: {
       params: CallContractParams<{
-        marketParams: MarketParams;
-        marketState: MarketState;
+        marketParams: types.MarketParams;
+        marketState: types.MarketState;
       }>;
       result: CallContractResult<bigint>;
     };
     borrowRateView: {
       params: CallContractParams<{
-        marketParams: MarketParams;
-        marketState: MarketState;
+        marketParams: types.MarketParams;
+        marketState: types.MarketState;
       }>;
       result: CallContractResult<bigint>;
     };
@@ -112,7 +112,7 @@ export namespace DynamicRateTypes {
       result: CallContractResult<bigint>;
     };
     calculateBorrowRate: {
-      params: CallContractParams<{ id: HexString; market: MarketState }>;
+      params: CallContractParams<{ id: HexString; market: types.MarketState }>;
       result: CallContractResult<[bigint, bigint]>;
     };
     marketId: {
@@ -142,22 +142,22 @@ export namespace DynamicRateTypes {
   export interface SignExecuteMethodTable {
     initInterest: {
       params: SignExecuteContractMethodParams<{
-        marketParams: MarketParams;
-        marketState: MarketState;
+        marketParams: types.MarketParams;
+        marketState: types.MarketState;
       }>;
       result: SignExecuteScriptTxResult;
     };
     borrowRate: {
       params: SignExecuteContractMethodParams<{
-        marketParams: MarketParams;
-        marketState: MarketState;
+        marketParams: types.MarketParams;
+        marketState: types.MarketState;
       }>;
       result: SignExecuteScriptTxResult;
     };
     borrowRateView: {
       params: SignExecuteContractMethodParams<{
-        marketParams: MarketParams;
-        marketState: MarketState;
+        marketParams: types.MarketParams;
+        marketState: types.MarketState;
       }>;
       result: SignExecuteScriptTxResult;
     };
@@ -204,7 +204,7 @@ export namespace DynamicRateTypes {
     calculateBorrowRate: {
       params: SignExecuteContractMethodParams<{
         id: HexString;
-        market: MarketState;
+        market: types.MarketState;
       }>;
       result: SignExecuteScriptTxResult;
     };
@@ -232,7 +232,7 @@ class Factory extends ContractFactory<
     return encodeContractFields(
       addStdIdToFields(this.contract, fields),
       this.contract.fieldsSig,
-      AllStructs
+      types.AllStructs
     );
   }
 
@@ -267,7 +267,7 @@ class Factory extends ContractFactory<
     initInterest: async (
       params: TestContractParams<
         DynamicRateTypes.Fields,
-        { marketParams: MarketParams; marketState: MarketState },
+        { marketParams: types.MarketParams; marketState: types.MarketState },
         DynamicRateTypes.Maps
       >
     ): Promise<TestContractResult<bigint, DynamicRateTypes.Maps>> => {
@@ -276,7 +276,7 @@ class Factory extends ContractFactory<
     borrowRate: async (
       params: TestContractParams<
         DynamicRateTypes.Fields,
-        { marketParams: MarketParams; marketState: MarketState },
+        { marketParams: types.MarketParams; marketState: types.MarketState },
         DynamicRateTypes.Maps
       >
     ): Promise<TestContractResult<bigint, DynamicRateTypes.Maps>> => {
@@ -285,7 +285,7 @@ class Factory extends ContractFactory<
     borrowRateView: async (
       params: TestContractParams<
         DynamicRateTypes.Fields,
-        { marketParams: MarketParams; marketState: MarketState },
+        { marketParams: types.MarketParams; marketState: types.MarketState },
         DynamicRateTypes.Maps
       >
     ): Promise<TestContractResult<bigint, DynamicRateTypes.Maps>> => {
@@ -357,7 +357,7 @@ class Factory extends ContractFactory<
     calculateBorrowRate: async (
       params: TestContractParams<
         DynamicRateTypes.Fields,
-        { id: HexString; market: MarketState },
+        { id: HexString; market: types.MarketState },
         DynamicRateTypes.Maps
       >
     ): Promise<TestContractResult<[bigint, bigint], DynamicRateTypes.Maps>> => {
@@ -395,7 +395,7 @@ export const DynamicRate = new Factory(
     DynamicRateContractJson,
     "=6-2+7f=2-2+d4=2-1+fd=1+1=2-2=2-2+4e=2-2+aa=2-2+e9=2-1=1-4+5=3-1+1=1-2+31=4-1+e4450=13-1+b=101-1+9=32+7a7e0214696e73657274206174206d617020706174683a2000=2010",
     "95b88680c2c8edb79d9f3ac9add6f08b7fced8db6d74b0f4635523ac10c6a64b",
-    AllStructs
+    types.AllStructs
   )
 );
 registerContract(DynamicRate);

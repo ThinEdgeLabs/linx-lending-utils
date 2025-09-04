@@ -17,29 +17,29 @@ import { default as GetBorrowRateAndUpdateScriptJson } from "../GetBorrowRateAnd
 import { default as GetMarketIdScriptJson } from "../GetMarketId.ral.json";
 import { default as GetRateAtTargetScriptJson } from "../GetRateAtTarget.ral.json";
 import { default as SetFixedRateScriptJson } from "../SetFixedRate.ral.json";
-import { MarketParams, MarketState, AllStructs } from "./types";
+import * as types from "./types";
 
 export const GetBorrowRate = new ExecutableScript<
   {
     dynamicRate: HexString;
-    marketParams: MarketParams;
-    marketState: MarketState;
+    marketParams: types.MarketParams;
+    marketState: types.MarketState;
   },
   bigint
 >(
-  Script.fromJson(GetBorrowRateScriptJson, "", AllStructs),
+  Script.fromJson(GetBorrowRateScriptJson, "", types.AllStructs),
   getContractByCodeHash
 );
 
 export const GetBorrowRateAndUpdate = new ExecutableScript<
   {
     dynamicRate: HexString;
-    marketParams: MarketParams;
-    marketState: MarketState;
+    marketParams: types.MarketParams;
+    marketState: types.MarketState;
   },
   bigint
 >(
-  Script.fromJson(GetBorrowRateAndUpdateScriptJson, "", AllStructs),
+  Script.fromJson(GetBorrowRateAndUpdateScriptJson, "", types.AllStructs),
   getContractByCodeHash
 );
 
@@ -47,7 +47,7 @@ export const GetMarketId = new ExecutableScript<
   { dynamicRate: HexString; loanToken: HexString; collateralToken: HexString },
   HexString
 >(
-  Script.fromJson(GetMarketIdScriptJson, "", AllStructs),
+  Script.fromJson(GetMarketIdScriptJson, "", types.AllStructs),
   getContractByCodeHash
 );
 
@@ -55,7 +55,7 @@ export const GetRateAtTarget = new ExecutableScript<
   { dynamicRate: HexString; loanToken: HexString; collateralToken: HexString },
   bigint
 >(
-  Script.fromJson(GetRateAtTargetScriptJson, "", AllStructs),
+  Script.fromJson(GetRateAtTargetScriptJson, "", types.AllStructs),
   getContractByCodeHash
 );
 
@@ -63,6 +63,6 @@ export const SetFixedRate = new ExecutableScript<{
   fixedRate: HexString;
   newBorrowRate: bigint;
 }>(
-  Script.fromJson(SetFixedRateScriptJson, "", AllStructs),
+  Script.fromJson(SetFixedRateScriptJson, "", types.AllStructs),
   getContractByCodeHash
 );
