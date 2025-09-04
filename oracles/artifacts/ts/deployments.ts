@@ -8,35 +8,39 @@ import {
   NetworkId,
 } from "@alephium/web3";
 import {
-  DIAOracleWrapper,
-  DIAOracleWrapperInstance,
   LinxDiaOracle,
   LinxDiaOracleInstance,
+  DIAOracleWrapper,
+  DIAOracleWrapperInstance,
 } from ".";
+import { default as testnetDeployments } from "../../deployments/.deployments.testnet.json";
 import { default as devnetDeployments } from "../../deployments/.deployments.devnet.json";
 
 export type Deployments = {
   deployerAddress: string;
   contracts: {
-    DIAOracleWrapper: DeployContractExecutionResult<DIAOracleWrapperInstance>;
     LinxDiaOracle: DeployContractExecutionResult<LinxDiaOracleInstance>;
+    DIAOracleWrapper?: DeployContractExecutionResult<DIAOracleWrapperInstance>;
   };
 };
 
 function toDeployments(json: any): Deployments {
   const contracts = {
-    DIAOracleWrapper: {
-      ...json.contracts["DIAOracleWrapper"],
-      contractInstance: DIAOracleWrapper.at(
-        json.contracts["DIAOracleWrapper"].contractInstance.address
-      ),
-    },
     LinxDiaOracle: {
       ...json.contracts["LinxDiaOracle"],
       contractInstance: LinxDiaOracle.at(
         json.contracts["LinxDiaOracle"].contractInstance.address
       ),
     },
+    DIAOracleWrapper:
+      json.contracts["DIAOracleWrapper"] === undefined
+        ? undefined
+        : {
+            ...json.contracts["DIAOracleWrapper"],
+            contractInstance: DIAOracleWrapper.at(
+              json.contracts["DIAOracleWrapper"].contractInstance.address
+            ),
+          },
   };
   return {
     ...json,
@@ -48,7 +52,12 @@ export function loadDeployments(
   networkId: NetworkId,
   deployerAddress?: string
 ): Deployments {
-  const deployments = networkId === "devnet" ? devnetDeployments : undefined;
+  const deployments =
+    networkId === "testnet"
+      ? testnetDeployments
+      : networkId === "devnet"
+      ? devnetDeployments
+      : undefined;
   if (deployments === undefined) {
     throw Error("The contract has not been deployed to the " + networkId);
   }

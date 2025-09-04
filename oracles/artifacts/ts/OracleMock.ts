@@ -45,12 +45,20 @@ import {
 
 // Custom types for the contract
 export namespace OracleMockTypes {
-  export type State = Omit<ContractState<any>, "fields">;
+  export type Fields = {
+    price: bigint;
+  };
+
+  export type State = ContractState<Fields>;
 
   export interface CallMethodTable {
     price: {
       params: Omit<CallContractParams<{}>, "args">;
       result: CallContractResult<bigint>;
+    };
+    setPrice: {
+      params: CallContractParams<{ newPrice: bigint }>;
+      result: CallContractResult<null>;
     };
   }
   export type CallMethodParams<T extends keyof CallMethodTable> =
@@ -74,6 +82,10 @@ export namespace OracleMockTypes {
       params: Omit<SignExecuteContractMethodParams<{}>, "args">;
       result: SignExecuteScriptTxResult;
     };
+    setPrice: {
+      params: SignExecuteContractMethodParams<{ newPrice: bigint }>;
+      result: SignExecuteScriptTxResult;
+    };
   }
   export type SignExecuteMethodParams<T extends keyof SignExecuteMethodTable> =
     SignExecuteMethodTable[T]["params"];
@@ -81,9 +93,16 @@ export namespace OracleMockTypes {
     SignExecuteMethodTable[T]["result"];
 }
 
-class Factory extends ContractFactory<OracleMockInstance, {}> {
-  encodeFields() {
-    return encodeContractFields({}, this.contract.fieldsSig, AllStructs);
+class Factory extends ContractFactory<
+  OracleMockInstance,
+  OracleMockTypes.Fields
+> {
+  encodeFields(fields: OracleMockTypes.Fields) {
+    return encodeContractFields(
+      addStdIdToFields(this.contract, fields),
+      this.contract.fieldsSig,
+      AllStructs
+    );
   }
 
   at(address: string): OracleMockInstance {
@@ -92,21 +111,28 @@ class Factory extends ContractFactory<OracleMockInstance, {}> {
 
   tests = {
     price: async (
-      params?: Omit<
-        TestContractParamsWithoutMaps<never, never>,
-        "args" | "initialFields"
+      params: Omit<
+        TestContractParamsWithoutMaps<OracleMockTypes.Fields, never>,
+        "args"
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
-      return testMethod(
-        this,
-        "price",
-        params === undefined ? {} : params,
-        getContractByCodeHash
-      );
+      return testMethod(this, "price", params, getContractByCodeHash);
+    },
+    setPrice: async (
+      params: TestContractParamsWithoutMaps<
+        OracleMockTypes.Fields,
+        { newPrice: bigint }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "setPrice", params, getContractByCodeHash);
     },
   };
 
-  stateForTest(initFields: {}, asset?: Asset, address?: string) {
+  stateForTest(
+    initFields: OracleMockTypes.Fields,
+    asset?: Asset,
+    address?: string
+  ) {
     return this.stateForTest_(initFields, asset, address, undefined);
   }
 }
@@ -116,7 +142,7 @@ export const OracleMock = new Factory(
   Contract.fromJson(
     OracleMockContractJson,
     "",
-    "129659a654ca07b1f400f291b61c5a0112d6e0536920c8f4654d2c74679954d8",
+    "63880767e7aab740e59a6166622cac29d502da75fa87f74ebc9fcf49f46252d8",
     AllStructs
   )
 );
@@ -144,6 +170,17 @@ export class OracleMockInstance extends ContractInstance {
         getContractByCodeHash
       );
     },
+    setPrice: async (
+      params: OracleMockTypes.CallMethodParams<"setPrice">
+    ): Promise<OracleMockTypes.CallMethodResult<"setPrice">> => {
+      return callMethod(
+        OracleMock,
+        this,
+        "setPrice",
+        params,
+        getContractByCodeHash
+      );
+    },
   };
 
   transact = {
@@ -151,6 +188,11 @@ export class OracleMockInstance extends ContractInstance {
       params: OracleMockTypes.SignExecuteMethodParams<"price">
     ): Promise<OracleMockTypes.SignExecuteMethodResult<"price">> => {
       return signExecuteMethod(OracleMock, this, "price", params);
+    },
+    setPrice: async (
+      params: OracleMockTypes.SignExecuteMethodParams<"setPrice">
+    ): Promise<OracleMockTypes.SignExecuteMethodResult<"setPrice">> => {
+      return signExecuteMethod(OracleMock, this, "setPrice", params);
     },
   };
 

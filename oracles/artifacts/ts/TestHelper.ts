@@ -185,6 +185,34 @@ export namespace TestHelperTypes {
       }>;
       result: CallContractResult<bigint>;
     };
+    calculateRepaidAssets: {
+      params: CallContractParams<{
+        seizedAssets: bigint;
+        collateralPrice: bigint;
+        loanToValue: bigint;
+      }>;
+      result: CallContractResult<bigint>;
+    };
+    calculateLiquidationIncentive: {
+      params: CallContractParams<{ loanToValue: bigint }>;
+      result: CallContractResult<bigint>;
+    };
+    calculateSeizedAssets: {
+      params: CallContractParams<{
+        borrowedAmount: bigint;
+        ltv: bigint;
+        collateralPrice: bigint;
+      }>;
+      result: CallContractResult<bigint>;
+    };
+    calculateRepaidShares: {
+      params: CallContractParams<{
+        repaidAssets: bigint;
+        totalBorrowAssets: bigint;
+        totalBorrowShares: bigint;
+      }>;
+      result: CallContractResult<bigint>;
+    };
   }
   export type CallMethodParams<T extends keyof CallMethodTable> =
     CallMethodTable[T]["params"];
@@ -351,6 +379,34 @@ export namespace TestHelperTypes {
       }>;
       result: SignExecuteScriptTxResult;
     };
+    calculateRepaidAssets: {
+      params: SignExecuteContractMethodParams<{
+        seizedAssets: bigint;
+        collateralPrice: bigint;
+        loanToValue: bigint;
+      }>;
+      result: SignExecuteScriptTxResult;
+    };
+    calculateLiquidationIncentive: {
+      params: SignExecuteContractMethodParams<{ loanToValue: bigint }>;
+      result: SignExecuteScriptTxResult;
+    };
+    calculateSeizedAssets: {
+      params: SignExecuteContractMethodParams<{
+        borrowedAmount: bigint;
+        ltv: bigint;
+        collateralPrice: bigint;
+      }>;
+      result: SignExecuteScriptTxResult;
+    };
+    calculateRepaidShares: {
+      params: SignExecuteContractMethodParams<{
+        repaidAssets: bigint;
+        totalBorrowAssets: bigint;
+        totalBorrowShares: bigint;
+      }>;
+      result: SignExecuteScriptTxResult;
+    };
   }
   export type SignExecuteMethodParams<T extends keyof SignExecuteMethodTable> =
     SignExecuteMethodTable[T]["params"];
@@ -370,7 +426,7 @@ class Factory extends ContractFactory<TestHelperInstance, {}> {
     MAX_FEE: BigInt("250000000000000000"),
     MAX_LIQUIDATION_INCENTIVE_FACTOR: BigInt("1150000000000000000"),
     LIQUIDATION_CURSOR: BigInt("300000000000000000"),
-    ORACLE_PRICE_SCALE: BigInt("1000000000000000000"),
+    ORACLE_PRICE_SCALE: BigInt("1000000000000000000000000000000000000"),
   };
 
   at(address: string): TestHelperInstance {
@@ -652,6 +708,71 @@ class Factory extends ContractFactory<TestHelperInstance, {}> {
         getContractByCodeHash
       );
     },
+    calculateRepaidAssets: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<
+          never,
+          { seizedAssets: bigint; collateralPrice: bigint; loanToValue: bigint }
+        >,
+        "initialFields"
+      >
+    ): Promise<TestContractResultWithoutMaps<bigint>> => {
+      return testMethod(
+        this,
+        "calculateRepaidAssets",
+        params,
+        getContractByCodeHash
+      );
+    },
+    calculateLiquidationIncentive: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<never, { loanToValue: bigint }>,
+        "initialFields"
+      >
+    ): Promise<TestContractResultWithoutMaps<bigint>> => {
+      return testMethod(
+        this,
+        "calculateLiquidationIncentive",
+        params,
+        getContractByCodeHash
+      );
+    },
+    calculateSeizedAssets: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<
+          never,
+          { borrowedAmount: bigint; ltv: bigint; collateralPrice: bigint }
+        >,
+        "initialFields"
+      >
+    ): Promise<TestContractResultWithoutMaps<bigint>> => {
+      return testMethod(
+        this,
+        "calculateSeizedAssets",
+        params,
+        getContractByCodeHash
+      );
+    },
+    calculateRepaidShares: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<
+          never,
+          {
+            repaidAssets: bigint;
+            totalBorrowAssets: bigint;
+            totalBorrowShares: bigint;
+          }
+        >,
+        "initialFields"
+      >
+    ): Promise<TestContractResultWithoutMaps<bigint>> => {
+      return testMethod(
+        this,
+        "calculateRepaidShares",
+        params,
+        getContractByCodeHash
+      );
+    },
   };
 
   stateForTest(initFields: {}, asset?: Asset, address?: string) {
@@ -664,7 +785,7 @@ export const TestHelper = new Factory(
   Contract.fromJson(
     TestHelperContractJson,
     "",
-    "6d0a14e656f458c17c4d09a30011cdde846c95319365a8c49283eb44288872bb",
+    "3b16e1155676d2ce03a1a0df077b46112a6040556fa328714269334bb6f41e15",
     AllStructs
   )
 );
@@ -917,6 +1038,52 @@ export class TestHelperInstance extends ContractInstance {
         getContractByCodeHash
       );
     },
+    calculateRepaidAssets: async (
+      params: TestHelperTypes.CallMethodParams<"calculateRepaidAssets">
+    ): Promise<TestHelperTypes.CallMethodResult<"calculateRepaidAssets">> => {
+      return callMethod(
+        TestHelper,
+        this,
+        "calculateRepaidAssets",
+        params,
+        getContractByCodeHash
+      );
+    },
+    calculateLiquidationIncentive: async (
+      params: TestHelperTypes.CallMethodParams<"calculateLiquidationIncentive">
+    ): Promise<
+      TestHelperTypes.CallMethodResult<"calculateLiquidationIncentive">
+    > => {
+      return callMethod(
+        TestHelper,
+        this,
+        "calculateLiquidationIncentive",
+        params,
+        getContractByCodeHash
+      );
+    },
+    calculateSeizedAssets: async (
+      params: TestHelperTypes.CallMethodParams<"calculateSeizedAssets">
+    ): Promise<TestHelperTypes.CallMethodResult<"calculateSeizedAssets">> => {
+      return callMethod(
+        TestHelper,
+        this,
+        "calculateSeizedAssets",
+        params,
+        getContractByCodeHash
+      );
+    },
+    calculateRepaidShares: async (
+      params: TestHelperTypes.CallMethodParams<"calculateRepaidShares">
+    ): Promise<TestHelperTypes.CallMethodResult<"calculateRepaidShares">> => {
+      return callMethod(
+        TestHelper,
+        this,
+        "calculateRepaidShares",
+        params,
+        getContractByCodeHash
+      );
+    },
   };
 
   transact = {
@@ -1048,6 +1215,54 @@ export class TestHelperInstance extends ContractInstance {
         TestHelper,
         this,
         "calculateMinCollateral",
+        params
+      );
+    },
+    calculateRepaidAssets: async (
+      params: TestHelperTypes.SignExecuteMethodParams<"calculateRepaidAssets">
+    ): Promise<
+      TestHelperTypes.SignExecuteMethodResult<"calculateRepaidAssets">
+    > => {
+      return signExecuteMethod(
+        TestHelper,
+        this,
+        "calculateRepaidAssets",
+        params
+      );
+    },
+    calculateLiquidationIncentive: async (
+      params: TestHelperTypes.SignExecuteMethodParams<"calculateLiquidationIncentive">
+    ): Promise<
+      TestHelperTypes.SignExecuteMethodResult<"calculateLiquidationIncentive">
+    > => {
+      return signExecuteMethod(
+        TestHelper,
+        this,
+        "calculateLiquidationIncentive",
+        params
+      );
+    },
+    calculateSeizedAssets: async (
+      params: TestHelperTypes.SignExecuteMethodParams<"calculateSeizedAssets">
+    ): Promise<
+      TestHelperTypes.SignExecuteMethodResult<"calculateSeizedAssets">
+    > => {
+      return signExecuteMethod(
+        TestHelper,
+        this,
+        "calculateSeizedAssets",
+        params
+      );
+    },
+    calculateRepaidShares: async (
+      params: TestHelperTypes.SignExecuteMethodParams<"calculateRepaidShares">
+    ): Promise<
+      TestHelperTypes.SignExecuteMethodResult<"calculateRepaidShares">
+    > => {
+      return signExecuteMethod(
+        TestHelper,
+        this,
+        "calculateRepaidShares",
         params
       );
     },

@@ -2,8 +2,9 @@
 /* tslint:disable */
 /* eslint-disable */
 
+export * from "./DynamicIrmMock";
+export * from "./FixedIrmMock";
 export * from "./FungibleToken";
-export * from "./IrmMock";
 export * from "./Linx";
 export * from "./LinxDiaOracle";
 export * from "./Market";

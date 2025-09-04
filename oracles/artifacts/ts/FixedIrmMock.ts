@@ -33,7 +33,7 @@ import {
   encodeContractFields,
   Narrow,
 } from "@alephium/web3";
-import { default as IrmMockContractJson } from "../lib/linx-lending-core/contracts/test/IrmMock.ral.json";
+import { default as FixedIrmMockContractJson } from "../lib/linx-lending-core/contracts/test/FixedIrmMock.ral.json";
 import { getContractByCodeHash, registerContract } from "./contracts";
 import {
   DIAOracleValue,
@@ -44,8 +44,12 @@ import {
 } from "./types";
 
 // Custom types for the contract
-export namespace IrmMockTypes {
-  export type State = Omit<ContractState<any>, "fields">;
+export namespace FixedIrmMockTypes {
+  export type Fields = {
+    rate: bigint;
+  };
+
+  export type State = ContractState<Fields>;
 
   export interface CallMethodTable {
     initInterest: {
@@ -61,6 +65,14 @@ export namespace IrmMockTypes {
         marketState: MarketState;
       }>;
       result: CallContractResult<bigint>;
+    };
+    getRate: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<bigint>;
+    };
+    setBorrowRate: {
+      params: CallContractParams<{ newRate: bigint }>;
+      result: CallContractResult<null>;
     };
     wMulDown: {
       params: CallContractParams<{ x: bigint; y: bigint }>;
@@ -102,20 +114,6 @@ export namespace IrmMockTypes {
       params: CallContractParams<{ amount: bigint; tokenDecimals: bigint }>;
       result: CallContractResult<bigint>;
     };
-    calculateBorrowRate: {
-      params: CallContractParams<{
-        marketParams: MarketParams;
-        marketState: MarketState;
-      }>;
-      result: CallContractResult<bigint>;
-    };
-    borrowRateView: {
-      params: CallContractParams<{
-        marketParams: MarketParams;
-        marketState: MarketState;
-      }>;
-      result: CallContractResult<bigint>;
-    };
   }
   export type CallMethodParams<T extends keyof CallMethodTable> =
     CallMethodTable[T]["params"];
@@ -146,6 +144,14 @@ export namespace IrmMockTypes {
         marketParams: MarketParams;
         marketState: MarketState;
       }>;
+      result: SignExecuteScriptTxResult;
+    };
+    getRate: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    setBorrowRate: {
+      params: SignExecuteContractMethodParams<{ newRate: bigint }>;
       result: SignExecuteScriptTxResult;
     };
     wMulDown: {
@@ -199,20 +205,6 @@ export namespace IrmMockTypes {
       }>;
       result: SignExecuteScriptTxResult;
     };
-    calculateBorrowRate: {
-      params: SignExecuteContractMethodParams<{
-        marketParams: MarketParams;
-        marketState: MarketState;
-      }>;
-      result: SignExecuteScriptTxResult;
-    };
-    borrowRateView: {
-      params: SignExecuteContractMethodParams<{
-        marketParams: MarketParams;
-        marketState: MarketState;
-      }>;
-      result: SignExecuteScriptTxResult;
-    };
   }
   export type SignExecuteMethodParams<T extends keyof SignExecuteMethodTable> =
     SignExecuteMethodTable[T]["params"];
@@ -220,90 +212,101 @@ export namespace IrmMockTypes {
     SignExecuteMethodTable[T]["result"];
 }
 
-class Factory extends ContractFactory<IrmMockInstance, {}> {
-  encodeFields() {
-    return encodeContractFields({}, this.contract.fieldsSig, AllStructs);
+class Factory extends ContractFactory<
+  FixedIrmMockInstance,
+  FixedIrmMockTypes.Fields
+> {
+  encodeFields(fields: FixedIrmMockTypes.Fields) {
+    return encodeContractFields(
+      addStdIdToFields(this.contract, fields),
+      this.contract.fieldsSig,
+      AllStructs
+    );
   }
 
   consts = { WAD: BigInt("1000000000000000000") };
 
-  at(address: string): IrmMockInstance {
-    return new IrmMockInstance(address);
+  at(address: string): FixedIrmMockInstance {
+    return new FixedIrmMockInstance(address);
   }
 
   tests = {
     initInterest: async (
-      params: Omit<
-        TestContractParamsWithoutMaps<
-          never,
-          { marketParams: MarketParams; marketState: MarketState }
-        >,
-        "initialFields"
+      params: TestContractParamsWithoutMaps<
+        FixedIrmMockTypes.Fields,
+        { marketParams: MarketParams; marketState: MarketState }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(this, "initInterest", params, getContractByCodeHash);
     },
     borrowRate: async (
-      params: Omit<
-        TestContractParamsWithoutMaps<
-          never,
-          { marketParams: MarketParams; marketState: MarketState }
-        >,
-        "initialFields"
+      params: TestContractParamsWithoutMaps<
+        FixedIrmMockTypes.Fields,
+        { marketParams: MarketParams; marketState: MarketState }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(this, "borrowRate", params, getContractByCodeHash);
     },
-    wMulDown: async (
+    getRate: async (
       params: Omit<
-        TestContractParamsWithoutMaps<never, { x: bigint; y: bigint }>,
-        "initialFields"
+        TestContractParamsWithoutMaps<FixedIrmMockTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<bigint>> => {
+      return testMethod(this, "getRate", params, getContractByCodeHash);
+    },
+    setBorrowRate: async (
+      params: TestContractParamsWithoutMaps<
+        FixedIrmMockTypes.Fields,
+        { newRate: bigint }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "setBorrowRate", params, getContractByCodeHash);
+    },
+    wMulDown: async (
+      params: TestContractParamsWithoutMaps<
+        FixedIrmMockTypes.Fields,
+        { x: bigint; y: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(this, "wMulDown", params, getContractByCodeHash);
     },
     wDivDown: async (
-      params: Omit<
-        TestContractParamsWithoutMaps<never, { x: bigint; y: bigint }>,
-        "initialFields"
+      params: TestContractParamsWithoutMaps<
+        FixedIrmMockTypes.Fields,
+        { x: bigint; y: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(this, "wDivDown", params, getContractByCodeHash);
     },
     wDivUp: async (
-      params: Omit<
-        TestContractParamsWithoutMaps<never, { x: bigint; y: bigint }>,
-        "initialFields"
+      params: TestContractParamsWithoutMaps<
+        FixedIrmMockTypes.Fields,
+        { x: bigint; y: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(this, "wDivUp", params, getContractByCodeHash);
     },
     mulDivDown: async (
-      params: Omit<
-        TestContractParamsWithoutMaps<
-          never,
-          { x: bigint; y: bigint; d: bigint }
-        >,
-        "initialFields"
+      params: TestContractParamsWithoutMaps<
+        FixedIrmMockTypes.Fields,
+        { x: bigint; y: bigint; d: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(this, "mulDivDown", params, getContractByCodeHash);
     },
     mulDivUp: async (
-      params: Omit<
-        TestContractParamsWithoutMaps<
-          never,
-          { x: bigint; y: bigint; d: bigint }
-        >,
-        "initialFields"
+      params: TestContractParamsWithoutMaps<
+        FixedIrmMockTypes.Fields,
+        { x: bigint; y: bigint; d: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(this, "mulDivUp", params, getContractByCodeHash);
     },
     wTaylorCompounded: async (
-      params: Omit<
-        TestContractParamsWithoutMaps<never, { x: bigint; n: bigint }>,
-        "initialFields"
+      params: TestContractParamsWithoutMaps<
+        FixedIrmMockTypes.Fields,
+        { x: bigint; n: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(
@@ -314,101 +317,75 @@ class Factory extends ContractFactory<IrmMockInstance, {}> {
       );
     },
     exactlyOneZero: async (
-      params: Omit<
-        TestContractParamsWithoutMaps<never, { a: bigint; b: bigint }>,
-        "initialFields"
+      params: TestContractParamsWithoutMaps<
+        FixedIrmMockTypes.Fields,
+        { a: bigint; b: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<boolean>> => {
       return testMethod(this, "exactlyOneZero", params, getContractByCodeHash);
     },
     zeroFloorSub: async (
-      params: Omit<
-        TestContractParamsWithoutMaps<never, { x: bigint; y: bigint }>,
-        "initialFields"
+      params: TestContractParamsWithoutMaps<
+        FixedIrmMockTypes.Fields,
+        { x: bigint; y: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(this, "zeroFloorSub", params, getContractByCodeHash);
     },
     min: async (
-      params: Omit<
-        TestContractParamsWithoutMaps<never, { a: bigint; b: bigint }>,
-        "initialFields"
+      params: TestContractParamsWithoutMaps<
+        FixedIrmMockTypes.Fields,
+        { a: bigint; b: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(this, "min", params, getContractByCodeHash);
     },
     toBaseUnits: async (
-      params: Omit<
-        TestContractParamsWithoutMaps<
-          never,
-          { amount: bigint; tokenDecimals: bigint }
-        >,
-        "initialFields"
+      params: TestContractParamsWithoutMaps<
+        FixedIrmMockTypes.Fields,
+        { amount: bigint; tokenDecimals: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(this, "toBaseUnits", params, getContractByCodeHash);
     },
-    calculateBorrowRate: async (
-      params: Omit<
-        TestContractParamsWithoutMaps<
-          never,
-          { marketParams: MarketParams; marketState: MarketState }
-        >,
-        "initialFields"
-      >
-    ): Promise<TestContractResultWithoutMaps<bigint>> => {
-      return testMethod(
-        this,
-        "calculateBorrowRate",
-        params,
-        getContractByCodeHash
-      );
-    },
-    borrowRateView: async (
-      params: Omit<
-        TestContractParamsWithoutMaps<
-          never,
-          { marketParams: MarketParams; marketState: MarketState }
-        >,
-        "initialFields"
-      >
-    ): Promise<TestContractResultWithoutMaps<bigint>> => {
-      return testMethod(this, "borrowRateView", params, getContractByCodeHash);
-    },
   };
 
-  stateForTest(initFields: {}, asset?: Asset, address?: string) {
+  stateForTest(
+    initFields: FixedIrmMockTypes.Fields,
+    asset?: Asset,
+    address?: string
+  ) {
     return this.stateForTest_(initFields, asset, address, undefined);
   }
 }
 
 // Use this object to test and deploy the contract
-export const IrmMock = new Factory(
+export const FixedIrmMock = new Factory(
   Contract.fromJson(
-    IrmMockContractJson,
+    FixedIrmMockContractJson,
     "",
-    "976d2216ba8d895ace4ab93ac23811becac08809cbc8646b075cdbda7c8adb21",
+    "6505d5245cc9b93901b4dcc784db82dd96eb80c245071149af2183d75e9ce91c",
     AllStructs
   )
 );
-registerContract(IrmMock);
+registerContract(FixedIrmMock);
 
 // Use this class to interact with the blockchain
-export class IrmMockInstance extends ContractInstance {
+export class FixedIrmMockInstance extends ContractInstance {
   constructor(address: Address) {
     super(address);
   }
 
-  async fetchState(): Promise<IrmMockTypes.State> {
-    return fetchContractState(IrmMock, this);
+  async fetchState(): Promise<FixedIrmMockTypes.State> {
+    return fetchContractState(FixedIrmMock, this);
   }
 
   view = {
     initInterest: async (
-      params: IrmMockTypes.CallMethodParams<"initInterest">
-    ): Promise<IrmMockTypes.CallMethodResult<"initInterest">> => {
+      params: FixedIrmMockTypes.CallMethodParams<"initInterest">
+    ): Promise<FixedIrmMockTypes.CallMethodResult<"initInterest">> => {
       return callMethod(
-        IrmMock,
+        FixedIrmMock,
         this,
         "initInterest",
         params,
@@ -416,21 +393,43 @@ export class IrmMockInstance extends ContractInstance {
       );
     },
     borrowRate: async (
-      params: IrmMockTypes.CallMethodParams<"borrowRate">
-    ): Promise<IrmMockTypes.CallMethodResult<"borrowRate">> => {
+      params: FixedIrmMockTypes.CallMethodParams<"borrowRate">
+    ): Promise<FixedIrmMockTypes.CallMethodResult<"borrowRate">> => {
       return callMethod(
-        IrmMock,
+        FixedIrmMock,
         this,
         "borrowRate",
         params,
         getContractByCodeHash
       );
     },
-    wMulDown: async (
-      params: IrmMockTypes.CallMethodParams<"wMulDown">
-    ): Promise<IrmMockTypes.CallMethodResult<"wMulDown">> => {
+    getRate: async (
+      params?: FixedIrmMockTypes.CallMethodParams<"getRate">
+    ): Promise<FixedIrmMockTypes.CallMethodResult<"getRate">> => {
       return callMethod(
-        IrmMock,
+        FixedIrmMock,
+        this,
+        "getRate",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    setBorrowRate: async (
+      params: FixedIrmMockTypes.CallMethodParams<"setBorrowRate">
+    ): Promise<FixedIrmMockTypes.CallMethodResult<"setBorrowRate">> => {
+      return callMethod(
+        FixedIrmMock,
+        this,
+        "setBorrowRate",
+        params,
+        getContractByCodeHash
+      );
+    },
+    wMulDown: async (
+      params: FixedIrmMockTypes.CallMethodParams<"wMulDown">
+    ): Promise<FixedIrmMockTypes.CallMethodResult<"wMulDown">> => {
+      return callMethod(
+        FixedIrmMock,
         this,
         "wMulDown",
         params,
@@ -438,10 +437,10 @@ export class IrmMockInstance extends ContractInstance {
       );
     },
     wDivDown: async (
-      params: IrmMockTypes.CallMethodParams<"wDivDown">
-    ): Promise<IrmMockTypes.CallMethodResult<"wDivDown">> => {
+      params: FixedIrmMockTypes.CallMethodParams<"wDivDown">
+    ): Promise<FixedIrmMockTypes.CallMethodResult<"wDivDown">> => {
       return callMethod(
-        IrmMock,
+        FixedIrmMock,
         this,
         "wDivDown",
         params,
@@ -449,15 +448,21 @@ export class IrmMockInstance extends ContractInstance {
       );
     },
     wDivUp: async (
-      params: IrmMockTypes.CallMethodParams<"wDivUp">
-    ): Promise<IrmMockTypes.CallMethodResult<"wDivUp">> => {
-      return callMethod(IrmMock, this, "wDivUp", params, getContractByCodeHash);
+      params: FixedIrmMockTypes.CallMethodParams<"wDivUp">
+    ): Promise<FixedIrmMockTypes.CallMethodResult<"wDivUp">> => {
+      return callMethod(
+        FixedIrmMock,
+        this,
+        "wDivUp",
+        params,
+        getContractByCodeHash
+      );
     },
     mulDivDown: async (
-      params: IrmMockTypes.CallMethodParams<"mulDivDown">
-    ): Promise<IrmMockTypes.CallMethodResult<"mulDivDown">> => {
+      params: FixedIrmMockTypes.CallMethodParams<"mulDivDown">
+    ): Promise<FixedIrmMockTypes.CallMethodResult<"mulDivDown">> => {
       return callMethod(
-        IrmMock,
+        FixedIrmMock,
         this,
         "mulDivDown",
         params,
@@ -465,10 +470,10 @@ export class IrmMockInstance extends ContractInstance {
       );
     },
     mulDivUp: async (
-      params: IrmMockTypes.CallMethodParams<"mulDivUp">
-    ): Promise<IrmMockTypes.CallMethodResult<"mulDivUp">> => {
+      params: FixedIrmMockTypes.CallMethodParams<"mulDivUp">
+    ): Promise<FixedIrmMockTypes.CallMethodResult<"mulDivUp">> => {
       return callMethod(
-        IrmMock,
+        FixedIrmMock,
         this,
         "mulDivUp",
         params,
@@ -476,10 +481,10 @@ export class IrmMockInstance extends ContractInstance {
       );
     },
     wTaylorCompounded: async (
-      params: IrmMockTypes.CallMethodParams<"wTaylorCompounded">
-    ): Promise<IrmMockTypes.CallMethodResult<"wTaylorCompounded">> => {
+      params: FixedIrmMockTypes.CallMethodParams<"wTaylorCompounded">
+    ): Promise<FixedIrmMockTypes.CallMethodResult<"wTaylorCompounded">> => {
       return callMethod(
-        IrmMock,
+        FixedIrmMock,
         this,
         "wTaylorCompounded",
         params,
@@ -487,10 +492,10 @@ export class IrmMockInstance extends ContractInstance {
       );
     },
     exactlyOneZero: async (
-      params: IrmMockTypes.CallMethodParams<"exactlyOneZero">
-    ): Promise<IrmMockTypes.CallMethodResult<"exactlyOneZero">> => {
+      params: FixedIrmMockTypes.CallMethodParams<"exactlyOneZero">
+    ): Promise<FixedIrmMockTypes.CallMethodResult<"exactlyOneZero">> => {
       return callMethod(
-        IrmMock,
+        FixedIrmMock,
         this,
         "exactlyOneZero",
         params,
@@ -498,10 +503,10 @@ export class IrmMockInstance extends ContractInstance {
       );
     },
     zeroFloorSub: async (
-      params: IrmMockTypes.CallMethodParams<"zeroFloorSub">
-    ): Promise<IrmMockTypes.CallMethodResult<"zeroFloorSub">> => {
+      params: FixedIrmMockTypes.CallMethodParams<"zeroFloorSub">
+    ): Promise<FixedIrmMockTypes.CallMethodResult<"zeroFloorSub">> => {
       return callMethod(
-        IrmMock,
+        FixedIrmMock,
         this,
         "zeroFloorSub",
         params,
@@ -509,39 +514,23 @@ export class IrmMockInstance extends ContractInstance {
       );
     },
     min: async (
-      params: IrmMockTypes.CallMethodParams<"min">
-    ): Promise<IrmMockTypes.CallMethodResult<"min">> => {
-      return callMethod(IrmMock, this, "min", params, getContractByCodeHash);
+      params: FixedIrmMockTypes.CallMethodParams<"min">
+    ): Promise<FixedIrmMockTypes.CallMethodResult<"min">> => {
+      return callMethod(
+        FixedIrmMock,
+        this,
+        "min",
+        params,
+        getContractByCodeHash
+      );
     },
     toBaseUnits: async (
-      params: IrmMockTypes.CallMethodParams<"toBaseUnits">
-    ): Promise<IrmMockTypes.CallMethodResult<"toBaseUnits">> => {
+      params: FixedIrmMockTypes.CallMethodParams<"toBaseUnits">
+    ): Promise<FixedIrmMockTypes.CallMethodResult<"toBaseUnits">> => {
       return callMethod(
-        IrmMock,
+        FixedIrmMock,
         this,
         "toBaseUnits",
-        params,
-        getContractByCodeHash
-      );
-    },
-    calculateBorrowRate: async (
-      params: IrmMockTypes.CallMethodParams<"calculateBorrowRate">
-    ): Promise<IrmMockTypes.CallMethodResult<"calculateBorrowRate">> => {
-      return callMethod(
-        IrmMock,
-        this,
-        "calculateBorrowRate",
-        params,
-        getContractByCodeHash
-      );
-    },
-    borrowRateView: async (
-      params: IrmMockTypes.CallMethodParams<"borrowRateView">
-    ): Promise<IrmMockTypes.CallMethodResult<"borrowRateView">> => {
-      return callMethod(
-        IrmMock,
-        this,
-        "borrowRateView",
         params,
         getContractByCodeHash
       );
@@ -550,86 +539,95 @@ export class IrmMockInstance extends ContractInstance {
 
   transact = {
     initInterest: async (
-      params: IrmMockTypes.SignExecuteMethodParams<"initInterest">
-    ): Promise<IrmMockTypes.SignExecuteMethodResult<"initInterest">> => {
-      return signExecuteMethod(IrmMock, this, "initInterest", params);
+      params: FixedIrmMockTypes.SignExecuteMethodParams<"initInterest">
+    ): Promise<FixedIrmMockTypes.SignExecuteMethodResult<"initInterest">> => {
+      return signExecuteMethod(FixedIrmMock, this, "initInterest", params);
     },
     borrowRate: async (
-      params: IrmMockTypes.SignExecuteMethodParams<"borrowRate">
-    ): Promise<IrmMockTypes.SignExecuteMethodResult<"borrowRate">> => {
-      return signExecuteMethod(IrmMock, this, "borrowRate", params);
+      params: FixedIrmMockTypes.SignExecuteMethodParams<"borrowRate">
+    ): Promise<FixedIrmMockTypes.SignExecuteMethodResult<"borrowRate">> => {
+      return signExecuteMethod(FixedIrmMock, this, "borrowRate", params);
+    },
+    getRate: async (
+      params: FixedIrmMockTypes.SignExecuteMethodParams<"getRate">
+    ): Promise<FixedIrmMockTypes.SignExecuteMethodResult<"getRate">> => {
+      return signExecuteMethod(FixedIrmMock, this, "getRate", params);
+    },
+    setBorrowRate: async (
+      params: FixedIrmMockTypes.SignExecuteMethodParams<"setBorrowRate">
+    ): Promise<FixedIrmMockTypes.SignExecuteMethodResult<"setBorrowRate">> => {
+      return signExecuteMethod(FixedIrmMock, this, "setBorrowRate", params);
     },
     wMulDown: async (
-      params: IrmMockTypes.SignExecuteMethodParams<"wMulDown">
-    ): Promise<IrmMockTypes.SignExecuteMethodResult<"wMulDown">> => {
-      return signExecuteMethod(IrmMock, this, "wMulDown", params);
+      params: FixedIrmMockTypes.SignExecuteMethodParams<"wMulDown">
+    ): Promise<FixedIrmMockTypes.SignExecuteMethodResult<"wMulDown">> => {
+      return signExecuteMethod(FixedIrmMock, this, "wMulDown", params);
     },
     wDivDown: async (
-      params: IrmMockTypes.SignExecuteMethodParams<"wDivDown">
-    ): Promise<IrmMockTypes.SignExecuteMethodResult<"wDivDown">> => {
-      return signExecuteMethod(IrmMock, this, "wDivDown", params);
+      params: FixedIrmMockTypes.SignExecuteMethodParams<"wDivDown">
+    ): Promise<FixedIrmMockTypes.SignExecuteMethodResult<"wDivDown">> => {
+      return signExecuteMethod(FixedIrmMock, this, "wDivDown", params);
     },
     wDivUp: async (
-      params: IrmMockTypes.SignExecuteMethodParams<"wDivUp">
-    ): Promise<IrmMockTypes.SignExecuteMethodResult<"wDivUp">> => {
-      return signExecuteMethod(IrmMock, this, "wDivUp", params);
+      params: FixedIrmMockTypes.SignExecuteMethodParams<"wDivUp">
+    ): Promise<FixedIrmMockTypes.SignExecuteMethodResult<"wDivUp">> => {
+      return signExecuteMethod(FixedIrmMock, this, "wDivUp", params);
     },
     mulDivDown: async (
-      params: IrmMockTypes.SignExecuteMethodParams<"mulDivDown">
-    ): Promise<IrmMockTypes.SignExecuteMethodResult<"mulDivDown">> => {
-      return signExecuteMethod(IrmMock, this, "mulDivDown", params);
+      params: FixedIrmMockTypes.SignExecuteMethodParams<"mulDivDown">
+    ): Promise<FixedIrmMockTypes.SignExecuteMethodResult<"mulDivDown">> => {
+      return signExecuteMethod(FixedIrmMock, this, "mulDivDown", params);
     },
     mulDivUp: async (
-      params: IrmMockTypes.SignExecuteMethodParams<"mulDivUp">
-    ): Promise<IrmMockTypes.SignExecuteMethodResult<"mulDivUp">> => {
-      return signExecuteMethod(IrmMock, this, "mulDivUp", params);
+      params: FixedIrmMockTypes.SignExecuteMethodParams<"mulDivUp">
+    ): Promise<FixedIrmMockTypes.SignExecuteMethodResult<"mulDivUp">> => {
+      return signExecuteMethod(FixedIrmMock, this, "mulDivUp", params);
     },
     wTaylorCompounded: async (
-      params: IrmMockTypes.SignExecuteMethodParams<"wTaylorCompounded">
-    ): Promise<IrmMockTypes.SignExecuteMethodResult<"wTaylorCompounded">> => {
-      return signExecuteMethod(IrmMock, this, "wTaylorCompounded", params);
+      params: FixedIrmMockTypes.SignExecuteMethodParams<"wTaylorCompounded">
+    ): Promise<
+      FixedIrmMockTypes.SignExecuteMethodResult<"wTaylorCompounded">
+    > => {
+      return signExecuteMethod(FixedIrmMock, this, "wTaylorCompounded", params);
     },
     exactlyOneZero: async (
-      params: IrmMockTypes.SignExecuteMethodParams<"exactlyOneZero">
-    ): Promise<IrmMockTypes.SignExecuteMethodResult<"exactlyOneZero">> => {
-      return signExecuteMethod(IrmMock, this, "exactlyOneZero", params);
+      params: FixedIrmMockTypes.SignExecuteMethodParams<"exactlyOneZero">
+    ): Promise<FixedIrmMockTypes.SignExecuteMethodResult<"exactlyOneZero">> => {
+      return signExecuteMethod(FixedIrmMock, this, "exactlyOneZero", params);
     },
     zeroFloorSub: async (
-      params: IrmMockTypes.SignExecuteMethodParams<"zeroFloorSub">
-    ): Promise<IrmMockTypes.SignExecuteMethodResult<"zeroFloorSub">> => {
-      return signExecuteMethod(IrmMock, this, "zeroFloorSub", params);
+      params: FixedIrmMockTypes.SignExecuteMethodParams<"zeroFloorSub">
+    ): Promise<FixedIrmMockTypes.SignExecuteMethodResult<"zeroFloorSub">> => {
+      return signExecuteMethod(FixedIrmMock, this, "zeroFloorSub", params);
     },
     min: async (
-      params: IrmMockTypes.SignExecuteMethodParams<"min">
-    ): Promise<IrmMockTypes.SignExecuteMethodResult<"min">> => {
-      return signExecuteMethod(IrmMock, this, "min", params);
+      params: FixedIrmMockTypes.SignExecuteMethodParams<"min">
+    ): Promise<FixedIrmMockTypes.SignExecuteMethodResult<"min">> => {
+      return signExecuteMethod(FixedIrmMock, this, "min", params);
     },
     toBaseUnits: async (
-      params: IrmMockTypes.SignExecuteMethodParams<"toBaseUnits">
-    ): Promise<IrmMockTypes.SignExecuteMethodResult<"toBaseUnits">> => {
-      return signExecuteMethod(IrmMock, this, "toBaseUnits", params);
-    },
-    calculateBorrowRate: async (
-      params: IrmMockTypes.SignExecuteMethodParams<"calculateBorrowRate">
-    ): Promise<IrmMockTypes.SignExecuteMethodResult<"calculateBorrowRate">> => {
-      return signExecuteMethod(IrmMock, this, "calculateBorrowRate", params);
-    },
-    borrowRateView: async (
-      params: IrmMockTypes.SignExecuteMethodParams<"borrowRateView">
-    ): Promise<IrmMockTypes.SignExecuteMethodResult<"borrowRateView">> => {
-      return signExecuteMethod(IrmMock, this, "borrowRateView", params);
+      params: FixedIrmMockTypes.SignExecuteMethodParams<"toBaseUnits">
+    ): Promise<FixedIrmMockTypes.SignExecuteMethodResult<"toBaseUnits">> => {
+      return signExecuteMethod(FixedIrmMock, this, "toBaseUnits", params);
     },
   };
 
-  async multicall<Calls extends IrmMockTypes.MultiCallParams>(
+  async multicall<Calls extends FixedIrmMockTypes.MultiCallParams>(
     calls: Calls
-  ): Promise<IrmMockTypes.MultiCallResults<Calls>>;
-  async multicall<Callss extends IrmMockTypes.MultiCallParams[]>(
+  ): Promise<FixedIrmMockTypes.MultiCallResults<Calls>>;
+  async multicall<Callss extends FixedIrmMockTypes.MultiCallParams[]>(
     callss: Narrow<Callss>
-  ): Promise<IrmMockTypes.MulticallReturnType<Callss>>;
+  ): Promise<FixedIrmMockTypes.MulticallReturnType<Callss>>;
   async multicall<
-    Callss extends IrmMockTypes.MultiCallParams | IrmMockTypes.MultiCallParams[]
+    Callss extends
+      | FixedIrmMockTypes.MultiCallParams
+      | FixedIrmMockTypes.MultiCallParams[]
   >(callss: Callss): Promise<unknown> {
-    return await multicallMethods(IrmMock, this, callss, getContractByCodeHash);
+    return await multicallMethods(
+      FixedIrmMock,
+      this,
+      callss,
+      getContractByCodeHash
+    );
   }
 }

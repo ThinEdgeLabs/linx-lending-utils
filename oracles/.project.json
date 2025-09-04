@@ -1,5 +1,5 @@
 {
-  "fullNodeVersion": "v4.0.0",
+  "fullNodeVersion": "v4.2.3",
   "compilerOptionsUsed": {
     "ignoreUnusedConstantsWarnings": false,
     "ignoreUnusedVariablesWarnings": false,
@@ -23,6 +23,18 @@
       "sourceCodeHash": "4e3a1036f09dec9a47955efa73e9e128cebea788b2b066d54757b5900fe853f5",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
+    },
+    "DynamicIrmMock": {
+      "sourceFile": "lib/linx-lending-core/contracts/test/DynamicIrmMock.ral",
+      "sourceCodeHash": "aa2d71a1bece054a5b43fb6d02a448522a6746a380231b13c04ff741ee6d4936",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "976d2216ba8d895ace4ab93ac23811becac08809cbc8646b075cdbda7c8adb21"
+    },
+    "FixedIrmMock": {
+      "sourceFile": "lib/linx-lending-core/contracts/test/FixedIrmMock.ral",
+      "sourceCodeHash": "630a5f59e43704843c4eb8c82efa24ee03efa0918c7267c4d24ec48af870f246",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "6505d5245cc9b93901b4dcc784db82dd96eb80c245071149af2183d75e9ce91c"
     },
     "FungibleToken": {
       "sourceFile": "lib/linx-ralph-libs/contracts/test/FungibleToken.ral",
@@ -78,21 +90,15 @@
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
-    "IrmMock": {
-      "sourceFile": "lib/linx-lending-core/contracts/test/IrmMock.ral",
-      "sourceCodeHash": "b41936d5a78d5eb55069056fdc0a6fe11f5d1ed4973cc3c083ff06a7bc5a32c4",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": "976d2216ba8d895ace4ab93ac23811becac08809cbc8646b075cdbda7c8adb21"
-    },
     "Linx": {
       "sourceFile": "lib/linx-lending-core/contracts/Linx.ral",
-      "sourceCodeHash": "562f25e4f457e0096c01f33cd09ae94a0195ed914678645e2b251ce8dd93512c",
-      "bytecodeDebugPatch": "=32-2+9c=1-3+20e=1+23=1-2=2-1=1+c=2-4=1-1+f=2-2+17=2-2+5f=2-2+35=2-2+57=2-2+38=2-1=1-11=2-2+a=1-3=2-1+c=1-9+c=3-1+4=3-1+1=2-1=1+e=2-2+2c=3-1+0=2-2+74=2-1=1+8=2-1+b=3-1+d=3+ea4=1-1+01=2-1+104f2=3-2+62=3+54f9=3-1+b14=1+ed=2-1+335=1+45=2-1+6850e25=1+83=645-1+e=110+7a7e0214696e73657274206174206d617020706174683a2000=31-1+5=146+7a7e0214696e73657274206174206d617020706174683a2000=417-1+c=578+7a7e0214696e73657274206174206d617020706174683a2000=27-1+d=283-1+d=38+7a7e0214696e73657274206174206d617020706174683a2000=283-1+5=137-1+d=38+7a7e0214696e73657274206174206d617020706174683a2000=3479-1+f=161+3=1+6007e021b4e6f2074696d6520656c617073656420666f72206d61726b6574201b2c20736b697070696e6720696e746572657374206163637275616c=1661-1+5=71-1+9=32+7a7e0214696e73657274206174206d617020706174683a2000=398",
-      "codeHashDebug": "56ce5c6ee66675c63f1071a134c957c3d953aa2a8282341c5d9047e8d14691b1"
+      "sourceCodeHash": "ed7ad1ea5dc8dbdacf4f67eb8255704d4f3cb1a8471841aea362210b9d269a67",
+      "bytecodeDebugPatch": "=32-2+9c=1-3+20e=1+23=1-2=2-1=1+c=2-4=1-1+f=2-2+17=2-2+5f=2-2+35=2-2+57=2-2+38=2-1=1-18=1-1=1-1=2+3=1-1=1-1+aa=1-1=1-1+12=3-1+f=3-1+c=3-1+a=3-2=1-2=2-2+82=2-2+a6=2-1+c=3+e14e=1-1+8=3-1+f=2+1e=1+f3=3-2+70=3+34fa=4-1+f4ffb=2+4=1-1+50535076=2-2+f0517f=645-1+e=110+7a7e0214696e73657274206174206d617020706174683a2000=31-1+5=146+7a7e0214696e73657274206174206d617020706174683a2000=417-1+c=578+7a7e0214696e73657274206174206d617020706174683a2000=27-1+d=283-1+d=38+7a7e0214696e73657274206174206d617020706174683a2000=283-1+5=137-1+d=38+7a7e0214696e73657274206174206d617020706174683a2000=3507-1+f=161+3=1+6007e021b4e6f2074696d6520656c617073656420666f72206d61726b6574201b2c20736b697070696e6720696e746572657374206163637275616c=1661-1+5=71-1+9=32+7a7e0214696e73657274206174206d617020706174683a2000=362",
+      "codeHashDebug": "73485c6e1e2cd11bcfaa29bc51d9b36156c33cc54f9f073992b9ff6a83874412"
     },
     "LinxConstants": {
       "sourceFile": "lib/linx-lending-core/contracts/utils/constants.ral",
-      "sourceCodeHash": "a62bb51a3b89387ba49f271fd8d1f3514ae08bf022226d0b5988f4f06ef77113",
+      "sourceCodeHash": "b0ba7e28d57bfd2cb25320b92f2638f6f747c2c136038c50708ddc300ca7ffd0",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -146,9 +152,9 @@
     },
     "OracleMock": {
       "sourceFile": "lib/linx-lending-core/contracts/test/OracleMock.ral",
-      "sourceCodeHash": "f0e44327ac30df2bebb1ac0735575851767299e5363bb8a3fcb57deb2c3ca671",
+      "sourceCodeHash": "91f39cb73f400de7a40cbed001557e1db630be784e296c6f5ba36862e90a18f8",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "129659a654ca07b1f400f291b61c5a0112d6e0536920c8f4654d2c74679954d8"
+      "codeHashDebug": "63880767e7aab740e59a6166622cac29d502da75fa87f74ebc9fcf49f46252d8"
     },
     "Position": {
       "sourceFile": "lib/linx-lending-core/contracts/types/structs.ral",
@@ -170,9 +176,9 @@
     },
     "TestHelper": {
       "sourceFile": "lib/linx-lending-core/contracts/test/TestHelper.ral",
-      "sourceCodeHash": "5cfd675d5d22bd54d09089d08f5a5528a66c84e4bcf70a8dd8f15f49253daf4e",
+      "sourceCodeHash": "5e04835e5827bea691a76728a634ad360cf837d6af042f646b0e90a5d7d457a6",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "6d0a14e656f458c17c4d09a30011cdde846c95319365a8c49283eb44288872bb"
+      "codeHashDebug": "3b16e1155676d2ce03a1a0df077b46112a6040556fa328714269334bb6f41e15"
     },
     "TestToken": {
       "sourceFile": "lib/linx-lending-core/contracts/test/TestToken.ral",

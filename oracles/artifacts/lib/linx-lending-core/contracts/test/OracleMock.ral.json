@@ -1,12 +1,18 @@
 {
   "version": "v4.0.0",
   "name": "OracleMock",
-  "bytecode": "000115010000000107d35dd91db71343e8130a1312832c02",
-  "codeHash": "129659a654ca07b1f400f291b61c5a0112d6e0536920c8f4654d2c74679954d8",
+  "bytecode": "01020e1d010000000103d35dd91db7a00002010001010003d331d40ba31600a100",
+  "codeHash": "63880767e7aab740e59a6166622cac29d502da75fa87f74ebc9fcf49f46252d8",
   "fieldsSig": {
-    "names": [],
-    "types": [],
-    "isMutable": []
+    "names": [
+      "price"
+    ],
+    "types": [
+      "U256"
+    ],
+    "isMutable": [
+      true
+    ]
   },
   "eventsSig": [],
   "functions": [
@@ -18,6 +24,19 @@
       "returnTypes": [
         "U256"
       ]
+    },
+    {
+      "name": "setPrice",
+      "paramNames": [
+        "newPrice"
+      ],
+      "paramTypes": [
+        "U256"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
     }
   ],
   "constants": [],
