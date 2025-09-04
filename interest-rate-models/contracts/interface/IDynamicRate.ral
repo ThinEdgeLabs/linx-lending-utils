@@ -1,30 +1,14 @@
 /// Extended interface for dynamic rate models
-/// 
+///
 /// This interface extends the base interest rate interface to add functionality
 /// specific to dynamic rate models, where the borrow rate adjusts based on market conditions.
 Interface IDynamicRate extends IInterestRate {
-    /// Calculates and updates the borrow rate based on current market conditions
-    /// 
-    /// This function is called by the Linx protocol to update the borrow rate for a market.
-    /// It calculates the new rate based on current utilization and updates the stored rate.
-    /// 
-    /// # Arguments
-    /// * `marketParams` - Market parameters including loan and collateral tokens
-    /// * `marketState` - Current state of the market
-    /// 
-    /// # Returns
-    /// The new average borrow rate
-    /// 
-    /// # Panics
-    /// Panics if called by any address other than the Linx protocol
-    pub fn borrowRateView(marketParams: MarketParams, marketState: MarketState) -> U256
-
     /// Returns the rate at target utilization for a specific market
-    /// 
+    ///
     /// # Arguments
     /// * `loanToken` - Address of the loan token
     /// * `collateralToken` - Address of the collateral token
-    /// 
+    ///
     /// # Returns
     /// The rate at target utilization, or 0 if not set
     pub fn getRateAtTarget(loanToken: ByteVec, collateralToken: ByteVec) -> U256

@@ -30,4 +30,15 @@ Interface IInterestRate {
     /// # Returns
     /// The current borrow rate scaled by 10^18 (1% = 0.01 * 10^18)
     pub fn borrowRate(marketParams: MarketParams, marketState: MarketState) -> U256
+
+
+    /// Returns the current borrow rate for given market scaled by WAD without modifying state
+    ///
+    /// # Arguments
+    /// * `marketParams` - Market parameters including loan and collateral tokens
+    /// * `marketState` - Current state of the market
+    ///
+    /// # Returns
+    /// The current borrow rate scaled by 10^18 (1% = 0.01 * 10^18)
+    pub fn borrowRateView(marketParams: MarketParams, marketState: MarketState) -> U256
 }

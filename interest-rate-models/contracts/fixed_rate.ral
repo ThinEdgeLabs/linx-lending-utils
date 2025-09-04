@@ -82,4 +82,9 @@ Contract FixedRate(
         // Emit event for tracking
         emit RateSet(callerAddress!(), rate, newBorrowRate)
     }
+
+    pub fn borrowRateView(marketParams: MarketParams, marketState: MarketState) -> U256 {
+        let _ = marketParams
+        let _ = marketState
+        return getRate()    }
 }
