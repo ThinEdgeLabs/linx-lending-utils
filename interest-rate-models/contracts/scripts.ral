@@ -6,9 +6,9 @@ TxScript GetBorrowRateAndUpdate(dynamicRate: DynamicRate, marketParams: MarketPa
     }
 }
 
-TxScript GetBorrowRate(dynamicRate: DynamicRate, marketParams: MarketParams, marketState: MarketState) {
+TxScript GetBorrowRate(irm: IInterestRate, marketParams: MarketParams, marketState: MarketState) {
     pub fn main() -> U256 {
-        let borrowRate = dynamicRate.borrowRateView(marketParams, marketState)
+        let borrowRate = irm.borrowRateView(marketParams, marketState)
         return borrowRate
     }
 }
