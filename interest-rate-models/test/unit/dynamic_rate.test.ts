@@ -1,4 +1,4 @@
-import { web3, TestContractParams, NamedVals, ONE_ALPH } from '@alephium/web3'
+import { web3, TestContractParams, NamedVals, ONE_ALPH, prettifyExactAmount } from '@alephium/web3'
 import {
   expectAssertionError,
   testNodeWallet,
@@ -50,8 +50,8 @@ describe('dynamic rate unit tests', () => {
     const marketState = {
       totalSupplyAssets: 100n * 10n ** 18n,
       totalSupplyShares: 100n * 10n ** 18n,
-      totalBorrowAssets: 50n * 10n ** 18n, // 50% utilization
-      totalBorrowShares: 50n * 10n ** 18n,
+      totalBorrowAssets: 90n * 10n ** 18n, // 50% utilization
+      totalBorrowShares: 90n * 10n ** 18n,
       lastUpdate: 1000n,
       fee: 0n
     }
@@ -74,8 +74,7 @@ describe('dynamic rate unit tests', () => {
     const testResult = await DynamicRate.tests.borrowRate({ ...testParams, initialMaps: state.maps })
 
     // For first interaction, should return the initial rate at target
-    expect(testResult.returns).toBeDefined()
-    expect(testResult.returns > 0n).toBeTruthy()
+    expect(testResult.returns).toEqual(DynamicRate.consts.INITIAL_RATE_AT_TARGET)
   })
 
   it('test borrowRate requires authorization', async () => {
@@ -182,6 +181,7 @@ describe('dynamic rate unit tests', () => {
 
     const state = await DynamicRate.tests.initInterest(testParams)
     const testResultHigh = await DynamicRate.tests.borrowRate({ ...testParams, initialMaps: state.maps })
+    console.log(`High utilization borrow rate: ${prettifyExactAmount(testResultHigh.returns * 31536000n, 18)}`)
 
     // Now test with lower utilization to compare
     const marketStateWithLowUtilization = {
@@ -198,7 +198,7 @@ describe('dynamic rate unit tests', () => {
     }
 
     const testResultLow = await DynamicRate.tests.borrowRate({ ...testParamsLow, initialMaps: state.maps })
-
+    console.log(`Low utilization borrow rate: ${prettifyExactAmount(testResultLow.returns * 31536000n, 18)}`)
     // High utilization should give higher rate
     expect(testResultHigh.returns > testResultLow.returns).toBeTruthy()
   })
@@ -244,12 +244,14 @@ describe('dynamic rate unit tests', () => {
       loanToValue: 75n * 10n ** 16n // 75% LTV
     }
 
+    const lastUpdate = Date.now()
+
     const marketState = {
       totalSupplyAssets: 100n * 10n ** 18n,
       totalSupplyShares: 100n * 10n ** 18n,
       totalBorrowAssets: 80n * 10n ** 18n, // 80% utilization (at target)
       totalBorrowShares: 80n * 10n ** 18n,
-      lastUpdate: 100000n, // Some past timestamp
+      lastUpdate: BigInt(lastUpdate),
       fee: 0n
     }
 
@@ -258,17 +260,18 @@ describe('dynamic rate unit tests', () => {
       args: {
         marketParams,
         marketState
-      }
+      },
+      blockTimeStamp: lastUpdate
     }
 
     const state = await DynamicRate.tests.initInterest(initialTestParams)
     const initialResult = await DynamicRate.tests.borrowRate({ ...initialTestParams, initialMaps: state.maps })
 
-    // Now simulate passage of time and changed utilization
+    // One week later with increased utilization
     const laterMarketState = {
       ...marketState,
-      totalBorrowAssets: 90n * 10n ** 18n, // 90% utilization (above target)
-      lastUpdate: 110000n // 10,000 units of time later
+      totalBorrowAssets: 95n * 10n ** 18n,
+      lastUpdate: BigInt(lastUpdate - 60 * 60 * 24 * 7 * 1000)
     }
 
     const laterTestParams = {
@@ -278,10 +281,10 @@ describe('dynamic rate unit tests', () => {
         marketState: laterMarketState
       }
     }
-
     const laterResult = await DynamicRate.tests.borrowRate({ ...laterTestParams, initialMaps: state.maps })
-
-    // Rates should adjust over time, with higher utilization leading to higher rates
     expect(laterResult.returns > initialResult.returns).toBeTruthy()
+    expect(initialResult.returns < DynamicRate.consts.INITIAL_RATE_AT_TARGET).toBe(true)
+    expect(prettifyExactAmount(initialResult.returns * 31536000n, 18)).toBe('0.036666666643392')
+    expect(prettifyExactAmount(laterResult.returns * 31536000n, 18)).toBe('0.1288798993728')
   })
 })
