@@ -143,7 +143,7 @@ Contract DynamicRate(
         } else {
             // Calculate adjustment
             let speed = wadMul(ADJUSTMENT_SPEED, err)
-            let elapsed = blockTimeStamp!() - market.lastUpdate
+            let elapsed = (blockTimeStamp!() - market.lastUpdate) / 1000
             let linearAdaptation = speed * toI256!(elapsed)
 
             if (linearAdaptation == 0i) {
@@ -156,9 +156,7 @@ Contract DynamicRate(
             }
         }
 
-        // Apply the rate curve
-        let avgRate = applyCurve(avgRateAtTarget, err)
-        return toU256!(avgRate), endRateAtTarget
+        return toU256!(applyCurve(avgRateAtTarget, err)), endRateAtTarget
     }
 
     pub fn marketId(loanToken: ByteVec, collateralToken: ByteVec) -> ByteVec {
