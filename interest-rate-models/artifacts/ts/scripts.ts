@@ -21,7 +21,7 @@ import * as types from "./types";
 
 export const GetBorrowRate = new ExecutableScript<
   {
-    dynamicRate: HexString;
+    irm: HexString;
     marketParams: types.MarketParams;
     marketState: types.MarketState;
   },

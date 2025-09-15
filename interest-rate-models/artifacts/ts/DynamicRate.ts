@@ -394,7 +394,7 @@ export const DynamicRate = new Factory(
   Contract.fromJson(
     DynamicRateContractJson,
     "=6-2+7f=2-2+d4=2-1+fd=1+1=2-2=2-2+4e=2-2+aa=2-2+e9=2-1=1-4+5=3-1+1=1-2+31=4-1+e4450=13-1+b=101-1+9=32+7a7e0214696e73657274206174206d617020706174683a2000=2010",
-    "95b88680c2c8edb79d9f3ac9add6f08b7fced8db6d74b0f4635523ac10c6a64b",
+    "0b1044982e25d098e1a6124f15bb6bf6fe128635cf1d53cd679bfac61f1b0b63",
     types.AllStructs
   )
 );
