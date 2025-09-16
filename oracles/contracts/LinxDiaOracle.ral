@@ -1,7 +1,7 @@
 // A wrapper contract for the DIA Oracle, implementing the `IOracle` interface.
 // This contract fetches price data from a specific DIA Oracle for a given market
 // and ensures the data is not stale based on a defined heartbeat interval.
-Contract LinxDiaOracle(
+Abstract Contract LinxDiaOracle(
     diaOracleContractId: ByteVec, // The address of the DIA Oracle contract to query
     baseMarketId: ByteVec,        // The base asset market identifier (e.g., "BTC/USD")
     quoteMarketId: ByteVec,       // The quote asset market identifier (e.g., "USDT/USD")

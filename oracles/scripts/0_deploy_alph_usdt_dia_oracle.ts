@@ -1,6 +1,6 @@
 import { Deployer, DeployFunction, Network } from '@alephium/cli'
 import { Settings } from '../alephium.config'
-import { LinxDiaOracle } from '../artifacts/ts'
+import { AlphUsdtOracle } from '../artifacts/ts'
 import { stringToHex } from '@alephium/web3'
 import { PrivateKeyWallet } from '@alephium/web3-wallet'
 
@@ -32,7 +32,7 @@ const deployOracle: DeployFunction<Settings> = async (
     throw new Error('Missing required settings to deploy the LinxDIAOracle contract.')
   }
 
-  const result = await deployer.deployContract(LinxDiaOracle, {
+  const result = await deployer.deployContract(AlphUsdtOracle, {
     initialFields: {
       diaOracleContractId,
       baseMarketId: stringToHex(baseMarketId),
@@ -50,7 +50,7 @@ const deployOracle: DeployFunction<Settings> = async (
 
   const privateKey = network.privateKeys[0]
   const signer = new PrivateKeyWallet({ privateKey })
-  LinxDiaOracle.at(result.contractInstance.address).transact.init({
+  AlphUsdtOracle.at(result.contractInstance.address).transact.init({
     signer
   })
 
