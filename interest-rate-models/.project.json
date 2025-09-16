@@ -1,5 +1,5 @@
 {
-  "fullNodeVersion": "v4.2.3",
+  "fullNodeVersion": "v4.0.0",
   "compilerOptionsUsed": {
     "ignoreUnusedConstantsWarnings": false,
     "ignoreUnusedVariablesWarnings": false,
@@ -20,7 +20,7 @@
     },
     "CurveUtils": {
       "sourceFile": "utils/curve.ral",
-      "sourceCodeHash": "3e1ec17e20ea961c056958b8f31846d3e4ec5ee9e8a9618627e62423ada69cbb",
+      "sourceCodeHash": "232e3648b29ff5abe3093f0cfa6b22910b2813a21d37e9a21fb7a3a7b0829174",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
