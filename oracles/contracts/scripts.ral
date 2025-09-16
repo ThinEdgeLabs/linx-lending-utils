@@ -1,0 +1,6 @@
+TxScript GetRawOraclePrice(oracle: IDIAOracle, key: ByteVec) {
+    pub fn main() -> U256 {
+        let (price, _) = oracle.getValue(key)
+        return price
+    }
+}
