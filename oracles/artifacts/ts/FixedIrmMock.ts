@@ -66,6 +66,13 @@ export namespace FixedIrmMockTypes {
       }>;
       result: CallContractResult<bigint>;
     };
+    borrowRateView: {
+      params: CallContractParams<{
+        marketParams: MarketParams;
+        marketState: MarketState;
+      }>;
+      result: CallContractResult<bigint>;
+    };
     getRate: {
       params: Omit<CallContractParams<{}>, "args">;
       result: CallContractResult<bigint>;
@@ -140,6 +147,13 @@ export namespace FixedIrmMockTypes {
       result: SignExecuteScriptTxResult;
     };
     borrowRate: {
+      params: SignExecuteContractMethodParams<{
+        marketParams: MarketParams;
+        marketState: MarketState;
+      }>;
+      result: SignExecuteScriptTxResult;
+    };
+    borrowRateView: {
       params: SignExecuteContractMethodParams<{
         marketParams: MarketParams;
         marketState: MarketState;
@@ -246,6 +260,14 @@ class Factory extends ContractFactory<
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(this, "borrowRate", params, getContractByCodeHash);
+    },
+    borrowRateView: async (
+      params: TestContractParamsWithoutMaps<
+        FixedIrmMockTypes.Fields,
+        { marketParams: MarketParams; marketState: MarketState }
+      >
+    ): Promise<TestContractResultWithoutMaps<bigint>> => {
+      return testMethod(this, "borrowRateView", params, getContractByCodeHash);
     },
     getRate: async (
       params: Omit<
@@ -364,7 +386,7 @@ export const FixedIrmMock = new Factory(
   Contract.fromJson(
     FixedIrmMockContractJson,
     "",
-    "6505d5245cc9b93901b4dcc784db82dd96eb80c245071149af2183d75e9ce91c",
+    "8954a05daac785b3417acb316d1bb86a79c8e2213f0d75ee5da2cda158277e59",
     AllStructs
   )
 );
@@ -399,6 +421,17 @@ export class FixedIrmMockInstance extends ContractInstance {
         FixedIrmMock,
         this,
         "borrowRate",
+        params,
+        getContractByCodeHash
+      );
+    },
+    borrowRateView: async (
+      params: FixedIrmMockTypes.CallMethodParams<"borrowRateView">
+    ): Promise<FixedIrmMockTypes.CallMethodResult<"borrowRateView">> => {
+      return callMethod(
+        FixedIrmMock,
+        this,
+        "borrowRateView",
         params,
         getContractByCodeHash
       );
@@ -547,6 +580,11 @@ export class FixedIrmMockInstance extends ContractInstance {
       params: FixedIrmMockTypes.SignExecuteMethodParams<"borrowRate">
     ): Promise<FixedIrmMockTypes.SignExecuteMethodResult<"borrowRate">> => {
       return signExecuteMethod(FixedIrmMock, this, "borrowRate", params);
+    },
+    borrowRateView: async (
+      params: FixedIrmMockTypes.SignExecuteMethodParams<"borrowRateView">
+    ): Promise<FixedIrmMockTypes.SignExecuteMethodResult<"borrowRateView">> => {
+      return signExecuteMethod(FixedIrmMock, this, "borrowRateView", params);
     },
     getRate: async (
       params: FixedIrmMockTypes.SignExecuteMethodParams<"getRate">

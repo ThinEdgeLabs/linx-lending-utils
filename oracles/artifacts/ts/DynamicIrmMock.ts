@@ -62,6 +62,13 @@ export namespace DynamicIrmMockTypes {
       }>;
       result: CallContractResult<bigint>;
     };
+    borrowRateView: {
+      params: CallContractParams<{
+        marketParams: MarketParams;
+        marketState: MarketState;
+      }>;
+      result: CallContractResult<bigint>;
+    };
     wMulDown: {
       params: CallContractParams<{ x: bigint; y: bigint }>;
       result: CallContractResult<bigint>;
@@ -109,13 +116,6 @@ export namespace DynamicIrmMockTypes {
       }>;
       result: CallContractResult<bigint>;
     };
-    borrowRateView: {
-      params: CallContractParams<{
-        marketParams: MarketParams;
-        marketState: MarketState;
-      }>;
-      result: CallContractResult<bigint>;
-    };
   }
   export type CallMethodParams<T extends keyof CallMethodTable> =
     CallMethodTable[T]["params"];
@@ -142,6 +142,13 @@ export namespace DynamicIrmMockTypes {
       result: SignExecuteScriptTxResult;
     };
     borrowRate: {
+      params: SignExecuteContractMethodParams<{
+        marketParams: MarketParams;
+        marketState: MarketState;
+      }>;
+      result: SignExecuteScriptTxResult;
+    };
+    borrowRateView: {
       params: SignExecuteContractMethodParams<{
         marketParams: MarketParams;
         marketState: MarketState;
@@ -206,13 +213,6 @@ export namespace DynamicIrmMockTypes {
       }>;
       result: SignExecuteScriptTxResult;
     };
-    borrowRateView: {
-      params: SignExecuteContractMethodParams<{
-        marketParams: MarketParams;
-        marketState: MarketState;
-      }>;
-      result: SignExecuteScriptTxResult;
-    };
   }
   export type SignExecuteMethodParams<T extends keyof SignExecuteMethodTable> =
     SignExecuteMethodTable[T]["params"];
@@ -253,6 +253,17 @@ class Factory extends ContractFactory<DynamicIrmMockInstance, {}> {
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(this, "borrowRate", params, getContractByCodeHash);
+    },
+    borrowRateView: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<
+          never,
+          { marketParams: MarketParams; marketState: MarketState }
+        >,
+        "initialFields"
+      >
+    ): Promise<TestContractResultWithoutMaps<bigint>> => {
+      return testMethod(this, "borrowRateView", params, getContractByCodeHash);
     },
     wMulDown: async (
       params: Omit<
@@ -364,17 +375,6 @@ class Factory extends ContractFactory<DynamicIrmMockInstance, {}> {
         getContractByCodeHash
       );
     },
-    borrowRateView: async (
-      params: Omit<
-        TestContractParamsWithoutMaps<
-          never,
-          { marketParams: MarketParams; marketState: MarketState }
-        >,
-        "initialFields"
-      >
-    ): Promise<TestContractResultWithoutMaps<bigint>> => {
-      return testMethod(this, "borrowRateView", params, getContractByCodeHash);
-    },
   };
 
   stateForTest(initFields: {}, asset?: Asset, address?: string) {
@@ -387,7 +387,7 @@ export const DynamicIrmMock = new Factory(
   Contract.fromJson(
     DynamicIrmMockContractJson,
     "",
-    "976d2216ba8d895ace4ab93ac23811becac08809cbc8646b075cdbda7c8adb21",
+    "f890a5bb26064dd916fe8b98d0bd364f639173702a15003d455990c33a7afebc",
     AllStructs
   )
 );
@@ -422,6 +422,17 @@ export class DynamicIrmMockInstance extends ContractInstance {
         DynamicIrmMock,
         this,
         "borrowRate",
+        params,
+        getContractByCodeHash
+      );
+    },
+    borrowRateView: async (
+      params: DynamicIrmMockTypes.CallMethodParams<"borrowRateView">
+    ): Promise<DynamicIrmMockTypes.CallMethodResult<"borrowRateView">> => {
+      return callMethod(
+        DynamicIrmMock,
+        this,
+        "borrowRateView",
         params,
         getContractByCodeHash
       );
@@ -547,17 +558,6 @@ export class DynamicIrmMockInstance extends ContractInstance {
         getContractByCodeHash
       );
     },
-    borrowRateView: async (
-      params: DynamicIrmMockTypes.CallMethodParams<"borrowRateView">
-    ): Promise<DynamicIrmMockTypes.CallMethodResult<"borrowRateView">> => {
-      return callMethod(
-        DynamicIrmMock,
-        this,
-        "borrowRateView",
-        params,
-        getContractByCodeHash
-      );
-    },
   };
 
   transact = {
@@ -570,6 +570,13 @@ export class DynamicIrmMockInstance extends ContractInstance {
       params: DynamicIrmMockTypes.SignExecuteMethodParams<"borrowRate">
     ): Promise<DynamicIrmMockTypes.SignExecuteMethodResult<"borrowRate">> => {
       return signExecuteMethod(DynamicIrmMock, this, "borrowRate", params);
+    },
+    borrowRateView: async (
+      params: DynamicIrmMockTypes.SignExecuteMethodParams<"borrowRateView">
+    ): Promise<
+      DynamicIrmMockTypes.SignExecuteMethodResult<"borrowRateView">
+    > => {
+      return signExecuteMethod(DynamicIrmMock, this, "borrowRateView", params);
     },
     wMulDown: async (
       params: DynamicIrmMockTypes.SignExecuteMethodParams<"wMulDown">
@@ -641,13 +648,6 @@ export class DynamicIrmMockInstance extends ContractInstance {
         "calculateBorrowRate",
         params
       );
-    },
-    borrowRateView: async (
-      params: DynamicIrmMockTypes.SignExecuteMethodParams<"borrowRateView">
-    ): Promise<
-      DynamicIrmMockTypes.SignExecuteMethodResult<"borrowRateView">
-    > => {
-      return signExecuteMethod(DynamicIrmMock, this, "borrowRateView", params);
     },
   };
 

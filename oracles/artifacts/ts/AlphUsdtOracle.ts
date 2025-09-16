@@ -33,7 +33,7 @@ import {
   encodeContractFields,
   Narrow,
 } from "@alephium/web3";
-import { default as LinxDiaOracleContractJson } from "../LinxDiaOracle.ral.json";
+import { default as AlphUsdtOracleContractJson } from "../AlphUsdtOracle.ral.json";
 import { getContractByCodeHash, registerContract } from "./contracts";
 import {
   DIAOracleValue,
@@ -44,7 +44,7 @@ import {
 } from "./types";
 
 // Custom types for the contract
-export namespace LinxDiaOracleTypes {
+export namespace AlphUsdtOracleTypes {
   export type Fields = {
     diaOracleContractId: HexString;
     baseMarketId: HexString;
@@ -63,6 +63,10 @@ export namespace LinxDiaOracleTypes {
     price: {
       params: Omit<CallContractParams<{}>, "args">;
       result: CallContractResult<bigint>;
+    };
+    init: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
     };
     wMulDown: {
       params: CallContractParams<{ x: bigint; y: bigint }>;
@@ -104,10 +108,6 @@ export namespace LinxDiaOracleTypes {
       params: CallContractParams<{ amount: bigint; tokenDecimals: bigint }>;
       result: CallContractResult<bigint>;
     };
-    init: {
-      params: Omit<CallContractParams<{}>, "args">;
-      result: CallContractResult<null>;
-    };
   }
   export type CallMethodParams<T extends keyof CallMethodTable> =
     CallMethodTable[T]["params"];
@@ -127,6 +127,10 @@ export namespace LinxDiaOracleTypes {
 
   export interface SignExecuteMethodTable {
     price: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    init: {
       params: Omit<SignExecuteContractMethodParams<{}>, "args">;
       result: SignExecuteScriptTxResult;
     };
@@ -181,10 +185,6 @@ export namespace LinxDiaOracleTypes {
       }>;
       result: SignExecuteScriptTxResult;
     };
-    init: {
-      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
-      result: SignExecuteScriptTxResult;
-    };
   }
   export type SignExecuteMethodParams<T extends keyof SignExecuteMethodTable> =
     SignExecuteMethodTable[T]["params"];
@@ -193,10 +193,10 @@ export namespace LinxDiaOracleTypes {
 }
 
 class Factory extends ContractFactory<
-  LinxDiaOracleInstance,
-  LinxDiaOracleTypes.Fields
+  AlphUsdtOracleInstance,
+  AlphUsdtOracleTypes.Fields
 > {
-  encodeFields(fields: LinxDiaOracleTypes.Fields) {
+  encodeFields(fields: AlphUsdtOracleTypes.Fields) {
     return encodeContractFields(
       addStdIdToFields(this.contract, fields),
       this.contract.fieldsSig,
@@ -209,22 +209,30 @@ class Factory extends ContractFactory<
     ErrorCodes: { StalePrice: BigInt("0") },
   };
 
-  at(address: string): LinxDiaOracleInstance {
-    return new LinxDiaOracleInstance(address);
+  at(address: string): AlphUsdtOracleInstance {
+    return new AlphUsdtOracleInstance(address);
   }
 
   tests = {
     price: async (
       params: Omit<
-        TestContractParamsWithoutMaps<LinxDiaOracleTypes.Fields, never>,
+        TestContractParamsWithoutMaps<AlphUsdtOracleTypes.Fields, never>,
         "args"
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(this, "price", params, getContractByCodeHash);
     },
+    init: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<AlphUsdtOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "init", params, getContractByCodeHash);
+    },
     wMulDown: async (
       params: TestContractParamsWithoutMaps<
-        LinxDiaOracleTypes.Fields,
+        AlphUsdtOracleTypes.Fields,
         { x: bigint; y: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
@@ -232,7 +240,7 @@ class Factory extends ContractFactory<
     },
     wDivDown: async (
       params: TestContractParamsWithoutMaps<
-        LinxDiaOracleTypes.Fields,
+        AlphUsdtOracleTypes.Fields,
         { x: bigint; y: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
@@ -240,7 +248,7 @@ class Factory extends ContractFactory<
     },
     wDivUp: async (
       params: TestContractParamsWithoutMaps<
-        LinxDiaOracleTypes.Fields,
+        AlphUsdtOracleTypes.Fields,
         { x: bigint; y: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
@@ -248,7 +256,7 @@ class Factory extends ContractFactory<
     },
     mulDivDown: async (
       params: TestContractParamsWithoutMaps<
-        LinxDiaOracleTypes.Fields,
+        AlphUsdtOracleTypes.Fields,
         { x: bigint; y: bigint; d: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
@@ -256,7 +264,7 @@ class Factory extends ContractFactory<
     },
     mulDivUp: async (
       params: TestContractParamsWithoutMaps<
-        LinxDiaOracleTypes.Fields,
+        AlphUsdtOracleTypes.Fields,
         { x: bigint; y: bigint; d: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
@@ -264,7 +272,7 @@ class Factory extends ContractFactory<
     },
     wTaylorCompounded: async (
       params: TestContractParamsWithoutMaps<
-        LinxDiaOracleTypes.Fields,
+        AlphUsdtOracleTypes.Fields,
         { x: bigint; n: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
@@ -277,7 +285,7 @@ class Factory extends ContractFactory<
     },
     exactlyOneZero: async (
       params: TestContractParamsWithoutMaps<
-        LinxDiaOracleTypes.Fields,
+        AlphUsdtOracleTypes.Fields,
         { a: bigint; b: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<boolean>> => {
@@ -285,7 +293,7 @@ class Factory extends ContractFactory<
     },
     zeroFloorSub: async (
       params: TestContractParamsWithoutMaps<
-        LinxDiaOracleTypes.Fields,
+        AlphUsdtOracleTypes.Fields,
         { x: bigint; y: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
@@ -293,7 +301,7 @@ class Factory extends ContractFactory<
     },
     min: async (
       params: TestContractParamsWithoutMaps<
-        LinxDiaOracleTypes.Fields,
+        AlphUsdtOracleTypes.Fields,
         { a: bigint; b: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
@@ -301,24 +309,16 @@ class Factory extends ContractFactory<
     },
     toBaseUnits: async (
       params: TestContractParamsWithoutMaps<
-        LinxDiaOracleTypes.Fields,
+        AlphUsdtOracleTypes.Fields,
         { amount: bigint; tokenDecimals: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(this, "toBaseUnits", params, getContractByCodeHash);
     },
-    init: async (
-      params: Omit<
-        TestContractParamsWithoutMaps<LinxDiaOracleTypes.Fields, never>,
-        "args"
-      >
-    ): Promise<TestContractResultWithoutMaps<null>> => {
-      return testMethod(this, "init", params, getContractByCodeHash);
-    },
   };
 
   stateForTest(
-    initFields: LinxDiaOracleTypes.Fields,
+    initFields: AlphUsdtOracleTypes.Fields,
     asset?: Asset,
     address?: string
   ) {
@@ -327,43 +327,54 @@ class Factory extends ContractFactory<
 }
 
 // Use this object to test and deploy the contract
-export const LinxDiaOracle = new Factory(
+export const AlphUsdtOracle = new Factory(
   Contract.fromJson(
-    LinxDiaOracleContractJson,
+    AlphUsdtOracleContractJson,
     "",
-    "948edfd27c4f812a97d69ad6db5c10f57f7b825c631a23da899f7a611e3f6d5d",
+    "7f5a52b1204b38fc8d848ae1ff66605e375009b4efd38978090e38fbd03bcdbc",
     AllStructs
   )
 );
-registerContract(LinxDiaOracle);
+registerContract(AlphUsdtOracle);
 
 // Use this class to interact with the blockchain
-export class LinxDiaOracleInstance extends ContractInstance {
+export class AlphUsdtOracleInstance extends ContractInstance {
   constructor(address: Address) {
     super(address);
   }
 
-  async fetchState(): Promise<LinxDiaOracleTypes.State> {
-    return fetchContractState(LinxDiaOracle, this);
+  async fetchState(): Promise<AlphUsdtOracleTypes.State> {
+    return fetchContractState(AlphUsdtOracle, this);
   }
 
   view = {
     price: async (
-      params?: LinxDiaOracleTypes.CallMethodParams<"price">
-    ): Promise<LinxDiaOracleTypes.CallMethodResult<"price">> => {
+      params?: AlphUsdtOracleTypes.CallMethodParams<"price">
+    ): Promise<AlphUsdtOracleTypes.CallMethodResult<"price">> => {
       return callMethod(
-        LinxDiaOracle,
+        AlphUsdtOracle,
         this,
         "price",
         params === undefined ? {} : params,
         getContractByCodeHash
       );
     },
-    wMulDown: async (
-      params: LinxDiaOracleTypes.CallMethodParams<"wMulDown">
-    ): Promise<LinxDiaOracleTypes.CallMethodResult<"wMulDown">> => {
+    init: async (
+      params?: AlphUsdtOracleTypes.CallMethodParams<"init">
+    ): Promise<AlphUsdtOracleTypes.CallMethodResult<"init">> => {
       return callMethod(
-        LinxDiaOracle,
+        AlphUsdtOracle,
+        this,
+        "init",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    wMulDown: async (
+      params: AlphUsdtOracleTypes.CallMethodParams<"wMulDown">
+    ): Promise<AlphUsdtOracleTypes.CallMethodResult<"wMulDown">> => {
+      return callMethod(
+        AlphUsdtOracle,
         this,
         "wMulDown",
         params,
@@ -371,10 +382,10 @@ export class LinxDiaOracleInstance extends ContractInstance {
       );
     },
     wDivDown: async (
-      params: LinxDiaOracleTypes.CallMethodParams<"wDivDown">
-    ): Promise<LinxDiaOracleTypes.CallMethodResult<"wDivDown">> => {
+      params: AlphUsdtOracleTypes.CallMethodParams<"wDivDown">
+    ): Promise<AlphUsdtOracleTypes.CallMethodResult<"wDivDown">> => {
       return callMethod(
-        LinxDiaOracle,
+        AlphUsdtOracle,
         this,
         "wDivDown",
         params,
@@ -382,10 +393,10 @@ export class LinxDiaOracleInstance extends ContractInstance {
       );
     },
     wDivUp: async (
-      params: LinxDiaOracleTypes.CallMethodParams<"wDivUp">
-    ): Promise<LinxDiaOracleTypes.CallMethodResult<"wDivUp">> => {
+      params: AlphUsdtOracleTypes.CallMethodParams<"wDivUp">
+    ): Promise<AlphUsdtOracleTypes.CallMethodResult<"wDivUp">> => {
       return callMethod(
-        LinxDiaOracle,
+        AlphUsdtOracle,
         this,
         "wDivUp",
         params,
@@ -393,10 +404,10 @@ export class LinxDiaOracleInstance extends ContractInstance {
       );
     },
     mulDivDown: async (
-      params: LinxDiaOracleTypes.CallMethodParams<"mulDivDown">
-    ): Promise<LinxDiaOracleTypes.CallMethodResult<"mulDivDown">> => {
+      params: AlphUsdtOracleTypes.CallMethodParams<"mulDivDown">
+    ): Promise<AlphUsdtOracleTypes.CallMethodResult<"mulDivDown">> => {
       return callMethod(
-        LinxDiaOracle,
+        AlphUsdtOracle,
         this,
         "mulDivDown",
         params,
@@ -404,10 +415,10 @@ export class LinxDiaOracleInstance extends ContractInstance {
       );
     },
     mulDivUp: async (
-      params: LinxDiaOracleTypes.CallMethodParams<"mulDivUp">
-    ): Promise<LinxDiaOracleTypes.CallMethodResult<"mulDivUp">> => {
+      params: AlphUsdtOracleTypes.CallMethodParams<"mulDivUp">
+    ): Promise<AlphUsdtOracleTypes.CallMethodResult<"mulDivUp">> => {
       return callMethod(
-        LinxDiaOracle,
+        AlphUsdtOracle,
         this,
         "mulDivUp",
         params,
@@ -415,10 +426,10 @@ export class LinxDiaOracleInstance extends ContractInstance {
       );
     },
     wTaylorCompounded: async (
-      params: LinxDiaOracleTypes.CallMethodParams<"wTaylorCompounded">
-    ): Promise<LinxDiaOracleTypes.CallMethodResult<"wTaylorCompounded">> => {
+      params: AlphUsdtOracleTypes.CallMethodParams<"wTaylorCompounded">
+    ): Promise<AlphUsdtOracleTypes.CallMethodResult<"wTaylorCompounded">> => {
       return callMethod(
-        LinxDiaOracle,
+        AlphUsdtOracle,
         this,
         "wTaylorCompounded",
         params,
@@ -426,10 +437,10 @@ export class LinxDiaOracleInstance extends ContractInstance {
       );
     },
     exactlyOneZero: async (
-      params: LinxDiaOracleTypes.CallMethodParams<"exactlyOneZero">
-    ): Promise<LinxDiaOracleTypes.CallMethodResult<"exactlyOneZero">> => {
+      params: AlphUsdtOracleTypes.CallMethodParams<"exactlyOneZero">
+    ): Promise<AlphUsdtOracleTypes.CallMethodResult<"exactlyOneZero">> => {
       return callMethod(
-        LinxDiaOracle,
+        AlphUsdtOracle,
         this,
         "exactlyOneZero",
         params,
@@ -437,10 +448,10 @@ export class LinxDiaOracleInstance extends ContractInstance {
       );
     },
     zeroFloorSub: async (
-      params: LinxDiaOracleTypes.CallMethodParams<"zeroFloorSub">
-    ): Promise<LinxDiaOracleTypes.CallMethodResult<"zeroFloorSub">> => {
+      params: AlphUsdtOracleTypes.CallMethodParams<"zeroFloorSub">
+    ): Promise<AlphUsdtOracleTypes.CallMethodResult<"zeroFloorSub">> => {
       return callMethod(
-        LinxDiaOracle,
+        AlphUsdtOracle,
         this,
         "zeroFloorSub",
         params,
@@ -448,10 +459,10 @@ export class LinxDiaOracleInstance extends ContractInstance {
       );
     },
     min: async (
-      params: LinxDiaOracleTypes.CallMethodParams<"min">
-    ): Promise<LinxDiaOracleTypes.CallMethodResult<"min">> => {
+      params: AlphUsdtOracleTypes.CallMethodParams<"min">
+    ): Promise<AlphUsdtOracleTypes.CallMethodResult<"min">> => {
       return callMethod(
-        LinxDiaOracle,
+        AlphUsdtOracle,
         this,
         "min",
         params,
@@ -459,24 +470,13 @@ export class LinxDiaOracleInstance extends ContractInstance {
       );
     },
     toBaseUnits: async (
-      params: LinxDiaOracleTypes.CallMethodParams<"toBaseUnits">
-    ): Promise<LinxDiaOracleTypes.CallMethodResult<"toBaseUnits">> => {
+      params: AlphUsdtOracleTypes.CallMethodParams<"toBaseUnits">
+    ): Promise<AlphUsdtOracleTypes.CallMethodResult<"toBaseUnits">> => {
       return callMethod(
-        LinxDiaOracle,
+        AlphUsdtOracle,
         this,
         "toBaseUnits",
         params,
-        getContractByCodeHash
-      );
-    },
-    init: async (
-      params?: LinxDiaOracleTypes.CallMethodParams<"init">
-    ): Promise<LinxDiaOracleTypes.CallMethodResult<"init">> => {
-      return callMethod(
-        LinxDiaOracle,
-        this,
-        "init",
-        params === undefined ? {} : params,
         getContractByCodeHash
       );
     },
@@ -484,89 +484,89 @@ export class LinxDiaOracleInstance extends ContractInstance {
 
   transact = {
     price: async (
-      params: LinxDiaOracleTypes.SignExecuteMethodParams<"price">
-    ): Promise<LinxDiaOracleTypes.SignExecuteMethodResult<"price">> => {
-      return signExecuteMethod(LinxDiaOracle, this, "price", params);
+      params: AlphUsdtOracleTypes.SignExecuteMethodParams<"price">
+    ): Promise<AlphUsdtOracleTypes.SignExecuteMethodResult<"price">> => {
+      return signExecuteMethod(AlphUsdtOracle, this, "price", params);
+    },
+    init: async (
+      params: AlphUsdtOracleTypes.SignExecuteMethodParams<"init">
+    ): Promise<AlphUsdtOracleTypes.SignExecuteMethodResult<"init">> => {
+      return signExecuteMethod(AlphUsdtOracle, this, "init", params);
     },
     wMulDown: async (
-      params: LinxDiaOracleTypes.SignExecuteMethodParams<"wMulDown">
-    ): Promise<LinxDiaOracleTypes.SignExecuteMethodResult<"wMulDown">> => {
-      return signExecuteMethod(LinxDiaOracle, this, "wMulDown", params);
+      params: AlphUsdtOracleTypes.SignExecuteMethodParams<"wMulDown">
+    ): Promise<AlphUsdtOracleTypes.SignExecuteMethodResult<"wMulDown">> => {
+      return signExecuteMethod(AlphUsdtOracle, this, "wMulDown", params);
     },
     wDivDown: async (
-      params: LinxDiaOracleTypes.SignExecuteMethodParams<"wDivDown">
-    ): Promise<LinxDiaOracleTypes.SignExecuteMethodResult<"wDivDown">> => {
-      return signExecuteMethod(LinxDiaOracle, this, "wDivDown", params);
+      params: AlphUsdtOracleTypes.SignExecuteMethodParams<"wDivDown">
+    ): Promise<AlphUsdtOracleTypes.SignExecuteMethodResult<"wDivDown">> => {
+      return signExecuteMethod(AlphUsdtOracle, this, "wDivDown", params);
     },
     wDivUp: async (
-      params: LinxDiaOracleTypes.SignExecuteMethodParams<"wDivUp">
-    ): Promise<LinxDiaOracleTypes.SignExecuteMethodResult<"wDivUp">> => {
-      return signExecuteMethod(LinxDiaOracle, this, "wDivUp", params);
+      params: AlphUsdtOracleTypes.SignExecuteMethodParams<"wDivUp">
+    ): Promise<AlphUsdtOracleTypes.SignExecuteMethodResult<"wDivUp">> => {
+      return signExecuteMethod(AlphUsdtOracle, this, "wDivUp", params);
     },
     mulDivDown: async (
-      params: LinxDiaOracleTypes.SignExecuteMethodParams<"mulDivDown">
-    ): Promise<LinxDiaOracleTypes.SignExecuteMethodResult<"mulDivDown">> => {
-      return signExecuteMethod(LinxDiaOracle, this, "mulDivDown", params);
+      params: AlphUsdtOracleTypes.SignExecuteMethodParams<"mulDivDown">
+    ): Promise<AlphUsdtOracleTypes.SignExecuteMethodResult<"mulDivDown">> => {
+      return signExecuteMethod(AlphUsdtOracle, this, "mulDivDown", params);
     },
     mulDivUp: async (
-      params: LinxDiaOracleTypes.SignExecuteMethodParams<"mulDivUp">
-    ): Promise<LinxDiaOracleTypes.SignExecuteMethodResult<"mulDivUp">> => {
-      return signExecuteMethod(LinxDiaOracle, this, "mulDivUp", params);
+      params: AlphUsdtOracleTypes.SignExecuteMethodParams<"mulDivUp">
+    ): Promise<AlphUsdtOracleTypes.SignExecuteMethodResult<"mulDivUp">> => {
+      return signExecuteMethod(AlphUsdtOracle, this, "mulDivUp", params);
     },
     wTaylorCompounded: async (
-      params: LinxDiaOracleTypes.SignExecuteMethodParams<"wTaylorCompounded">
+      params: AlphUsdtOracleTypes.SignExecuteMethodParams<"wTaylorCompounded">
     ): Promise<
-      LinxDiaOracleTypes.SignExecuteMethodResult<"wTaylorCompounded">
+      AlphUsdtOracleTypes.SignExecuteMethodResult<"wTaylorCompounded">
     > => {
       return signExecuteMethod(
-        LinxDiaOracle,
+        AlphUsdtOracle,
         this,
         "wTaylorCompounded",
         params
       );
     },
     exactlyOneZero: async (
-      params: LinxDiaOracleTypes.SignExecuteMethodParams<"exactlyOneZero">
+      params: AlphUsdtOracleTypes.SignExecuteMethodParams<"exactlyOneZero">
     ): Promise<
-      LinxDiaOracleTypes.SignExecuteMethodResult<"exactlyOneZero">
+      AlphUsdtOracleTypes.SignExecuteMethodResult<"exactlyOneZero">
     > => {
-      return signExecuteMethod(LinxDiaOracle, this, "exactlyOneZero", params);
+      return signExecuteMethod(AlphUsdtOracle, this, "exactlyOneZero", params);
     },
     zeroFloorSub: async (
-      params: LinxDiaOracleTypes.SignExecuteMethodParams<"zeroFloorSub">
-    ): Promise<LinxDiaOracleTypes.SignExecuteMethodResult<"zeroFloorSub">> => {
-      return signExecuteMethod(LinxDiaOracle, this, "zeroFloorSub", params);
+      params: AlphUsdtOracleTypes.SignExecuteMethodParams<"zeroFloorSub">
+    ): Promise<AlphUsdtOracleTypes.SignExecuteMethodResult<"zeroFloorSub">> => {
+      return signExecuteMethod(AlphUsdtOracle, this, "zeroFloorSub", params);
     },
     min: async (
-      params: LinxDiaOracleTypes.SignExecuteMethodParams<"min">
-    ): Promise<LinxDiaOracleTypes.SignExecuteMethodResult<"min">> => {
-      return signExecuteMethod(LinxDiaOracle, this, "min", params);
+      params: AlphUsdtOracleTypes.SignExecuteMethodParams<"min">
+    ): Promise<AlphUsdtOracleTypes.SignExecuteMethodResult<"min">> => {
+      return signExecuteMethod(AlphUsdtOracle, this, "min", params);
     },
     toBaseUnits: async (
-      params: LinxDiaOracleTypes.SignExecuteMethodParams<"toBaseUnits">
-    ): Promise<LinxDiaOracleTypes.SignExecuteMethodResult<"toBaseUnits">> => {
-      return signExecuteMethod(LinxDiaOracle, this, "toBaseUnits", params);
-    },
-    init: async (
-      params: LinxDiaOracleTypes.SignExecuteMethodParams<"init">
-    ): Promise<LinxDiaOracleTypes.SignExecuteMethodResult<"init">> => {
-      return signExecuteMethod(LinxDiaOracle, this, "init", params);
+      params: AlphUsdtOracleTypes.SignExecuteMethodParams<"toBaseUnits">
+    ): Promise<AlphUsdtOracleTypes.SignExecuteMethodResult<"toBaseUnits">> => {
+      return signExecuteMethod(AlphUsdtOracle, this, "toBaseUnits", params);
     },
   };
 
-  async multicall<Calls extends LinxDiaOracleTypes.MultiCallParams>(
+  async multicall<Calls extends AlphUsdtOracleTypes.MultiCallParams>(
     calls: Calls
-  ): Promise<LinxDiaOracleTypes.MultiCallResults<Calls>>;
-  async multicall<Callss extends LinxDiaOracleTypes.MultiCallParams[]>(
+  ): Promise<AlphUsdtOracleTypes.MultiCallResults<Calls>>;
+  async multicall<Callss extends AlphUsdtOracleTypes.MultiCallParams[]>(
     callss: Narrow<Callss>
-  ): Promise<LinxDiaOracleTypes.MulticallReturnType<Callss>>;
+  ): Promise<AlphUsdtOracleTypes.MulticallReturnType<Callss>>;
   async multicall<
     Callss extends
-      | LinxDiaOracleTypes.MultiCallParams
-      | LinxDiaOracleTypes.MultiCallParams[]
+      | AlphUsdtOracleTypes.MultiCallParams
+      | AlphUsdtOracleTypes.MultiCallParams[]
   >(callss: Callss): Promise<unknown> {
     return await multicallMethods(
-      LinxDiaOracle,
+      AlphUsdtOracle,
       this,
       callss,
       getContractByCodeHash

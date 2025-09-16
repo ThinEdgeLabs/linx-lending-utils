@@ -2,15 +2,17 @@
 /* tslint:disable */
 /* eslint-disable */
 
+export * from "./AlphUsdtOracle";
 export * from "./DynamicIrmMock";
 export * from "./FixedIrmMock";
 export * from "./FungibleToken";
 export * from "./Linx";
-export * from "./LinxDiaOracle";
 export * from "./Market";
 export * from "./MockOracle";
 export * from "./OracleMock";
+export * from "./TestBTC";
 export * from "./TestHelper";
 export * from "./TestToken";
+export * from "./TestUSDT";
 export * from "./contracts";
 export * from "./scripts";

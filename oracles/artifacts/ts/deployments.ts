@@ -10,6 +10,8 @@ import {
 import {
   LinxDiaOracle,
   LinxDiaOracleInstance,
+  AlphUsdtOracle,
+  AlphUsdtOracleInstance,
   DIAOracleWrapper,
   DIAOracleWrapperInstance,
 } from ".";
@@ -20,6 +22,7 @@ export type Deployments = {
   deployerAddress: string;
   contracts: {
     LinxDiaOracle: DeployContractExecutionResult<LinxDiaOracleInstance>;
+    AlphUsdtOracle?: DeployContractExecutionResult<AlphUsdtOracleInstance>;
     DIAOracleWrapper?: DeployContractExecutionResult<DIAOracleWrapperInstance>;
   };
 };
@@ -32,6 +35,15 @@ function toDeployments(json: any): Deployments {
         json.contracts["LinxDiaOracle"].contractInstance.address
       ),
     },
+    AlphUsdtOracle:
+      json.contracts["AlphUsdtOracle"] === undefined
+        ? undefined
+        : {
+            ...json.contracts["AlphUsdtOracle"],
+            contractInstance: AlphUsdtOracle.at(
+              json.contracts["AlphUsdtOracle"].contractInstance.address
+            ),
+          },
     DIAOracleWrapper:
       json.contracts["DIAOracleWrapper"] === undefined
         ? undefined
