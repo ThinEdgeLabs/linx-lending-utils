@@ -1,7 +1,7 @@
 Abstract Contract StringUtils() {
 
-    fn calcMarketId(loanToken: ByteVec, collateralToken: ByteVec) -> ByteVec {
-        return keccak256!(loanToken ++ collateralToken)
+    fn calcMarketId(params: MarketParams) -> ByteVec {
+        return keccak256!(params.loanToken ++ params.collateralToken ++ params.interestRateModel ++ params.oracle ++ toByteVec!(params.loanToValue))
     }
 }
 

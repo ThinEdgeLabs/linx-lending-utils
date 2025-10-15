@@ -6,7 +6,7 @@
 Contract DynamicRate(
     /// Address of the Linx protocol contract
     linx: Address
-) extends Constants(), StringUtils(), CurveUtils() implements IDynamicRate {
+) extends Constants(), StringUtils(), CurveUtils() implements IInterestRate {
     // Storage
     /// Maps market IDs to their current rate at target utilization
     mapping[ByteVec, I256] rateAtTarget
@@ -24,7 +24,7 @@ Contract DynamicRate(
     @using (preapprovedAssets = true, checkExternalCaller = false)
     pub fn initInterest(marketParams: MarketParams, marketState: MarketState) -> U256 {
         let _ = marketState
-        let id = calcMarketId(marketParams.loanToken, marketParams.collateralToken)
+        let id = calcMarketId(marketParams)
         if (!rateAtTarget.contains!(id)) {
             // Initialize rate at target for new market
             rateAtTarget.insert!(id, 0i)
@@ -52,7 +52,7 @@ Contract DynamicRate(
         let caller = callerAddress!()
         checkCaller!(caller == linx, ErrorCodes.NotAuthorized)
 
-        let id = calcMarketId(marketParams.loanToken, marketParams.collateralToken)
+        let id = calcMarketId(marketParams)
         let (avgRate, endRateAtTarget) = calculateBorrowRate(id, marketState)
 
         rateAtTarget[id] = endRateAtTarget
@@ -74,26 +74,9 @@ Contract DynamicRate(
     /// # Returns
     /// The current borrow rate
     pub fn borrowRateView(marketParams: MarketParams, marketState: MarketState) -> U256 {
-        let id = calcMarketId(marketParams.loanToken, marketParams.collateralToken)
+        let id = calcMarketId(marketParams)
         let (avgRate, _) = calculateBorrowRate(id, marketState)
         return avgRate
-    }
-
-    /// Returns the rate at target utilization for a specific market
-    ///
-    /// # Arguments
-    /// * `loanToken` - Address of the loan token
-    /// * `collateralToken` - Address of the collateral token
-    ///
-    /// # Returns
-    /// The rate at target utilization, or 0 if not set
-    pub fn getRateAtTarget(loanToken: ByteVec, collateralToken: ByteVec) -> U256 {
-        let id = calcMarketId(loanToken, collateralToken)
-        let mut rate = 0i
-        if (rateAtTarget.contains!(id)) {
-            rate = rateAtTarget[id]
-        }
-        return toU256!(rate)
     }
 
     /// Internal function to calculate borrow rate based on market conditions
@@ -158,9 +141,4 @@ Contract DynamicRate(
 
         return toU256!(applyCurve(avgRateAtTarget, err)), endRateAtTarget
     }
-
-    pub fn marketId(loanToken: ByteVec, collateralToken: ByteVec) -> ByteVec {
-        return calcMarketId(loanToken, collateralToken)
-    }
 }
-
