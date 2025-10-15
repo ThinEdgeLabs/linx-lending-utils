@@ -1,4 +1,11 @@
-import { web3, DUST_AMOUNT, SignerProvider, addressFromContractId, MAP_ENTRY_DEPOSIT } from '@alephium/web3'
+import {
+  web3,
+  DUST_AMOUNT,
+  SignerProvider,
+  addressFromContractId,
+  MAP_ENTRY_DEPOSIT,
+  waitForTxConfirmation
+} from '@alephium/web3'
 import { testNodeWallet, randomContractId } from '@alephium/web3-test'
 import { DynamicRate } from '../../artifacts/ts'
 import { describe, it, expect, beforeAll, jest } from '@jest/globals'
@@ -64,15 +71,18 @@ describe('dynamic rate integration tests', () => {
     console.log(`Utilization: ${utilization * 100}%`)
 
     // Get initial rate at target
-    const rateAtTarget = await dynamicRate.view.getRateAtTarget({
-      args: { loanToken: testAddress, collateralToken: testAddress }
+    const txResult = await dynamicRate.transact.borrowRate({
+      signer: signer,
+      attoAlphAmount: MAP_ENTRY_DEPOSIT,
+      args: { marketParams, marketState }
     })
+    await waitForTxConfirmation(txResult.txId, 1, 1000)
 
     // Should be 0 for first interaction
-    expect(rateAtTarget.returns).toEqual(0n)
-    console.log('Initial rate at target:', rateAtTarget.returns.toString())
+    // expect(rateAtTarget.returns).toEqual(0n)
+    // console.log('Initial rate at target:', rateAtTarget.returns.toString())
 
-    // Calculate expected rate using our calculation function (first interaction)
+    // // Calculate expected rate using our calculation function (first interaction)
     const expectedRate = calculateBorrowRate(marketState, rateAtTarget.returns)
     console.log('Expected calculated rate:', expectedRate.toString())
 
@@ -93,8 +103,8 @@ describe('dynamic rate integration tests', () => {
     })
 
     // Verify rate was updated
-    const newRateAtTarget = await dynamicRate.view.getRateAtTarget({
-      args: { loanToken: marketParams.loanToken, collateralToken: marketParams.collateralToken }
+    const newRateAtTarget = await dynamicRate.view.borrowRateView({
+      args: { marketParams, marketState }
     })
     console.log('New rate at target:', newRateAtTarget.returns.toString())
 

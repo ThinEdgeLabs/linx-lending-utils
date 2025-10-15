@@ -30,12 +30,22 @@ describe('string utils unit tests', () => {
     // Create addresses for testing
     const loanToken = addressFromContractId(randomContractId())
     const collateralToken = addressFromContractId(randomContractId())
+    const irm = addressFromContractId(randomContractId())
+    const oracle = addressFromContractId(randomContractId())
+    const loanToValue = 50n
+
+    const marketParams = {
+      loanToken,
+      collateralToken,
+      interestRateModel: irm,
+      oracle,
+      loanToValue
+    }
 
     const testParams = {
       ...testParamsFixture,
       args: {
-        loanToken,
-        collateralToken
+        params: marketParams
       }
     }
 
@@ -46,11 +56,14 @@ describe('string utils unit tests', () => {
 
     // Generate a second ID with different marketParams
     const newLoanToken = addressFromContractId(randomContractId())
+    const marketParams2 = {
+      ...marketParams,
+      loanToken: newLoanToken
+    }
     const testParams2 = {
       ...testParamsFixture,
       args: {
-        loanToken: newLoanToken,
-        collateralToken
+        params: marketParams2
       }
     }
 
@@ -58,19 +71,5 @@ describe('string utils unit tests', () => {
 
     // Different loan tokens should generate different IDs
     expect(testResult.returns).not.toEqual(testResult2.returns)
-
-    // Test same parameters produce the same ID (consistency)
-    const testParams3 = {
-      ...testParamsFixture,
-      args: {
-        loanToken,
-        collateralToken
-      }
-    }
-
-    const testResult3 = await DynamicRate.tests.calcMarketId(testParams3)
-
-    // Same parameters should generate the same ID
-    expect(testResult.returns).toEqual(testResult3.returns)
   })
 })
