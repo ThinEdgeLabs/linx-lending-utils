@@ -1,5 +1,5 @@
 {
-  "fullNodeVersion": "v4.0.0",
+  "fullNodeVersion": "v4.2.5",
   "compilerOptionsUsed": {
     "ignoreUnusedConstantsWarnings": false,
     "ignoreUnusedVariablesWarnings": false,
@@ -26,9 +26,9 @@
     },
     "DynamicRate": {
       "sourceFile": "dynamic_rate.ral",
-      "sourceCodeHash": "a316f8c36b565e9cd2b04d055f26111913d36069064ed6d152a3776d57a751c6",
-      "bytecodeDebugPatch": "=6-2+7f=2-2+d4=2-1+fd=1+1=2-2=2-2+4e=2-2+aa=2-2+e9=2-1=1-4+5=3-1+1=1-2+31=4-1+e4450=13-1+b=101-1+9=32+7a7e0214696e73657274206174206d617020706174683a2000=2010",
-      "codeHashDebug": "0b1044982e25d098e1a6124f15bb6bf6fe128635cf1d53cd679bfac61f1b0b63"
+      "sourceCodeHash": "62438729fd784cb439363a48cfebb9587c0897fdb94dabc52d0d90c68c4aea7a",
+      "bytecodeDebugPatch": "=6-2+85=2-3+e=1-2=3-1+f=2+2=1-1=2-1=1-1=1-1=1+1c1=2-2+9d=2+c942e=3-3+16=13-1+e=113-1+9=32+7a7e0214696e73657274206174206d617020706174683a2000=1882",
+      "codeHashDebug": "ab618bfe1179f7c37ac66ae11b622d79c427275e551fadf507284e403d92347a"
     },
     "FixedRate": {
       "sourceFile": "fixed_rate.ral",
@@ -38,25 +38,13 @@
     },
     "GetBorrowRate": {
       "sourceFile": "scripts.ral",
-      "sourceCodeHash": "a3d523c88a39e622062e6884285f2506a4957d0fad8b57e58a1906d2c12943a9",
+      "sourceCodeHash": "827aed13189c596a9985bd91e7aad9f172a1c30ea1de98647d2a3809f78348b8",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "GetBorrowRateAndUpdate": {
       "sourceFile": "scripts.ral",
-      "sourceCodeHash": "a3d523c88a39e622062e6884285f2506a4957d0fad8b57e58a1906d2c12943a9",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": ""
-    },
-    "GetMarketId": {
-      "sourceFile": "scripts.ral",
-      "sourceCodeHash": "a3d523c88a39e622062e6884285f2506a4957d0fad8b57e58a1906d2c12943a9",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": ""
-    },
-    "GetRateAtTarget": {
-      "sourceFile": "scripts.ral",
-      "sourceCodeHash": "a3d523c88a39e622062e6884285f2506a4957d0fad8b57e58a1906d2c12943a9",
+      "sourceCodeHash": "827aed13189c596a9985bd91e7aad9f172a1c30ea1de98647d2a3809f78348b8",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -92,13 +80,13 @@
     },
     "SetFixedRate": {
       "sourceFile": "scripts.ral",
-      "sourceCodeHash": "a3d523c88a39e622062e6884285f2506a4957d0fad8b57e58a1906d2c12943a9",
+      "sourceCodeHash": "827aed13189c596a9985bd91e7aad9f172a1c30ea1de98647d2a3809f78348b8",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "StringUtils": {
       "sourceFile": "utils/string.ral",
-      "sourceCodeHash": "7855672301640fdba82a41ef13bf4f1000ff2523026bf92288b5d56e8706dbe0",
+      "sourceCodeHash": "8fb5439380c673d81e44060d90707799a9099137284d4404d4358ebbeb22b318",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     }

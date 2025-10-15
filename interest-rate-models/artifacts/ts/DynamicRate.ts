@@ -74,18 +74,8 @@ export namespace DynamicRateTypes {
       }>;
       result: CallContractResult<bigint>;
     };
-    getRateAtTarget: {
-      params: CallContractParams<{
-        loanToken: HexString;
-        collateralToken: HexString;
-      }>;
-      result: CallContractResult<bigint>;
-    };
     calcMarketId: {
-      params: CallContractParams<{
-        loanToken: HexString;
-        collateralToken: HexString;
-      }>;
+      params: CallContractParams<{ params: types.MarketParams }>;
       result: CallContractResult<HexString>;
     };
     applyCurve: {
@@ -114,13 +104,6 @@ export namespace DynamicRateTypes {
     calculateBorrowRate: {
       params: CallContractParams<{ id: HexString; market: types.MarketState }>;
       result: CallContractResult<[bigint, bigint]>;
-    };
-    marketId: {
-      params: CallContractParams<{
-        loanToken: HexString;
-        collateralToken: HexString;
-      }>;
-      result: CallContractResult<HexString>;
     };
   }
   export type CallMethodParams<T extends keyof CallMethodTable> =
@@ -161,18 +144,8 @@ export namespace DynamicRateTypes {
       }>;
       result: SignExecuteScriptTxResult;
     };
-    getRateAtTarget: {
-      params: SignExecuteContractMethodParams<{
-        loanToken: HexString;
-        collateralToken: HexString;
-      }>;
-      result: SignExecuteScriptTxResult;
-    };
     calcMarketId: {
-      params: SignExecuteContractMethodParams<{
-        loanToken: HexString;
-        collateralToken: HexString;
-      }>;
+      params: SignExecuteContractMethodParams<{ params: types.MarketParams }>;
       result: SignExecuteScriptTxResult;
     };
     applyCurve: {
@@ -205,13 +178,6 @@ export namespace DynamicRateTypes {
       params: SignExecuteContractMethodParams<{
         id: HexString;
         market: types.MarketState;
-      }>;
-      result: SignExecuteScriptTxResult;
-    };
-    marketId: {
-      params: SignExecuteContractMethodParams<{
-        loanToken: HexString;
-        collateralToken: HexString;
       }>;
       result: SignExecuteScriptTxResult;
     };
@@ -291,19 +257,10 @@ class Factory extends ContractFactory<
     ): Promise<TestContractResult<bigint, DynamicRateTypes.Maps>> => {
       return testMethod(this, "borrowRateView", params, getContractByCodeHash);
     },
-    getRateAtTarget: async (
-      params: TestContractParams<
-        DynamicRateTypes.Fields,
-        { loanToken: HexString; collateralToken: HexString },
-        DynamicRateTypes.Maps
-      >
-    ): Promise<TestContractResult<bigint, DynamicRateTypes.Maps>> => {
-      return testMethod(this, "getRateAtTarget", params, getContractByCodeHash);
-    },
     calcMarketId: async (
       params: TestContractParams<
         DynamicRateTypes.Fields,
-        { loanToken: HexString; collateralToken: HexString },
+        { params: types.MarketParams },
         DynamicRateTypes.Maps
       >
     ): Promise<TestContractResult<HexString, DynamicRateTypes.Maps>> => {
@@ -368,15 +325,6 @@ class Factory extends ContractFactory<
         getContractByCodeHash
       );
     },
-    marketId: async (
-      params: TestContractParams<
-        DynamicRateTypes.Fields,
-        { loanToken: HexString; collateralToken: HexString },
-        DynamicRateTypes.Maps
-      >
-    ): Promise<TestContractResult<HexString, DynamicRateTypes.Maps>> => {
-      return testMethod(this, "marketId", params, getContractByCodeHash);
-    },
   };
 
   stateForTest(
@@ -393,8 +341,8 @@ class Factory extends ContractFactory<
 export const DynamicRate = new Factory(
   Contract.fromJson(
     DynamicRateContractJson,
-    "=6-2+7f=2-2+d4=2-1+fd=1+1=2-2=2-2+4e=2-2+aa=2-2+e9=2-1=1-4+5=3-1+1=1-2+31=4-1+e4450=13-1+b=101-1+9=32+7a7e0214696e73657274206174206d617020706174683a2000=2010",
-    "0b1044982e25d098e1a6124f15bb6bf6fe128635cf1d53cd679bfac61f1b0b63",
+    "=6-2+85=2-3+e=1-2=3-1+f=2+2=1-1=2-1=1-1=1-1=1+1c1=2-2+9d=2+c942e=3-3+16=13-1+e=113-1+9=32+7a7e0214696e73657274206174206d617020706174683a2000=1882",
+    "ab618bfe1179f7c37ac66ae11b622d79c427275e551fadf507284e403d92347a",
     types.AllStructs
   )
 );
@@ -465,17 +413,6 @@ export class DynamicRateInstance extends ContractInstance {
         DynamicRate,
         this,
         "borrowRateView",
-        params,
-        getContractByCodeHash
-      );
-    },
-    getRateAtTarget: async (
-      params: DynamicRateTypes.CallMethodParams<"getRateAtTarget">
-    ): Promise<DynamicRateTypes.CallMethodResult<"getRateAtTarget">> => {
-      return callMethod(
-        DynamicRate,
-        this,
-        "getRateAtTarget",
         params,
         getContractByCodeHash
       );
@@ -557,17 +494,6 @@ export class DynamicRateInstance extends ContractInstance {
         getContractByCodeHash
       );
     },
-    marketId: async (
-      params: DynamicRateTypes.CallMethodParams<"marketId">
-    ): Promise<DynamicRateTypes.CallMethodResult<"marketId">> => {
-      return callMethod(
-        DynamicRate,
-        this,
-        "marketId",
-        params,
-        getContractByCodeHash
-      );
-    },
   };
 
   transact = {
@@ -585,11 +511,6 @@ export class DynamicRateInstance extends ContractInstance {
       params: DynamicRateTypes.SignExecuteMethodParams<"borrowRateView">
     ): Promise<DynamicRateTypes.SignExecuteMethodResult<"borrowRateView">> => {
       return signExecuteMethod(DynamicRate, this, "borrowRateView", params);
-    },
-    getRateAtTarget: async (
-      params: DynamicRateTypes.SignExecuteMethodParams<"getRateAtTarget">
-    ): Promise<DynamicRateTypes.SignExecuteMethodResult<"getRateAtTarget">> => {
-      return signExecuteMethod(DynamicRate, this, "getRateAtTarget", params);
     },
     calcMarketId: async (
       params: DynamicRateTypes.SignExecuteMethodParams<"calcMarketId">
@@ -632,11 +553,6 @@ export class DynamicRateInstance extends ContractInstance {
         "calculateBorrowRate",
         params
       );
-    },
-    marketId: async (
-      params: DynamicRateTypes.SignExecuteMethodParams<"marketId">
-    ): Promise<DynamicRateTypes.SignExecuteMethodResult<"marketId">> => {
-      return signExecuteMethod(DynamicRate, this, "marketId", params);
     },
   };
 
