@@ -1,17 +1,35 @@
 import {
   web3,
-  DUST_AMOUNT,
   SignerProvider,
   addressFromContractId,
   MAP_ENTRY_DEPOSIT,
-  waitForTxConfirmation
+  waitForTxConfirmation,
+  prettifyTokenAmount
 } from '@alephium/web3'
 import { testNodeWallet, randomContractId } from '@alephium/web3-test'
-import { DynamicRate } from '../../artifacts/ts'
+import { DynamicRate, DynamicRateInstance } from '../../artifacts/ts'
 import { describe, it, expect, beforeAll, jest } from '@jest/globals'
-import { calculateBorrowRate } from '../utils/rate_calculations'
+import { MarketParams, MarketState } from '../../artifacts/ts/types'
+import { _err, applyCurve } from '../utils/rate_calculations'
 
-jest.setTimeout(30000)
+jest.setTimeout(300000)
+
+function calculateAPY(ratePerSecond: bigint): string | undefined {
+  const secondsInYear = 31536000
+  return prettifyTokenAmount(ratePerSecond * BigInt(secondsInYear), 16) + '%'
+}
+
+function assertApproxEqual(actual: bigint, expected: bigint, toleranceBps: number = 100) {
+  const tolerance = (expected * BigInt(toleranceBps)) / 10000n
+  const lowerBound = expected - tolerance
+  const upperBound = expected + tolerance
+
+  if (actual < lowerBound || actual > upperBound) {
+    throw new Error(
+      `Values are not approximately equal. Actual: ${actual}, Expected: ${expected}, Tolerance: ±${tolerance} (${toleranceBps} bps)`
+    )
+  }
+}
 
 async function deployDynamicRate(signer: SignerProvider): Promise<string> {
   const address = (await signer.getSelectedAccount()).address
@@ -25,207 +43,345 @@ async function deployDynamicRate(signer: SignerProvider): Promise<string> {
   return result.contractInstance.contractId
 }
 
+async function testFirstInteraction(params: {
+  suppliedAssets: bigint
+  borrowedAssets: bigint
+  expectedAvgRate: bigint
+  expectedRateAtTarget: bigint
+  marketParams: MarketParams
+  signer?: SignerProvider
+}): Promise<DynamicRateInstance> {
+  const { suppliedAssets, borrowedAssets, expectedAvgRate, expectedRateAtTarget, marketParams } = params
+  const signer: SignerProvider = params.signer ?? (await testNodeWallet())
+  const dynamicRateId = await deployDynamicRate(signer)
+  const dynamicRate = DynamicRate.at(addressFromContractId(dynamicRateId))
+  const marketState = {
+    totalSupplyAssets: suppliedAssets,
+    totalSupplyShares: 0n,
+    totalBorrowAssets: borrowedAssets,
+    totalBorrowShares: 0n,
+    lastUpdate: BigInt(Date.now()),
+    fee: 0n
+  }
+
+  await dynamicRate.transact.initInterest({
+    args: { marketParams, marketState },
+    signer: signer,
+    attoAlphAmount: MAP_ENTRY_DEPOSIT
+  })
+
+  const txResult = await dynamicRate.transact.borrowRate({
+    signer: signer,
+    args: { marketParams, marketState }
+  })
+  await waitForTxConfirmation(txResult.txId, 1, 2)
+
+  const { events } = await signer.nodeProvider!.events.getEventsContractContractaddress(dynamicRate.address, {
+    start: 0
+  })
+
+  expect(events[0].eventIndex).toEqual(0)
+
+  const avgRate = BigInt(events[0].fields[1].value as string)
+  expect(avgRate).toEqual(expectedAvgRate)
+
+  const rateAtTarget = BigInt(events[0].fields[2].value as string)
+  expect(rateAtTarget).toEqual(expectedRateAtTarget)
+
+  console.log(`Avg rate: ${calculateAPY(avgRate)}, Expected avg rate: ${calculateAPY(expectedAvgRate)}`)
+  console.log(
+    `Rate at target: ${calculateAPY(rateAtTarget)}, Expected rate at target: ${calculateAPY(expectedRateAtTarget)}`
+  )
+
+  return dynamicRate
+}
+
+async function updateBorrowRate(params: {
+  dynamicRate: DynamicRateInstance
+  signer: SignerProvider
+  marketParams: MarketParams
+  marketState: MarketState
+}): Promise<[bigint, bigint]> {
+  const { dynamicRate, signer, marketParams, marketState } = params
+  const txResult = await dynamicRate.transact.borrowRate({
+    signer: signer,
+    args: { marketParams, marketState }
+  })
+  await waitForTxConfirmation(txResult.txId, 1, 2)
+
+  const { events } = await signer.nodeProvider!.events.getEventsContractContractaddress(dynamicRate.address, {
+    start: 0
+  })
+
+  const lastEventIndex = events.length - 1
+  expect(events[lastEventIndex].eventIndex).toEqual(0)
+
+  const avgRate = BigInt(events[lastEventIndex].fields[1].value as string)
+  const rateAtTarget = BigInt(events[lastEventIndex].fields[2].value as string)
+  return [avgRate, rateAtTarget]
+}
+
 describe('dynamic rate integration tests', () => {
-  let dynamicRateId: string
+  const ONE_YEAR_IN_SECONDS = 365n * 24n * 3600n
+  const loanToken = randomContractId()
+  const collateralToken = randomContractId()
+  const oracle = randomContractId()
+  const interestRateModel = randomContractId()
+  const marketParams = {
+    loanToken,
+    collateralToken,
+    oracle,
+    interestRateModel,
+    loanToValue: 86n * 10n ** 16n
+  }
 
   beforeAll(async () => {
     web3.setCurrentNodeProvider('http://127.0.0.1:22973', undefined, fetch)
   })
 
-  it('should test dynamic rate functions on devnet', async () => {
-    const signer = await testNodeWallet()
-    dynamicRateId = await deployDynamicRate(signer)
-
-    const account = await signer.getSelectedAccount()
-    const testAddress = randomContractId()
-    await signer.setSelectedAccount(account.address)
-    const dynamicRate = DynamicRate.at(addressFromContractId(dynamicRateId))
-
-    // Test borrowRate and borrowRateView with mock market data
-    const marketParams = {
-      loanToken: testAddress,
-      collateralToken: testAddress,
-      oracle: testAddress,
-      interestRateModel: testAddress,
-      loanToValue: 75n * 10n ** 16n
-    }
+  it('returns the correct rate after 5 days with 100% utilization', async () => {
+    const dynamicRate = await testFirstInteraction({
+      suppliedAssets: 1n,
+      borrowedAssets: 1n,
+      expectedAvgRate: DynamicRate.consts.INITIAL_RATE_AT_TARGET * 4n,
+      expectedRateAtTarget: DynamicRate.consts.INITIAL_RATE_AT_TARGET,
+      marketParams
+    })
 
     const marketState = {
-      totalSupplyAssets: 3n * 10n ** 18n, // 3 tokens
-      totalSupplyShares: 3n * 10n ** 18n,
-      totalBorrowAssets: 15n * 10n ** 17n, // 1.5 tokens (50% utilization)
-      totalBorrowShares: 15n * 10n ** 17n,
-      lastUpdate: 1000n,
+      totalSupplyAssets: 1n,
+      totalSupplyShares: 0n,
+      totalBorrowAssets: 1n,
+      totalBorrowShares: 0n,
+      lastUpdate: BigInt(Date.now() - 5 * 24 * 3600 * 1000),
+      fee: 0n
+    }
+    const result = await dynamicRate.view.borrowRateView({
+      args: { marketParams, marketState }
+    })
+    const avgRate = result.returns
+    const ONE_YEAR_IN_SECONDS = 365n * 24n * 3600n
+    const expectedRate = BigInt(0.22976 * 10 ** 18) / ONE_YEAR_IN_SECONDS // ~22.976% APY
+
+    console.log('Avg rate after 5 days at 100% utilization: ' + calculateAPY(avgRate))
+    console.log('Expected rate after 5 days at 100% utilization: ' + calculateAPY(expectedRate))
+
+    assertApproxEqual(avgRate, expectedRate, 1000) // 1000 bps tolerance
+  })
+
+  it('returns the correct rate after 5 days with 0% utilization', async () => {
+    const dynamicRate = await testFirstInteraction({
+      suppliedAssets: 0n,
+      borrowedAssets: 0n,
+      expectedAvgRate: DynamicRate.consts.INITIAL_RATE_AT_TARGET / 4n,
+      expectedRateAtTarget: DynamicRate.consts.INITIAL_RATE_AT_TARGET,
+      marketParams
+    })
+
+    const marketState = {
+      totalSupplyAssets: 1n,
+      totalSupplyShares: 0n,
+      totalBorrowAssets: 0n,
+      totalBorrowShares: 0n,
+      lastUpdate: BigInt(Date.now() - 5 * 24 * 3600 * 1000),
+      fee: 0n
+    }
+    const result = await dynamicRate.view.borrowRateView({
+      args: { marketParams, marketState }
+    })
+    const avgRate = result.returns
+    const expectedRate = BigInt(0.00724 * 10 ** 18) / ONE_YEAR_IN_SECONDS // ~0.724% APY
+
+    console.log('Avg rate after 5 days at 0% utilization: ' + calculateAPY(avgRate))
+    console.log('Expected rate after 5 days at 0% utilization: ' + calculateAPY(expectedRate))
+
+    assertApproxEqual(avgRate, expectedRate, 1000) // 1000 bps tolerance
+  })
+
+  it('returns the correct rate after 45 days with utilization above target, no accrual', async () => {
+    const signer = await testNodeWallet()
+    const dynamicRate = await testFirstInteraction({
+      suppliedAssets: 1n * 10n ** 18n,
+      borrowedAssets: DynamicRate.consts.TARGET_UTILIZATION,
+      expectedAvgRate: DynamicRate.consts.INITIAL_RATE_AT_TARGET,
+      expectedRateAtTarget: DynamicRate.consts.INITIAL_RATE_AT_TARGET,
+      marketParams,
+      signer
+    })
+    const marketState = {
+      totalSupplyAssets: 1n * 10n ** 18n,
+      totalSupplyShares: 0n,
+      totalBorrowAssets: (DynamicRate.consts.TARGET_UTILIZATION + 1n * 10n ** 18n) / 2n, // 95% utilization
+      totalBorrowShares: 0n,
+      lastUpdate: BigInt(Date.now() - 45 * 24 * 3600 * 1000),
+      fee: 0n
+    }
+    const txResult = await dynamicRate.transact.borrowRate({
+      signer: signer,
+      args: { marketParams, marketState }
+    })
+    await waitForTxConfirmation(txResult.txId, 1, 2)
+
+    const { events } = await signer.nodeProvider!.events.getEventsContractContractaddress(dynamicRate.address, {
+      start: 0
+    })
+
+    const rateAtTarget = BigInt(events[1].fields[2].value as string)
+    const expectedRate = BigInt(0.8722 * 10 ** 18) / ONE_YEAR_IN_SECONDS // ~87.22% APY
+
+    console.log('Rate at target after 45 days above target utilization: ' + calculateAPY(rateAtTarget))
+    console.log('Expected rate at target after 45 days above target utilization: ' + calculateAPY(expectedRate))
+
+    assertApproxEqual(rateAtTarget, expectedRate, 50)
+  })
+
+  // it('return correct rate after 45 days with utilization above target, with accrual every minute', async () => {
+  //   const signer = await testNodeWallet()
+  //   const dynamicRate = await testFirstInteraction({
+  //     suppliedAssets: 1n * 10n ** 18n,
+  //     borrowedAssets: DynamicRate.consts.TARGET_UTILIZATION,
+  //     expectedAvgRate: DynamicRate.consts.INITIAL_RATE_AT_TARGET,
+  //     expectedRateAtTarget: DynamicRate.consts.INITIAL_RATE_AT_TARGET,
+  //     marketParams,
+  //     signer
+  //   })
+  //   const initialBorrowAssets = (DynamicRate.consts.TARGET_UTILIZATION + 1n * 10n ** 18n) / 2n // 95% utilization
+  //   const marketState = {
+  //     totalSupplyAssets: 1n * 10n ** 18n,
+  //     totalSupplyShares: 0n,
+  //     totalBorrowAssets: initialBorrowAssets,
+  //     totalBorrowShares: 0n,
+  //     lastUpdate: BigInt(Date.now() - 45 * 24 * 3600 * 1000),
+  //     fee: 0n
+  //   }
+
+  //   const minuteInSeconds = 60
+  //   const days = 1
+  //   const hours = 24
+  //   const secondsInHour = 3600
+  //   const minutes = 24 * 60 * days
+
+  //   let rateAtTarget = 0n
+
+  //   for (let i = 0; i < minutes; ++i) {
+  //     console.log(`--- Minute ${i + 1} ---`)
+  //     marketState.lastUpdate =
+  //       BigInt(Date.now() - days * hours * secondsInHour * 1000) + BigInt(i * minuteInSeconds * 1000)
+  //     const [avgBorrowRate, currentRateAtTarget] = await updateBorrowRate({
+  //       marketParams,
+  //       marketState,
+  //       dynamicRate,
+  //       signer
+  //     })
+  //     rateAtTarget = currentRateAtTarget
+
+  //     const interest = wadMul(marketState.totalBorrowAssets, wTaylorCompounded(avgBorrowRate, BigInt(minuteInSeconds)))
+  //     marketState.totalSupplyAssets += interest
+  //     marketState.totalBorrowAssets += interest
+  //   }
+
+  //   assertApproxEqual(
+  //     wadDiv(marketState.totalBorrowAssets, marketState.totalSupplyAssets),
+  //     BigInt(0.95 * 10 ** 18),
+  //     100
+  //   )
+
+  //   // Expected rate: 4% * exp(50 * 1 / 365 * 50%) = 4.28%.
+  //   const expectedRateAtTarget = BigInt(0.0428 * 10 ** 18) / ONE_YEAR_IN_SECONDS
+
+  //   console.log('Rate at target: ' + calculateAPY(rateAtTarget))
+  //   console.log('Expected rate at target: ' + calculateAPY(expectedRateAtTarget))
+
+  //   expect(rateAtTarget).toBeGreaterThanOrEqual(expectedRateAtTarget)
+  // })
+
+  it('returns the correct rate after days when utilization is at target, without accrual', async () => {
+    const signer = await testNodeWallet()
+    const dynamicRate = await testFirstInteraction({
+      suppliedAssets: 1n * 10n ** 18n,
+      borrowedAssets: DynamicRate.consts.TARGET_UTILIZATION,
+      expectedAvgRate: DynamicRate.consts.INITIAL_RATE_AT_TARGET,
+      expectedRateAtTarget: DynamicRate.consts.INITIAL_RATE_AT_TARGET,
+      marketParams,
+      signer
+    })
+
+    const randomDays = Math.floor(Math.random() * 100)
+    const marketState = {
+      totalSupplyAssets: 1n * 10n ** 18n,
+      totalSupplyShares: 0n,
+      totalBorrowAssets: DynamicRate.consts.TARGET_UTILIZATION,
+      totalBorrowShares: 0n,
+      lastUpdate: BigInt(Date.now() - randomDays * 24 * 3600 * 1000),
       fee: 0n
     }
 
-    await dynamicRate.transact.initInterest({
+    const [, rateAtTarget] = await updateBorrowRate({
+      dynamicRate,
+      signer,
+      marketParams,
+      marketState
+    })
+    expect(rateAtTarget).toEqual(DynamicRate.consts.INITIAL_RATE_AT_TARGET)
+  })
+
+  it('first borrowRate call', async () => {
+    const marketState = {
+      totalSupplyAssets: 1n * 10n ** 18n,
+      totalSupplyShares: 0n,
+      totalBorrowAssets: 5n * 10n ** 17n,
+      totalBorrowShares: 0n,
+      lastUpdate: 0n,
+      fee: 0n
+    }
+    const expectedAvgRate = applyCurve(DynamicRate.consts.INITIAL_RATE_AT_TARGET, _err(marketState))
+    const expectedRateAtTarget = DynamicRate.consts.INITIAL_RATE_AT_TARGET
+    await testFirstInteraction({
+      suppliedAssets: 1n * 10n ** 18n,
+      borrowedAssets: 5n * 10n ** 17n,
+      expectedAvgRate,
+      expectedRateAtTarget,
+      marketParams
+    })
+  })
+
+  it('first borrowRateView call', async () => {
+    const signer = await testNodeWallet()
+    const marketState = {
+      totalSupplyAssets: 1n * 10n ** 18n,
+      totalSupplyShares: 0n,
+      totalBorrowAssets: 5n * 10n ** 17n,
+      totalBorrowShares: 0n,
+      lastUpdate: BigInt(Date.now()),
+      fee: 0n
+    }
+    const dynamicRateId = await deployDynamicRate(signer)
+    const dynamicRate = DynamicRate.at(addressFromContractId(dynamicRateId))
+
+    const result = await dynamicRate.transact.initInterest({
       args: { marketParams, marketState },
       signer: signer,
       attoAlphAmount: MAP_ENTRY_DEPOSIT
     })
+    await waitForTxConfirmation(result.txId, 1, 2)
 
-    // 1. Test initial rate calculation with 50% utilization
-    // Calculate utilization and expected rate
-    const utilization = Number(marketState.totalBorrowAssets) / Number(marketState.totalSupplyAssets)
-    console.log(`Utilization: ${utilization * 100}%`)
-
-    // Get initial rate at target
-    const txResult = await dynamicRate.transact.borrowRate({
-      signer: signer,
-      attoAlphAmount: MAP_ENTRY_DEPOSIT,
-      args: { marketParams, marketState }
-    })
-    await waitForTxConfirmation(txResult.txId, 1, 1000)
-
-    // Should be 0 for first interaction
-    // expect(rateAtTarget.returns).toEqual(0n)
-    // console.log('Initial rate at target:', rateAtTarget.returns.toString())
-
-    // // Calculate expected rate using our calculation function (first interaction)
-    const expectedRate = calculateBorrowRate(marketState, rateAtTarget.returns)
-    console.log('Expected calculated rate:', expectedRate.toString())
-
-    // Get borrow rate from contract
     const viewResult = await dynamicRate.view.borrowRateView({
       args: { marketParams, marketState }
     })
-    console.log('Actual contract rate:', viewResult.returns.toString())
 
-    // Verify our calculation exactly matches the contract's result
-    expect(viewResult.returns).toEqual(expectedRate)
+    const expectedAvgRate = applyCurve(DynamicRate.consts.INITIAL_RATE_AT_TARGET, _err(marketState))
+    expect(viewResult.returns).toEqual(expectedAvgRate)
+  })
 
-    // Test rate update via transaction
-    await dynamicRate.transact.borrowRate({
-      signer: signer,
-      attoAlphAmount: DUST_AMOUNT * 100n,
-      args: { marketParams, marketState }
-    })
+  it('borrowRate', async () => {
+    //TODO
+  })
 
-    // Verify rate was updated
-    const newRateAtTarget = await dynamicRate.view.borrowRateView({
-      args: { marketParams, marketState }
-    })
-    console.log('New rate at target:', newRateAtTarget.returns.toString())
+  it('borrowRate no time elapsed', async () => {
+    //TODO
+  })
 
-    // Rate at target should now be set
-    expect(newRateAtTarget.returns).toBeGreaterThan(0n)
-
-    // 2. Test with 90% utilization (at target)
-    const targetUtilizationMarketState = {
-      ...marketState,
-      totalBorrowAssets: 27n * 10n ** 17n, // 2.7 tokens (90% utilization - at target)
-      totalBorrowShares: 27n * 10n ** 17n
-    }
-
-    // Calculate expected rate at target utilization
-    const expectedTargetRate = calculateBorrowRate(targetUtilizationMarketState, newRateAtTarget.returns)
-    console.log('Expected target utilization rate:', expectedTargetRate.toString())
-
-    const targetUtilizationResult = await dynamicRate.view.borrowRateView({
-      args: { marketParams, marketState: targetUtilizationMarketState }
-    })
-    console.log('Actual target utilization rate:', targetUtilizationResult.returns.toString())
-
-    // Verify exact match for target utilization
-    expect(targetUtilizationResult.returns).toEqual(expectedTargetRate)
-
-    // 3. Test with very high utilization (95%)
-    const highUtilizationMarketState = {
-      ...marketState,
-      totalBorrowAssets: 285n * 10n ** 16n, // 2.85 tokens (95% utilization - above target)
-      totalBorrowShares: 285n * 10n ** 16n
-    }
-
-    // Calculate expected rate at high utilization
-    const expectedHighRate = calculateBorrowRate(highUtilizationMarketState, newRateAtTarget.returns)
-    console.log('Expected high utilization rate:', expectedHighRate.toString())
-
-    const highUtilizationResult = await dynamicRate.view.borrowRateView({
-      args: { marketParams, marketState: highUtilizationMarketState }
-    })
-    console.log('Actual high utilization rate:', highUtilizationResult.returns.toString())
-
-    // Verify exact match for high utilization
-    expect(highUtilizationResult.returns).toEqual(expectedHighRate)
-
-    // Verify the rate behavior
-    expect(highUtilizationResult.returns).toBeGreaterThan(targetUtilizationResult.returns)
-
-    // 4. Edge case: zero utilization (0%)
-    const zeroUtilizationMarketState = {
-      ...marketState,
-      totalBorrowAssets: 0n,
-      totalBorrowShares: 0n
-    }
-
-    const expectedZeroRate = calculateBorrowRate(zeroUtilizationMarketState, newRateAtTarget.returns)
-    const zeroUtilizationResult = await dynamicRate.view.borrowRateView({
-      args: { marketParams, marketState: zeroUtilizationMarketState }
-    })
-
-    // Exact match with our calculation
-    expect(zeroUtilizationResult.returns).toEqual(expectedZeroRate)
-    // Rate at zero utilization should be below the target-utilization rate
-    expect(zeroUtilizationResult.returns).toBeLessThan(targetUtilizationResult.returns)
-
-    // 5. over-utilization (> 100%, e.g. 150%)
-    const overUtilizationMarketState = {
-      ...marketState,
-      totalBorrowAssets: 45n * 10n ** 17n, // 4.5 tokens → 150% utilization
-      totalBorrowShares: 45n * 10n ** 17n
-    }
-
-    const expectedOverRate = calculateBorrowRate(overUtilizationMarketState, newRateAtTarget.returns)
-    const overUtilizationResult = await dynamicRate.view.borrowRateView({
-      args: { marketParams, marketState: overUtilizationMarketState }
-    })
-
-    expect(overUtilizationResult.returns).toEqual(expectedOverRate)
-    // The rate for >100% utilization should exceed the 95% utilization rate
-    expect(overUtilizationResult.returns).toBeGreaterThan(highUtilizationResult.returns)
-
-    // 6. Time-dependent adaptation checks
-    const ONE_YEAR = 31536000n // seconds
-
-    // For utilization ABOVE target (95%) the borrow‐rate should INCREASE with time
-    const highUtilRecent = {
-      ...highUtilizationMarketState,
-      lastUpdate: highUtilizationMarketState.lastUpdate + ONE_YEAR // simulate an update 1 year later (smaller elapsed)
-    }
-    const highUtilOld = {
-      ...highUtilizationMarketState,
-      lastUpdate: highUtilizationMarketState.lastUpdate // older (baseline)
-    }
-
-    const recentHighRate = await dynamicRate.view.borrowRateView({
-      args: { marketParams, marketState: highUtilRecent }
-    })
-    const oldHighRate = await dynamicRate.view.borrowRateView({
-      args: { marketParams, marketState: highUtilOld }
-    })
-
-    // When utilization is above target, the rate should grow over time
-    expect(oldHighRate.returns).toBeGreaterThanOrEqual(recentHighRate.returns)
-
-    // For utilization BELOW target (50%) the borrow-rate should DECREASE with time
-    const lowUtilRecent = {
-      ...marketState,
-      lastUpdate: marketState.lastUpdate + ONE_YEAR // 1 year more recent (smaller elapsed)
-    }
-    const lowUtilOld = {
-      ...marketState,
-      lastUpdate: marketState.lastUpdate // baseline (older)
-    }
-
-    const recentLowRate = await dynamicRate.view.borrowRateView({
-      args: { marketParams, marketState: lowUtilRecent }
-    })
-    const oldLowRate = await dynamicRate.view.borrowRateView({
-      args: { marketParams, marketState: lowUtilOld }
-    })
-
-    // When utilization is below target, the rate should decay over time
-    expect(oldLowRate.returns).toBeLessThanOrEqual(recentLowRate.returns)
+  it('borrowRate no utilization change', async () => {
+    //TODO
   })
 })

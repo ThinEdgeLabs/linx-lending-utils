@@ -1,3 +1,4 @@
+import { DynamicRate } from '../../artifacts/ts'
 import { MarketState } from '../../artifacts/ts/types'
 
 export const WAD = 10n ** 18n
@@ -16,6 +17,10 @@ const LN_2_INT = 693147180559945309n // ln(2) * 1e18
 const LN_WEI_INT = -41446531673892822312n // ln(1e-18)
 const WEXP_UPPER_BOUND = 93859467695000404319n // ln(type(int256).max / 1e36)
 const WEXP_UPPER_VALUE = 57716089161558943949701069502944508345128422502756744429568n // pre-computed e^{WEXP_UPPER_BOUND}
+
+function mulDivDown(x: bigint, y: bigint, d: bigint): bigint {
+  return (x * y) / d
+}
 
 export function wadMul(a: bigint, b: bigint): bigint {
   return (a * b) / WAD
@@ -130,4 +135,25 @@ export function calculateBorrowRate(marketState: MarketState, existingRateAtTarg
   // Apply the rate curve
   const avgRate = applyCurve(avgRateAtTarget, err)
   return avgRate
+}
+
+export function wTaylorCompounded(x: bigint, n: bigint): bigint {
+  const firstTerm = x * n
+  const secondTerm = mulDivDown(firstTerm, firstTerm, 2n * WAD)
+  const thirdTerm = mulDivDown(secondTerm, firstTerm, 3n * WAD)
+
+  return firstTerm + secondTerm + thirdTerm
+}
+
+export function _err(market: MarketState): bigint {
+  if (market.totalSupplyAssets == 0n) return -1n * WAD
+
+  const utilization = wadDiv(market.totalBorrowAssets, market.totalSupplyAssets)
+  let err = 0n
+  if (utilization > DynamicRate.consts.TARGET_UTILIZATION) {
+    err = wadDiv(utilization - DynamicRate.consts.TARGET_UTILIZATION, WAD - DynamicRate.consts.TARGET_UTILIZATION)
+  } else {
+    err = wadDiv(utilization - DynamicRate.consts.TARGET_UTILIZATION, DynamicRate.consts.TARGET_UTILIZATION)
+  }
+  return err
 }
