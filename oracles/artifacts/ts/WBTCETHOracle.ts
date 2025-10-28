@@ -33,7 +33,7 @@ import {
   encodeContractFields,
   Narrow,
 } from "@alephium/web3";
-import { default as ALPHUSDTOracleContractJson } from "../oracles/ALPHUSDTOracle.ral.json";
+import { default as WBTCETHOracleContractJson } from "../oracles/WBTCETHOracle.ral.json";
 import { getContractByCodeHash, registerContract } from "./contracts";
 import {
   DIAOracleValue,
@@ -44,7 +44,7 @@ import {
 } from "./types";
 
 // Custom types for the contract
-export namespace ALPHUSDTOracleTypes {
+export namespace WBTCETHOracleTypes {
   export type Fields = {
     diaOracleContractId: HexString;
     baseMarketId: HexString;
@@ -193,10 +193,10 @@ export namespace ALPHUSDTOracleTypes {
 }
 
 class Factory extends ContractFactory<
-  ALPHUSDTOracleInstance,
-  ALPHUSDTOracleTypes.Fields
+  WBTCETHOracleInstance,
+  WBTCETHOracleTypes.Fields
 > {
-  encodeFields(fields: ALPHUSDTOracleTypes.Fields) {
+  encodeFields(fields: WBTCETHOracleTypes.Fields) {
     return encodeContractFields(
       addStdIdToFields(this.contract, fields),
       this.contract.fieldsSig,
@@ -209,14 +209,14 @@ class Factory extends ContractFactory<
     ErrorCodes: { StalePrice: BigInt("0") },
   };
 
-  at(address: string): ALPHUSDTOracleInstance {
-    return new ALPHUSDTOracleInstance(address);
+  at(address: string): WBTCETHOracleInstance {
+    return new WBTCETHOracleInstance(address);
   }
 
   tests = {
     price: async (
       params: Omit<
-        TestContractParamsWithoutMaps<ALPHUSDTOracleTypes.Fields, never>,
+        TestContractParamsWithoutMaps<WBTCETHOracleTypes.Fields, never>,
         "args"
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
@@ -224,7 +224,7 @@ class Factory extends ContractFactory<
     },
     init: async (
       params: Omit<
-        TestContractParamsWithoutMaps<ALPHUSDTOracleTypes.Fields, never>,
+        TestContractParamsWithoutMaps<WBTCETHOracleTypes.Fields, never>,
         "args"
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
@@ -232,7 +232,7 @@ class Factory extends ContractFactory<
     },
     wMulDown: async (
       params: TestContractParamsWithoutMaps<
-        ALPHUSDTOracleTypes.Fields,
+        WBTCETHOracleTypes.Fields,
         { x: bigint; y: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
@@ -240,7 +240,7 @@ class Factory extends ContractFactory<
     },
     wDivDown: async (
       params: TestContractParamsWithoutMaps<
-        ALPHUSDTOracleTypes.Fields,
+        WBTCETHOracleTypes.Fields,
         { x: bigint; y: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
@@ -248,7 +248,7 @@ class Factory extends ContractFactory<
     },
     wDivUp: async (
       params: TestContractParamsWithoutMaps<
-        ALPHUSDTOracleTypes.Fields,
+        WBTCETHOracleTypes.Fields,
         { x: bigint; y: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
@@ -256,7 +256,7 @@ class Factory extends ContractFactory<
     },
     mulDivDown: async (
       params: TestContractParamsWithoutMaps<
-        ALPHUSDTOracleTypes.Fields,
+        WBTCETHOracleTypes.Fields,
         { x: bigint; y: bigint; d: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
@@ -264,7 +264,7 @@ class Factory extends ContractFactory<
     },
     mulDivUp: async (
       params: TestContractParamsWithoutMaps<
-        ALPHUSDTOracleTypes.Fields,
+        WBTCETHOracleTypes.Fields,
         { x: bigint; y: bigint; d: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
@@ -272,7 +272,7 @@ class Factory extends ContractFactory<
     },
     wTaylorCompounded: async (
       params: TestContractParamsWithoutMaps<
-        ALPHUSDTOracleTypes.Fields,
+        WBTCETHOracleTypes.Fields,
         { x: bigint; n: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
@@ -285,7 +285,7 @@ class Factory extends ContractFactory<
     },
     exactlyOneZero: async (
       params: TestContractParamsWithoutMaps<
-        ALPHUSDTOracleTypes.Fields,
+        WBTCETHOracleTypes.Fields,
         { a: bigint; b: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<boolean>> => {
@@ -293,7 +293,7 @@ class Factory extends ContractFactory<
     },
     zeroFloorSub: async (
       params: TestContractParamsWithoutMaps<
-        ALPHUSDTOracleTypes.Fields,
+        WBTCETHOracleTypes.Fields,
         { x: bigint; y: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
@@ -301,7 +301,7 @@ class Factory extends ContractFactory<
     },
     min: async (
       params: TestContractParamsWithoutMaps<
-        ALPHUSDTOracleTypes.Fields,
+        WBTCETHOracleTypes.Fields,
         { a: bigint; b: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
@@ -309,7 +309,7 @@ class Factory extends ContractFactory<
     },
     toBaseUnits: async (
       params: TestContractParamsWithoutMaps<
-        ALPHUSDTOracleTypes.Fields,
+        WBTCETHOracleTypes.Fields,
         { amount: bigint; tokenDecimals: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
@@ -318,7 +318,7 @@ class Factory extends ContractFactory<
   };
 
   stateForTest(
-    initFields: ALPHUSDTOracleTypes.Fields,
+    initFields: WBTCETHOracleTypes.Fields,
     asset?: Asset,
     address?: string
   ) {
@@ -327,32 +327,32 @@ class Factory extends ContractFactory<
 }
 
 // Use this object to test and deploy the contract
-export const ALPHUSDTOracle = new Factory(
+export const WBTCETHOracle = new Factory(
   Contract.fromJson(
-    ALPHUSDTOracleContractJson,
+    WBTCETHOracleContractJson,
     "",
     "7f5a52b1204b38fc8d848ae1ff66605e375009b4efd38978090e38fbd03bcdbc",
     AllStructs
   )
 );
-registerContract(ALPHUSDTOracle);
+registerContract(WBTCETHOracle);
 
 // Use this class to interact with the blockchain
-export class ALPHUSDTOracleInstance extends ContractInstance {
+export class WBTCETHOracleInstance extends ContractInstance {
   constructor(address: Address) {
     super(address);
   }
 
-  async fetchState(): Promise<ALPHUSDTOracleTypes.State> {
-    return fetchContractState(ALPHUSDTOracle, this);
+  async fetchState(): Promise<WBTCETHOracleTypes.State> {
+    return fetchContractState(WBTCETHOracle, this);
   }
 
   view = {
     price: async (
-      params?: ALPHUSDTOracleTypes.CallMethodParams<"price">
-    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"price">> => {
+      params?: WBTCETHOracleTypes.CallMethodParams<"price">
+    ): Promise<WBTCETHOracleTypes.CallMethodResult<"price">> => {
       return callMethod(
-        ALPHUSDTOracle,
+        WBTCETHOracle,
         this,
         "price",
         params === undefined ? {} : params,
@@ -360,10 +360,10 @@ export class ALPHUSDTOracleInstance extends ContractInstance {
       );
     },
     init: async (
-      params?: ALPHUSDTOracleTypes.CallMethodParams<"init">
-    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"init">> => {
+      params?: WBTCETHOracleTypes.CallMethodParams<"init">
+    ): Promise<WBTCETHOracleTypes.CallMethodResult<"init">> => {
       return callMethod(
-        ALPHUSDTOracle,
+        WBTCETHOracle,
         this,
         "init",
         params === undefined ? {} : params,
@@ -371,10 +371,10 @@ export class ALPHUSDTOracleInstance extends ContractInstance {
       );
     },
     wMulDown: async (
-      params: ALPHUSDTOracleTypes.CallMethodParams<"wMulDown">
-    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"wMulDown">> => {
+      params: WBTCETHOracleTypes.CallMethodParams<"wMulDown">
+    ): Promise<WBTCETHOracleTypes.CallMethodResult<"wMulDown">> => {
       return callMethod(
-        ALPHUSDTOracle,
+        WBTCETHOracle,
         this,
         "wMulDown",
         params,
@@ -382,10 +382,10 @@ export class ALPHUSDTOracleInstance extends ContractInstance {
       );
     },
     wDivDown: async (
-      params: ALPHUSDTOracleTypes.CallMethodParams<"wDivDown">
-    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"wDivDown">> => {
+      params: WBTCETHOracleTypes.CallMethodParams<"wDivDown">
+    ): Promise<WBTCETHOracleTypes.CallMethodResult<"wDivDown">> => {
       return callMethod(
-        ALPHUSDTOracle,
+        WBTCETHOracle,
         this,
         "wDivDown",
         params,
@@ -393,10 +393,10 @@ export class ALPHUSDTOracleInstance extends ContractInstance {
       );
     },
     wDivUp: async (
-      params: ALPHUSDTOracleTypes.CallMethodParams<"wDivUp">
-    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"wDivUp">> => {
+      params: WBTCETHOracleTypes.CallMethodParams<"wDivUp">
+    ): Promise<WBTCETHOracleTypes.CallMethodResult<"wDivUp">> => {
       return callMethod(
-        ALPHUSDTOracle,
+        WBTCETHOracle,
         this,
         "wDivUp",
         params,
@@ -404,10 +404,10 @@ export class ALPHUSDTOracleInstance extends ContractInstance {
       );
     },
     mulDivDown: async (
-      params: ALPHUSDTOracleTypes.CallMethodParams<"mulDivDown">
-    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"mulDivDown">> => {
+      params: WBTCETHOracleTypes.CallMethodParams<"mulDivDown">
+    ): Promise<WBTCETHOracleTypes.CallMethodResult<"mulDivDown">> => {
       return callMethod(
-        ALPHUSDTOracle,
+        WBTCETHOracle,
         this,
         "mulDivDown",
         params,
@@ -415,10 +415,10 @@ export class ALPHUSDTOracleInstance extends ContractInstance {
       );
     },
     mulDivUp: async (
-      params: ALPHUSDTOracleTypes.CallMethodParams<"mulDivUp">
-    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"mulDivUp">> => {
+      params: WBTCETHOracleTypes.CallMethodParams<"mulDivUp">
+    ): Promise<WBTCETHOracleTypes.CallMethodResult<"mulDivUp">> => {
       return callMethod(
-        ALPHUSDTOracle,
+        WBTCETHOracle,
         this,
         "mulDivUp",
         params,
@@ -426,10 +426,10 @@ export class ALPHUSDTOracleInstance extends ContractInstance {
       );
     },
     wTaylorCompounded: async (
-      params: ALPHUSDTOracleTypes.CallMethodParams<"wTaylorCompounded">
-    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"wTaylorCompounded">> => {
+      params: WBTCETHOracleTypes.CallMethodParams<"wTaylorCompounded">
+    ): Promise<WBTCETHOracleTypes.CallMethodResult<"wTaylorCompounded">> => {
       return callMethod(
-        ALPHUSDTOracle,
+        WBTCETHOracle,
         this,
         "wTaylorCompounded",
         params,
@@ -437,10 +437,10 @@ export class ALPHUSDTOracleInstance extends ContractInstance {
       );
     },
     exactlyOneZero: async (
-      params: ALPHUSDTOracleTypes.CallMethodParams<"exactlyOneZero">
-    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"exactlyOneZero">> => {
+      params: WBTCETHOracleTypes.CallMethodParams<"exactlyOneZero">
+    ): Promise<WBTCETHOracleTypes.CallMethodResult<"exactlyOneZero">> => {
       return callMethod(
-        ALPHUSDTOracle,
+        WBTCETHOracle,
         this,
         "exactlyOneZero",
         params,
@@ -448,10 +448,10 @@ export class ALPHUSDTOracleInstance extends ContractInstance {
       );
     },
     zeroFloorSub: async (
-      params: ALPHUSDTOracleTypes.CallMethodParams<"zeroFloorSub">
-    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"zeroFloorSub">> => {
+      params: WBTCETHOracleTypes.CallMethodParams<"zeroFloorSub">
+    ): Promise<WBTCETHOracleTypes.CallMethodResult<"zeroFloorSub">> => {
       return callMethod(
-        ALPHUSDTOracle,
+        WBTCETHOracle,
         this,
         "zeroFloorSub",
         params,
@@ -459,10 +459,10 @@ export class ALPHUSDTOracleInstance extends ContractInstance {
       );
     },
     min: async (
-      params: ALPHUSDTOracleTypes.CallMethodParams<"min">
-    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"min">> => {
+      params: WBTCETHOracleTypes.CallMethodParams<"min">
+    ): Promise<WBTCETHOracleTypes.CallMethodResult<"min">> => {
       return callMethod(
-        ALPHUSDTOracle,
+        WBTCETHOracle,
         this,
         "min",
         params,
@@ -470,10 +470,10 @@ export class ALPHUSDTOracleInstance extends ContractInstance {
       );
     },
     toBaseUnits: async (
-      params: ALPHUSDTOracleTypes.CallMethodParams<"toBaseUnits">
-    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"toBaseUnits">> => {
+      params: WBTCETHOracleTypes.CallMethodParams<"toBaseUnits">
+    ): Promise<WBTCETHOracleTypes.CallMethodResult<"toBaseUnits">> => {
       return callMethod(
-        ALPHUSDTOracle,
+        WBTCETHOracle,
         this,
         "toBaseUnits",
         params,
@@ -484,89 +484,89 @@ export class ALPHUSDTOracleInstance extends ContractInstance {
 
   transact = {
     price: async (
-      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"price">
-    ): Promise<ALPHUSDTOracleTypes.SignExecuteMethodResult<"price">> => {
-      return signExecuteMethod(ALPHUSDTOracle, this, "price", params);
+      params: WBTCETHOracleTypes.SignExecuteMethodParams<"price">
+    ): Promise<WBTCETHOracleTypes.SignExecuteMethodResult<"price">> => {
+      return signExecuteMethod(WBTCETHOracle, this, "price", params);
     },
     init: async (
-      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"init">
-    ): Promise<ALPHUSDTOracleTypes.SignExecuteMethodResult<"init">> => {
-      return signExecuteMethod(ALPHUSDTOracle, this, "init", params);
+      params: WBTCETHOracleTypes.SignExecuteMethodParams<"init">
+    ): Promise<WBTCETHOracleTypes.SignExecuteMethodResult<"init">> => {
+      return signExecuteMethod(WBTCETHOracle, this, "init", params);
     },
     wMulDown: async (
-      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"wMulDown">
-    ): Promise<ALPHUSDTOracleTypes.SignExecuteMethodResult<"wMulDown">> => {
-      return signExecuteMethod(ALPHUSDTOracle, this, "wMulDown", params);
+      params: WBTCETHOracleTypes.SignExecuteMethodParams<"wMulDown">
+    ): Promise<WBTCETHOracleTypes.SignExecuteMethodResult<"wMulDown">> => {
+      return signExecuteMethod(WBTCETHOracle, this, "wMulDown", params);
     },
     wDivDown: async (
-      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"wDivDown">
-    ): Promise<ALPHUSDTOracleTypes.SignExecuteMethodResult<"wDivDown">> => {
-      return signExecuteMethod(ALPHUSDTOracle, this, "wDivDown", params);
+      params: WBTCETHOracleTypes.SignExecuteMethodParams<"wDivDown">
+    ): Promise<WBTCETHOracleTypes.SignExecuteMethodResult<"wDivDown">> => {
+      return signExecuteMethod(WBTCETHOracle, this, "wDivDown", params);
     },
     wDivUp: async (
-      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"wDivUp">
-    ): Promise<ALPHUSDTOracleTypes.SignExecuteMethodResult<"wDivUp">> => {
-      return signExecuteMethod(ALPHUSDTOracle, this, "wDivUp", params);
+      params: WBTCETHOracleTypes.SignExecuteMethodParams<"wDivUp">
+    ): Promise<WBTCETHOracleTypes.SignExecuteMethodResult<"wDivUp">> => {
+      return signExecuteMethod(WBTCETHOracle, this, "wDivUp", params);
     },
     mulDivDown: async (
-      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"mulDivDown">
-    ): Promise<ALPHUSDTOracleTypes.SignExecuteMethodResult<"mulDivDown">> => {
-      return signExecuteMethod(ALPHUSDTOracle, this, "mulDivDown", params);
+      params: WBTCETHOracleTypes.SignExecuteMethodParams<"mulDivDown">
+    ): Promise<WBTCETHOracleTypes.SignExecuteMethodResult<"mulDivDown">> => {
+      return signExecuteMethod(WBTCETHOracle, this, "mulDivDown", params);
     },
     mulDivUp: async (
-      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"mulDivUp">
-    ): Promise<ALPHUSDTOracleTypes.SignExecuteMethodResult<"mulDivUp">> => {
-      return signExecuteMethod(ALPHUSDTOracle, this, "mulDivUp", params);
+      params: WBTCETHOracleTypes.SignExecuteMethodParams<"mulDivUp">
+    ): Promise<WBTCETHOracleTypes.SignExecuteMethodResult<"mulDivUp">> => {
+      return signExecuteMethod(WBTCETHOracle, this, "mulDivUp", params);
     },
     wTaylorCompounded: async (
-      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"wTaylorCompounded">
+      params: WBTCETHOracleTypes.SignExecuteMethodParams<"wTaylorCompounded">
     ): Promise<
-      ALPHUSDTOracleTypes.SignExecuteMethodResult<"wTaylorCompounded">
+      WBTCETHOracleTypes.SignExecuteMethodResult<"wTaylorCompounded">
     > => {
       return signExecuteMethod(
-        ALPHUSDTOracle,
+        WBTCETHOracle,
         this,
         "wTaylorCompounded",
         params
       );
     },
     exactlyOneZero: async (
-      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"exactlyOneZero">
+      params: WBTCETHOracleTypes.SignExecuteMethodParams<"exactlyOneZero">
     ): Promise<
-      ALPHUSDTOracleTypes.SignExecuteMethodResult<"exactlyOneZero">
+      WBTCETHOracleTypes.SignExecuteMethodResult<"exactlyOneZero">
     > => {
-      return signExecuteMethod(ALPHUSDTOracle, this, "exactlyOneZero", params);
+      return signExecuteMethod(WBTCETHOracle, this, "exactlyOneZero", params);
     },
     zeroFloorSub: async (
-      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"zeroFloorSub">
-    ): Promise<ALPHUSDTOracleTypes.SignExecuteMethodResult<"zeroFloorSub">> => {
-      return signExecuteMethod(ALPHUSDTOracle, this, "zeroFloorSub", params);
+      params: WBTCETHOracleTypes.SignExecuteMethodParams<"zeroFloorSub">
+    ): Promise<WBTCETHOracleTypes.SignExecuteMethodResult<"zeroFloorSub">> => {
+      return signExecuteMethod(WBTCETHOracle, this, "zeroFloorSub", params);
     },
     min: async (
-      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"min">
-    ): Promise<ALPHUSDTOracleTypes.SignExecuteMethodResult<"min">> => {
-      return signExecuteMethod(ALPHUSDTOracle, this, "min", params);
+      params: WBTCETHOracleTypes.SignExecuteMethodParams<"min">
+    ): Promise<WBTCETHOracleTypes.SignExecuteMethodResult<"min">> => {
+      return signExecuteMethod(WBTCETHOracle, this, "min", params);
     },
     toBaseUnits: async (
-      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"toBaseUnits">
-    ): Promise<ALPHUSDTOracleTypes.SignExecuteMethodResult<"toBaseUnits">> => {
-      return signExecuteMethod(ALPHUSDTOracle, this, "toBaseUnits", params);
+      params: WBTCETHOracleTypes.SignExecuteMethodParams<"toBaseUnits">
+    ): Promise<WBTCETHOracleTypes.SignExecuteMethodResult<"toBaseUnits">> => {
+      return signExecuteMethod(WBTCETHOracle, this, "toBaseUnits", params);
     },
   };
 
-  async multicall<Calls extends ALPHUSDTOracleTypes.MultiCallParams>(
+  async multicall<Calls extends WBTCETHOracleTypes.MultiCallParams>(
     calls: Calls
-  ): Promise<ALPHUSDTOracleTypes.MultiCallResults<Calls>>;
-  async multicall<Callss extends ALPHUSDTOracleTypes.MultiCallParams[]>(
+  ): Promise<WBTCETHOracleTypes.MultiCallResults<Calls>>;
+  async multicall<Callss extends WBTCETHOracleTypes.MultiCallParams[]>(
     callss: Narrow<Callss>
-  ): Promise<ALPHUSDTOracleTypes.MulticallReturnType<Callss>>;
+  ): Promise<WBTCETHOracleTypes.MulticallReturnType<Callss>>;
   async multicall<
     Callss extends
-      | ALPHUSDTOracleTypes.MultiCallParams
-      | ALPHUSDTOracleTypes.MultiCallParams[]
+      | WBTCETHOracleTypes.MultiCallParams
+      | WBTCETHOracleTypes.MultiCallParams[]
   >(callss: Callss): Promise<unknown> {
     return await multicallMethods(
-      ALPHUSDTOracle,
+      WBTCETHOracle,
       this,
       callss,
       getContractByCodeHash

@@ -2,7 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export * from "./AlphUsdtOracle";
+export * from "./ALPHUSDTOracle";
 export * from "./DynamicIrmMock";
 export * from "./FixedIrmMock";
 export * from "./FungibleToken";
@@ -14,5 +14,7 @@ export * from "./TestBTC";
 export * from "./TestHelper";
 export * from "./TestToken";
 export * from "./TestUSDT";
+export * from "./WBTCETHOracle";
+export * from "./WBTCUSDTOracle";
 export * from "./contracts";
 export * from "./scripts";

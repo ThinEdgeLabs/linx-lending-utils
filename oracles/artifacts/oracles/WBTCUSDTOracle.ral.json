@@ -1,0 +1,269 @@
+{
+  "version": "v4.2.3",
+  "name": "WBTCUSDTOracle",
+  "bytecode": "090c40454063407a409140a840b740cb4109412c41434158419401000004014022d35dd91db7ce010d0ece00d4a0e6c231170117005616012bce07320c7bce020d0ece00d4a0e6c231170317025616032bce07320c7ba0001600160200050201000000000dd3142dcbe6130a1324ce062ace042ace052bce032b83a1000000020201051600160113c40de0b6b3a7640000000502000002020105160013c40de0b6b3a76400001601000502000002020105160013c40de0b6b3a76400001601000602000003030106160016012c16022d0200000303010a160016012c16020d2b2a16022d02000002050118160016012c1702160216020e13c40de0b6b3a76400002c00051703160316020f13c40de0b6b3a76400002c00051704160216032a16042a0200000202011616000c2f7a4c041816010c307a4b0a1816000c307a4c041816010c2f0200000202010b16001601334c05160016012b024a020c0200000202010916001601314c031600024a021601020000020401402016011312314c0b130a131216012b831702160016022c024a1116011312334c0b130a160113122b831703160016032d024a02160002",
+  "codeHash": "7f5a52b1204b38fc8d848ae1ff66605e375009b4efd38978090e38fbd03bcdbc",
+  "fieldsSig": {
+    "names": [
+      "diaOracleContractId",
+      "baseMarketId",
+      "quoteMarketId",
+      "baseMarketDecimals",
+      "quoteMarketDecimals",
+      "baseTokenDecimals",
+      "quoteTokenDecimals",
+      "heartbeatInterval",
+      "scaleFactor"
+    ],
+    "types": [
+      "ByteVec",
+      "ByteVec",
+      "ByteVec",
+      "U256",
+      "U256",
+      "U256",
+      "U256",
+      "U256",
+      "U256"
+    ],
+    "isMutable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  "eventsSig": [],
+  "functions": [
+    {
+      "name": "price",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "init",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": []
+    },
+    {
+      "name": "wMulDown",
+      "paramNames": [
+        "x",
+        "y"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "wDivDown",
+      "paramNames": [
+        "x",
+        "y"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "wDivUp",
+      "paramNames": [
+        "x",
+        "y"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "mulDivDown",
+      "paramNames": [
+        "x",
+        "y",
+        "d"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "mulDivUp",
+      "paramNames": [
+        "x",
+        "y",
+        "d"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "wTaylorCompounded",
+      "paramNames": [
+        "x",
+        "n"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "exactlyOneZero",
+      "paramNames": [
+        "a",
+        "b"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "Bool"
+      ]
+    },
+    {
+      "name": "zeroFloorSub",
+      "paramNames": [
+        "x",
+        "y"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "min",
+      "paramNames": [
+        "a",
+        "b"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "toBaseUnits",
+      "paramNames": [
+        "amount",
+        "tokenDecimals"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    }
+  ],
+  "constants": [
+    {
+      "name": "WAD",
+      "value": {
+        "type": "U256",
+        "value": "1000000000000000000"
+      }
+    }
+  ],
+  "enums": [
+    {
+      "name": "ErrorCodes",
+      "fields": [
+        {
+          "name": "StalePrice",
+          "value": {
+            "type": "U256",
+            "value": "0"
+          }
+        }
+      ]
+    }
+  ]
+}

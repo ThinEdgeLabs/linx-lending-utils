@@ -1,5 +1,5 @@
 {
-  "version": "v4.0.0",
+  "version": "v4.2.3",
   "name": "CreateMarketAndAccrueInterest",
   "bytecodeTemplate": "010103000700402a{1}{2}{3}{4}{5}17041703170217011700b417051605d10e2cd10e2c2aa216001601160216031604110c{0}010c160016010e0d{0}0127170616060d0c{0}0114",
   "fieldsSig": {

@@ -12,6 +12,12 @@ import {
   LinxDiaOracleInstance,
   AlphUsdtOracle,
   AlphUsdtOracleInstance,
+  ALPHUSDTOracle,
+  ALPHUSDTOracleInstance,
+  WBTCUSDTOracle,
+  WBTCUSDTOracleInstance,
+  WBTCETHOracle,
+  WBTCETHOracleInstance,
   DIAOracleWrapper,
   DIAOracleWrapperInstance,
 } from ".";
@@ -23,6 +29,9 @@ export type Deployments = {
   contracts: {
     LinxDiaOracle: DeployContractExecutionResult<LinxDiaOracleInstance>;
     AlphUsdtOracle?: DeployContractExecutionResult<AlphUsdtOracleInstance>;
+    ALPHUSDTOracle?: DeployContractExecutionResult<ALPHUSDTOracleInstance>;
+    WBTCUSDTOracle?: DeployContractExecutionResult<WBTCUSDTOracleInstance>;
+    WBTCETHOracle?: DeployContractExecutionResult<WBTCETHOracleInstance>;
     DIAOracleWrapper?: DeployContractExecutionResult<DIAOracleWrapperInstance>;
   };
 };
@@ -42,6 +51,33 @@ function toDeployments(json: any): Deployments {
             ...json.contracts["AlphUsdtOracle"],
             contractInstance: AlphUsdtOracle.at(
               json.contracts["AlphUsdtOracle"].contractInstance.address
+            ),
+          },
+    ALPHUSDTOracle:
+      json.contracts["ALPHUSDTOracle"] === undefined
+        ? undefined
+        : {
+            ...json.contracts["ALPHUSDTOracle"],
+            contractInstance: ALPHUSDTOracle.at(
+              json.contracts["ALPHUSDTOracle"].contractInstance.address
+            ),
+          },
+    WBTCUSDTOracle:
+      json.contracts["WBTCUSDTOracle"] === undefined
+        ? undefined
+        : {
+            ...json.contracts["WBTCUSDTOracle"],
+            contractInstance: WBTCUSDTOracle.at(
+              json.contracts["WBTCUSDTOracle"].contractInstance.address
+            ),
+          },
+    WBTCETHOracle:
+      json.contracts["WBTCETHOracle"] === undefined
+        ? undefined
+        : {
+            ...json.contracts["WBTCETHOracle"],
+            contractInstance: WBTCETHOracle.at(
+              json.contracts["WBTCETHOracle"].contractInstance.address
             ),
           },
     DIAOracleWrapper:

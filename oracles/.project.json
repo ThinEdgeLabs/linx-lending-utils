@@ -1,5 +1,5 @@
 {
-  "fullNodeVersion": "v4.0.0",
+  "fullNodeVersion": "v4.2.5",
   "compilerOptionsUsed": {
     "ignoreUnusedConstantsWarnings": false,
     "ignoreUnusedVariablesWarnings": false,
@@ -12,9 +12,9 @@
     "skipTests": false
   },
   "infos": {
-    "AlphUsdtOracle": {
-      "sourceFile": "AlphUsdtOracle.ral",
-      "sourceCodeHash": "aa59dba1c3452d59f0741c0ef3c7100ba5bfbd8ff8fcc0fa9c00f7b50ef01be0",
+    "ALPHUSDTOracle": {
+      "sourceFile": "oracles/ALPHUSDTOracle.ral",
+      "sourceCodeHash": "7a2daf9d1a0a0ca163955dd59e7a9f18f21ad1db4e82d1bc497042cfc215a6ec",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "7f5a52b1204b38fc8d848ae1ff66605e375009b4efd38978090e38fbd03bcdbc"
     },
@@ -209,6 +209,18 @@
       "sourceCodeHash": "1792d6cee1153a965170a86bd9caf9960483c64dc2ae7fec5cdd2ea84fae23ce",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "f9dac4e7d0bf28a2bc019f43138339e23afadde322d50441cdfe029993bf35f3"
+    },
+    "WBTCETHOracle": {
+      "sourceFile": "oracles/WBTCETHOracle.ral",
+      "sourceCodeHash": "4ba72504e17e5e090c57981c6efc9d805ec53ef76b312ab35e85bd91e267b607",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "7f5a52b1204b38fc8d848ae1ff66605e375009b4efd38978090e38fbd03bcdbc"
+    },
+    "WBTCUSDTOracle": {
+      "sourceFile": "oracles/WBTCUSDTOracle.ral",
+      "sourceCodeHash": "c27c0121ccc273e94e68c712eb1f9661f96fdd68b9bc3098842c333d67fa77a3",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "7f5a52b1204b38fc8d848ae1ff66605e375009b4efd38978090e38fbd03bcdbc"
     }
   }
 }
