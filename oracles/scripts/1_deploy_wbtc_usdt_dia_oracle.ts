@@ -1,6 +1,6 @@
 import { Deployer, DeployFunction, Network } from '@alephium/cli'
 import { Settings } from '../alephium.config'
-import { ALPHUSDTOracle } from '../artifacts/ts'
+import { WBTCUSDTOracle } from '../artifacts/ts'
 import { stringToHex } from '@alephium/web3'
 import { PrivateKeyWallet } from '@alephium/web3-wallet'
 
@@ -8,7 +8,7 @@ const deployOracle: DeployFunction<Settings> = async (
   deployer: Deployer,
   network: Network<Settings>
 ): Promise<void> => {
-  const { diaOracleContractId, heartbeatInterval, alphUsdtOracle: oracleSettings } = network.settings
+  const { diaOracleContractId, heartbeatInterval, wbtcUsdtOracle: oracleSettings } = network.settings
 
   if (
     !diaOracleContractId ||
@@ -23,7 +23,7 @@ const deployOracle: DeployFunction<Settings> = async (
     throw new Error('Missing required settings to deploy the oracle contract.')
   }
 
-  const result = await deployer.deployContract(ALPHUSDTOracle, {
+  const result = await deployer.deployContract(WBTCUSDTOracle, {
     initialFields: {
       diaOracleContractId,
       baseMarketId: stringToHex(oracleSettings.baseMarketId),
@@ -41,7 +41,8 @@ const deployOracle: DeployFunction<Settings> = async (
 
   const privateKey = network.privateKeys[0]
   const signer = new PrivateKeyWallet({ privateKey })
-  ALPHUSDTOracle.at(result.contractInstance.address).transact.init({
+
+  WBTCUSDTOracle.at(result.contractInstance.address).transact.init({
     signer
   })
 

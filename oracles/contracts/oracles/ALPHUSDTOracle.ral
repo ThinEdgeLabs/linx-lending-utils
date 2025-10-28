@@ -1,4 +1,4 @@
-Contract AlphUsdtOracle(
+Contract ALPHUSDTOracle(
   diaOracleContractId: ByteVec, // The address of the DIA Oracle contract to query
   baseMarketId: ByteVec,        // The base asset market identifier (e.g., "BTC/USD")
   quoteMarketId: ByteVec,       // The quote asset market identifier (e.g., "USDT/USD")
@@ -8,6 +8,4 @@ Contract AlphUsdtOracle(
   quoteTokenDecimals: U256,     // The number of decimals for the quote token (e.g., 6 for USDT)
   heartbeatInterval: U256,      // Interval in milliseconds to consider the price data fresh
   mut scaleFactor: U256         // The scaling factor
-) extends LinxDiaOracle(diaOracleContractId, baseMarketId, quoteMarketId, baseMarketDecimals, quoteMarketDecimals, baseTokenDecimals, quoteTokenDecimals, heartbeatInterval, scaleFactor  ) {
-
-}
+) extends LinxDiaOracle(diaOracleContractId, baseMarketId, quoteMarketId, baseMarketDecimals, quoteMarketDecimals, baseTokenDecimals, quoteTokenDecimals, heartbeatInterval, scaleFactor  ) {}

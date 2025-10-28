@@ -1,9 +1,7 @@
 import { Configuration } from '@alephium/cli'
 import { HexString } from '@alephium/web3'
 
-export type Settings = {
-  diaOracleContractId: HexString
-  heartbeatInterval: bigint
+export type OracleSettings = {
   baseMarketId: HexString // Market ID to be set at deployment, e.g. 'BTC/USD' in hex format
   quoteMarketId: HexString // Market ID to be set at deployment, e.g. 'USDT/USD' in hex format
   baseMarketDecimals: bigint // Number of decimals for the base asset price (e.g., 8 for BTC/USD DIA feed)
@@ -12,14 +10,16 @@ export type Settings = {
   quoteTokenDecimals: bigint // Number of decimals for the quote token (e.g., 6 for USDT)
 }
 
+export type Settings = {
+  diaOracleContractId: HexString
+  heartbeatInterval: bigint
+  wbtcUsdtOracle?: OracleSettings
+  alphUsdtOracle?: OracleSettings
+  wbtcEthOracle?: OracleSettings
+}
+
 const defaultSettings: Settings = {
   diaOracleContractId: '',
-  baseMarketId: '',
-  quoteMarketId: '',
-  baseMarketDecimals: 0n,
-  quoteMarketDecimals: 0n,
-  baseTokenDecimals: 0n,
-  quoteTokenDecimals: 0n,
   heartbeatInterval: 86400000n // 24 hours
 }
 
@@ -33,12 +33,14 @@ const configuration: Configuration<Settings> = {
       settings: {
         ...defaultSettings,
         diaOracleContractId: '216wgM3Xi5uBFYwwiw2T7iZoCy9vozPJ4XjToW74nQjbV',
-        baseMarketId: 'BTC/USD',
-        quoteMarketId: 'USDT/USD',
-        baseMarketDecimals: 8n,
-        quoteMarketDecimals: 6n,
-        baseTokenDecimals: 18n,
-        quoteTokenDecimals: 6n
+        wbtcUsdtOracle: {
+          baseMarketId: 'BTC/USD',
+          quoteMarketId: 'USDT/USD',
+          baseMarketDecimals: 8n,
+          quoteMarketDecimals: 6n,
+          baseTokenDecimals: 18n,
+          quoteTokenDecimals: 6n
+        }
       }
     },
 
@@ -47,7 +49,31 @@ const configuration: Configuration<Settings> = {
       privateKeys: process.env.PRIVATE_KEYS === undefined ? [] : process.env.PRIVATE_KEYS.split(','),
       settings: {
         ...defaultSettings,
-        diaOracleContractId: '216wgM3Xi5uBFYwwiw2T7iZoCy9vozPJ4XjToW74nQjbV' // DIA Oracle contract ID on testnet
+        diaOracleContractId: '216wgM3Xi5uBFYwwiw2T7iZoCy9vozPJ4XjToW74nQjbV', // DIA Oracle contract ID on testnet
+        wbtcUsdtOracle: {
+          baseMarketId: 'BTC/USD',
+          quoteMarketId: 'USDT/USD',
+          baseMarketDecimals: 8n,
+          quoteMarketDecimals: 8n,
+          baseTokenDecimals: 18n,
+          quoteTokenDecimals: 6n
+        },
+        alphUsdtOracle: {
+          baseMarketId: 'ALPH/USD',
+          quoteMarketId: 'USDT/USD',
+          baseMarketDecimals: 8n,
+          quoteMarketDecimals: 8n,
+          baseTokenDecimals: 18n,
+          quoteTokenDecimals: 6n
+        },
+        wbtcEthOracle: {
+          baseMarketId: 'BTC/USD',
+          quoteMarketId: 'ETH/USD',
+          baseMarketDecimals: 8n,
+          quoteMarketDecimals: 8n,
+          baseTokenDecimals: 18n,
+          quoteTokenDecimals: 18n
+        }
       }
     },
 
