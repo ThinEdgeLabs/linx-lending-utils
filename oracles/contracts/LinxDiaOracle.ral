@@ -14,6 +14,7 @@ Abstract Contract LinxDiaOracle(
 ) extends MathUtils() implements IOracle  {
     enum ErrorCodes {
         StalePrice = 0
+        NotInitialized = 1
     }
 
     @using(checkExternalCaller = false, updateFields = true)
@@ -26,9 +27,12 @@ Abstract Contract LinxDiaOracle(
     // # Reverts
     //
     // Reverts with `ErrorCodes.StalePrice` if the timestamp of the fetched price
+    // Reverts with `ErrorCodes.NotInitialized` if the oracle has not been initialized
     // is older than the current block timestamp minus the `heartbeatInterval`.
     @using(checkExternalCaller = false)
     pub fn price() -> U256 {
+        assert!(scaleFactor != 0, ErrorCodes.NotInitialized)
+
         let (basePrice, baseTimestamp) = IDIAOracle(diaOracleContractId).getValue(baseMarketId)
         assert!(blockTimeStamp!() - baseTimestamp <= heartbeatInterval, ErrorCodes.StalePrice)
 

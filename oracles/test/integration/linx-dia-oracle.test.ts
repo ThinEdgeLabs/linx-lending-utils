@@ -1,6 +1,6 @@
 import { web3, stringToHex, MINIMAL_CONTRACT_DEPOSIT } from '@alephium/web3'
 import { PrivateKeyWallet } from '@alephium/web3-wallet'
-import { LinxDiaOracle, LinxDiaOracleInstance, MockOracle, MockOracleInstance } from '../../artifacts/ts'
+import { OracleExample, OracleExampleInstance, MockOracle, MockOracleInstance } from '../../artifacts/ts'
 import { getSigner, expectAssertionError } from '@alephium/web3-test'
 import { HUNDRED_ALPH } from '../utils'
 
@@ -8,7 +8,7 @@ web3.setCurrentNodeProvider('http://127.0.0.1:22973', undefined, fetch)
 
 describe('LinxDIAOracle', () => {
   let mockOracle: MockOracleInstance
-  let linxOracle: LinxDiaOracleInstance
+  let linxOracle: OracleExampleInstance
   let signer: PrivateKeyWallet
 
   const baseMarketId = stringToHex('BTC/USD')
@@ -24,7 +24,7 @@ describe('LinxDIAOracle', () => {
     mockOracle = (await MockOracle.deploy(signer, { initialFields: {} })).contractInstance
 
     linxOracle = (
-      await LinxDiaOracle.deploy(signer, {
+      await OracleExample.deploy(signer, {
         initialFields: {
           diaOracleContractId: mockOracle.contractId,
           baseMarketId: stringToHex('BTC/USD'),
@@ -38,9 +38,6 @@ describe('LinxDIAOracle', () => {
         }
       })
     ).contractInstance
-    await linxOracle.transact.init({
-      signer
-    })
   })
 
   it('should initialize all fields correctly', async () => {
@@ -65,7 +62,18 @@ describe('LinxDIAOracle', () => {
     expect(heartbeatInterval).toEqual(heartbeatInterval)
   })
 
+  it('should fail to get price before initialization', async () => {
+    await expectAssertionError(
+      linxOracle.view.price(),
+      linxOracle.address,
+      OracleExample.consts.ErrorCodes.NotInitialized
+    )
+  })
+
   it('should return the price with the correct scale factor', async () => {
+    await linxOracle.transact.init({
+      signer
+    })
     const basePrice = BigInt(1000.12345678 * 10 ** 8)
     await mockOracle.transact.setPrice({
       signer,
@@ -89,7 +97,10 @@ describe('LinxDIAOracle', () => {
   })
 
   it('should fail if oracle data is stale', async () => {
+    await linxOracle.transact.init({
+      signer
+    })
     await new Promise((r) => setTimeout(r, heartbeatInterval))
-    await expectAssertionError(linxOracle.view.price(), linxOracle.address, LinxDiaOracle.consts.ErrorCodes.StalePrice)
+    await expectAssertionError(linxOracle.view.price(), linxOracle.address, OracleExample.consts.ErrorCodes.StalePrice)
   })
 })
