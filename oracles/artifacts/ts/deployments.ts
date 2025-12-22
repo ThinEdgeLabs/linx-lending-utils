@@ -8,51 +8,40 @@ import {
   NetworkId,
 } from "@alephium/web3";
 import {
-  LinxDiaOracle,
-  LinxDiaOracleInstance,
-  AlphUsdtOracle,
-  AlphUsdtOracleInstance,
   ALPHUSDTOracle,
   ALPHUSDTOracleInstance,
   WBTCUSDTOracle,
   WBTCUSDTOracleInstance,
+  LinxDiaOracle,
+  LinxDiaOracleInstance,
+  AlphUsdtOracle,
+  AlphUsdtOracleInstance,
   WBTCETHOracle,
   WBTCETHOracleInstance,
+  USDCUSDTOracle,
+  USDCUSDTOracleInstance,
   DIAOracleWrapper,
   DIAOracleWrapperInstance,
 } from ".";
+import { default as mainnetDeployments } from "../../deployments/.deployments.mainnet.json";
 import { default as testnetDeployments } from "../../deployments/.deployments.testnet.json";
 import { default as devnetDeployments } from "../../deployments/.deployments.devnet.json";
 
 export type Deployments = {
   deployerAddress: string;
   contracts: {
-    LinxDiaOracle: DeployContractExecutionResult<LinxDiaOracleInstance>;
-    AlphUsdtOracle?: DeployContractExecutionResult<AlphUsdtOracleInstance>;
     ALPHUSDTOracle?: DeployContractExecutionResult<ALPHUSDTOracleInstance>;
     WBTCUSDTOracle?: DeployContractExecutionResult<WBTCUSDTOracleInstance>;
+    LinxDiaOracle?: DeployContractExecutionResult<LinxDiaOracleInstance>;
+    AlphUsdtOracle?: DeployContractExecutionResult<AlphUsdtOracleInstance>;
     WBTCETHOracle?: DeployContractExecutionResult<WBTCETHOracleInstance>;
+    USDCUSDTOracle?: DeployContractExecutionResult<USDCUSDTOracleInstance>;
     DIAOracleWrapper?: DeployContractExecutionResult<DIAOracleWrapperInstance>;
   };
 };
 
 function toDeployments(json: any): Deployments {
   const contracts = {
-    LinxDiaOracle: {
-      ...json.contracts["LinxDiaOracle"],
-      contractInstance: LinxDiaOracle.at(
-        json.contracts["LinxDiaOracle"].contractInstance.address
-      ),
-    },
-    AlphUsdtOracle:
-      json.contracts["AlphUsdtOracle"] === undefined
-        ? undefined
-        : {
-            ...json.contracts["AlphUsdtOracle"],
-            contractInstance: AlphUsdtOracle.at(
-              json.contracts["AlphUsdtOracle"].contractInstance.address
-            ),
-          },
     ALPHUSDTOracle:
       json.contracts["ALPHUSDTOracle"] === undefined
         ? undefined
@@ -71,6 +60,24 @@ function toDeployments(json: any): Deployments {
               json.contracts["WBTCUSDTOracle"].contractInstance.address
             ),
           },
+    LinxDiaOracle:
+      json.contracts["LinxDiaOracle"] === undefined
+        ? undefined
+        : {
+            ...json.contracts["LinxDiaOracle"],
+            contractInstance: LinxDiaOracle.at(
+              json.contracts["LinxDiaOracle"].contractInstance.address
+            ),
+          },
+    AlphUsdtOracle:
+      json.contracts["AlphUsdtOracle"] === undefined
+        ? undefined
+        : {
+            ...json.contracts["AlphUsdtOracle"],
+            contractInstance: AlphUsdtOracle.at(
+              json.contracts["AlphUsdtOracle"].contractInstance.address
+            ),
+          },
     WBTCETHOracle:
       json.contracts["WBTCETHOracle"] === undefined
         ? undefined
@@ -78,6 +85,15 @@ function toDeployments(json: any): Deployments {
             ...json.contracts["WBTCETHOracle"],
             contractInstance: WBTCETHOracle.at(
               json.contracts["WBTCETHOracle"].contractInstance.address
+            ),
+          },
+    USDCUSDTOracle:
+      json.contracts["USDCUSDTOracle"] === undefined
+        ? undefined
+        : {
+            ...json.contracts["USDCUSDTOracle"],
+            contractInstance: USDCUSDTOracle.at(
+              json.contracts["USDCUSDTOracle"].contractInstance.address
             ),
           },
     DIAOracleWrapper:
@@ -101,7 +117,9 @@ export function loadDeployments(
   deployerAddress?: string
 ): Deployments {
   const deployments =
-    networkId === "testnet"
+    networkId === "mainnet"
+      ? mainnetDeployments
+      : networkId === "testnet"
       ? testnetDeployments
       : networkId === "devnet"
       ? devnetDeployments

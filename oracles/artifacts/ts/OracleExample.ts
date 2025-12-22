@@ -33,7 +33,7 @@ import {
   encodeContractFields,
   Narrow,
 } from "@alephium/web3";
-import { default as ALPHUSDTOracleContractJson } from "../oracles/ALPHUSDTOracle.ral.json";
+import { default as OracleExampleContractJson } from "../OracleExample.ral.json";
 import { getContractByCodeHash, registerContract } from "./contracts";
 import {
   DIAOracleValue,
@@ -44,7 +44,7 @@ import {
 } from "./types";
 
 // Custom types for the contract
-export namespace ALPHUSDTOracleTypes {
+export namespace OracleExampleTypes {
   export type Fields = {
     diaOracleContractId: HexString;
     baseMarketId: HexString;
@@ -193,10 +193,10 @@ export namespace ALPHUSDTOracleTypes {
 }
 
 class Factory extends ContractFactory<
-  ALPHUSDTOracleInstance,
-  ALPHUSDTOracleTypes.Fields
+  OracleExampleInstance,
+  OracleExampleTypes.Fields
 > {
-  encodeFields(fields: ALPHUSDTOracleTypes.Fields) {
+  encodeFields(fields: OracleExampleTypes.Fields) {
     return encodeContractFields(
       addStdIdToFields(this.contract, fields),
       this.contract.fieldsSig,
@@ -209,14 +209,14 @@ class Factory extends ContractFactory<
     ErrorCodes: { StalePrice: BigInt("0"), NotInitialized: BigInt("1") },
   };
 
-  at(address: string): ALPHUSDTOracleInstance {
-    return new ALPHUSDTOracleInstance(address);
+  at(address: string): OracleExampleInstance {
+    return new OracleExampleInstance(address);
   }
 
   tests = {
     price: async (
       params: Omit<
-        TestContractParamsWithoutMaps<ALPHUSDTOracleTypes.Fields, never>,
+        TestContractParamsWithoutMaps<OracleExampleTypes.Fields, never>,
         "args"
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
@@ -224,7 +224,7 @@ class Factory extends ContractFactory<
     },
     init: async (
       params: Omit<
-        TestContractParamsWithoutMaps<ALPHUSDTOracleTypes.Fields, never>,
+        TestContractParamsWithoutMaps<OracleExampleTypes.Fields, never>,
         "args"
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
@@ -232,7 +232,7 @@ class Factory extends ContractFactory<
     },
     wMulDown: async (
       params: TestContractParamsWithoutMaps<
-        ALPHUSDTOracleTypes.Fields,
+        OracleExampleTypes.Fields,
         { x: bigint; y: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
@@ -240,7 +240,7 @@ class Factory extends ContractFactory<
     },
     wDivDown: async (
       params: TestContractParamsWithoutMaps<
-        ALPHUSDTOracleTypes.Fields,
+        OracleExampleTypes.Fields,
         { x: bigint; y: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
@@ -248,7 +248,7 @@ class Factory extends ContractFactory<
     },
     wDivUp: async (
       params: TestContractParamsWithoutMaps<
-        ALPHUSDTOracleTypes.Fields,
+        OracleExampleTypes.Fields,
         { x: bigint; y: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
@@ -256,7 +256,7 @@ class Factory extends ContractFactory<
     },
     mulDivDown: async (
       params: TestContractParamsWithoutMaps<
-        ALPHUSDTOracleTypes.Fields,
+        OracleExampleTypes.Fields,
         { x: bigint; y: bigint; d: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
@@ -264,7 +264,7 @@ class Factory extends ContractFactory<
     },
     mulDivUp: async (
       params: TestContractParamsWithoutMaps<
-        ALPHUSDTOracleTypes.Fields,
+        OracleExampleTypes.Fields,
         { x: bigint; y: bigint; d: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
@@ -272,7 +272,7 @@ class Factory extends ContractFactory<
     },
     wTaylorCompounded: async (
       params: TestContractParamsWithoutMaps<
-        ALPHUSDTOracleTypes.Fields,
+        OracleExampleTypes.Fields,
         { x: bigint; n: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
@@ -285,7 +285,7 @@ class Factory extends ContractFactory<
     },
     exactlyOneZero: async (
       params: TestContractParamsWithoutMaps<
-        ALPHUSDTOracleTypes.Fields,
+        OracleExampleTypes.Fields,
         { a: bigint; b: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<boolean>> => {
@@ -293,7 +293,7 @@ class Factory extends ContractFactory<
     },
     zeroFloorSub: async (
       params: TestContractParamsWithoutMaps<
-        ALPHUSDTOracleTypes.Fields,
+        OracleExampleTypes.Fields,
         { x: bigint; y: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
@@ -301,7 +301,7 @@ class Factory extends ContractFactory<
     },
     min: async (
       params: TestContractParamsWithoutMaps<
-        ALPHUSDTOracleTypes.Fields,
+        OracleExampleTypes.Fields,
         { a: bigint; b: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
@@ -309,7 +309,7 @@ class Factory extends ContractFactory<
     },
     toBaseUnits: async (
       params: TestContractParamsWithoutMaps<
-        ALPHUSDTOracleTypes.Fields,
+        OracleExampleTypes.Fields,
         { amount: bigint; tokenDecimals: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
@@ -318,7 +318,7 @@ class Factory extends ContractFactory<
   };
 
   stateForTest(
-    initFields: ALPHUSDTOracleTypes.Fields,
+    initFields: OracleExampleTypes.Fields,
     asset?: Asset,
     address?: string
   ) {
@@ -327,32 +327,32 @@ class Factory extends ContractFactory<
 }
 
 // Use this object to test and deploy the contract
-export const ALPHUSDTOracle = new Factory(
+export const OracleExample = new Factory(
   Contract.fromJson(
-    ALPHUSDTOracleContractJson,
+    OracleExampleContractJson,
     "",
     "8a3eb1223b39d37b94435a8d0cddcf757eb5c62cbefa726a0c4a14752ea0d3ff",
     AllStructs
   )
 );
-registerContract(ALPHUSDTOracle);
+registerContract(OracleExample);
 
 // Use this class to interact with the blockchain
-export class ALPHUSDTOracleInstance extends ContractInstance {
+export class OracleExampleInstance extends ContractInstance {
   constructor(address: Address) {
     super(address);
   }
 
-  async fetchState(): Promise<ALPHUSDTOracleTypes.State> {
-    return fetchContractState(ALPHUSDTOracle, this);
+  async fetchState(): Promise<OracleExampleTypes.State> {
+    return fetchContractState(OracleExample, this);
   }
 
   view = {
     price: async (
-      params?: ALPHUSDTOracleTypes.CallMethodParams<"price">
-    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"price">> => {
+      params?: OracleExampleTypes.CallMethodParams<"price">
+    ): Promise<OracleExampleTypes.CallMethodResult<"price">> => {
       return callMethod(
-        ALPHUSDTOracle,
+        OracleExample,
         this,
         "price",
         params === undefined ? {} : params,
@@ -360,10 +360,10 @@ export class ALPHUSDTOracleInstance extends ContractInstance {
       );
     },
     init: async (
-      params?: ALPHUSDTOracleTypes.CallMethodParams<"init">
-    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"init">> => {
+      params?: OracleExampleTypes.CallMethodParams<"init">
+    ): Promise<OracleExampleTypes.CallMethodResult<"init">> => {
       return callMethod(
-        ALPHUSDTOracle,
+        OracleExample,
         this,
         "init",
         params === undefined ? {} : params,
@@ -371,10 +371,10 @@ export class ALPHUSDTOracleInstance extends ContractInstance {
       );
     },
     wMulDown: async (
-      params: ALPHUSDTOracleTypes.CallMethodParams<"wMulDown">
-    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"wMulDown">> => {
+      params: OracleExampleTypes.CallMethodParams<"wMulDown">
+    ): Promise<OracleExampleTypes.CallMethodResult<"wMulDown">> => {
       return callMethod(
-        ALPHUSDTOracle,
+        OracleExample,
         this,
         "wMulDown",
         params,
@@ -382,10 +382,10 @@ export class ALPHUSDTOracleInstance extends ContractInstance {
       );
     },
     wDivDown: async (
-      params: ALPHUSDTOracleTypes.CallMethodParams<"wDivDown">
-    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"wDivDown">> => {
+      params: OracleExampleTypes.CallMethodParams<"wDivDown">
+    ): Promise<OracleExampleTypes.CallMethodResult<"wDivDown">> => {
       return callMethod(
-        ALPHUSDTOracle,
+        OracleExample,
         this,
         "wDivDown",
         params,
@@ -393,10 +393,10 @@ export class ALPHUSDTOracleInstance extends ContractInstance {
       );
     },
     wDivUp: async (
-      params: ALPHUSDTOracleTypes.CallMethodParams<"wDivUp">
-    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"wDivUp">> => {
+      params: OracleExampleTypes.CallMethodParams<"wDivUp">
+    ): Promise<OracleExampleTypes.CallMethodResult<"wDivUp">> => {
       return callMethod(
-        ALPHUSDTOracle,
+        OracleExample,
         this,
         "wDivUp",
         params,
@@ -404,10 +404,10 @@ export class ALPHUSDTOracleInstance extends ContractInstance {
       );
     },
     mulDivDown: async (
-      params: ALPHUSDTOracleTypes.CallMethodParams<"mulDivDown">
-    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"mulDivDown">> => {
+      params: OracleExampleTypes.CallMethodParams<"mulDivDown">
+    ): Promise<OracleExampleTypes.CallMethodResult<"mulDivDown">> => {
       return callMethod(
-        ALPHUSDTOracle,
+        OracleExample,
         this,
         "mulDivDown",
         params,
@@ -415,10 +415,10 @@ export class ALPHUSDTOracleInstance extends ContractInstance {
       );
     },
     mulDivUp: async (
-      params: ALPHUSDTOracleTypes.CallMethodParams<"mulDivUp">
-    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"mulDivUp">> => {
+      params: OracleExampleTypes.CallMethodParams<"mulDivUp">
+    ): Promise<OracleExampleTypes.CallMethodResult<"mulDivUp">> => {
       return callMethod(
-        ALPHUSDTOracle,
+        OracleExample,
         this,
         "mulDivUp",
         params,
@@ -426,10 +426,10 @@ export class ALPHUSDTOracleInstance extends ContractInstance {
       );
     },
     wTaylorCompounded: async (
-      params: ALPHUSDTOracleTypes.CallMethodParams<"wTaylorCompounded">
-    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"wTaylorCompounded">> => {
+      params: OracleExampleTypes.CallMethodParams<"wTaylorCompounded">
+    ): Promise<OracleExampleTypes.CallMethodResult<"wTaylorCompounded">> => {
       return callMethod(
-        ALPHUSDTOracle,
+        OracleExample,
         this,
         "wTaylorCompounded",
         params,
@@ -437,10 +437,10 @@ export class ALPHUSDTOracleInstance extends ContractInstance {
       );
     },
     exactlyOneZero: async (
-      params: ALPHUSDTOracleTypes.CallMethodParams<"exactlyOneZero">
-    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"exactlyOneZero">> => {
+      params: OracleExampleTypes.CallMethodParams<"exactlyOneZero">
+    ): Promise<OracleExampleTypes.CallMethodResult<"exactlyOneZero">> => {
       return callMethod(
-        ALPHUSDTOracle,
+        OracleExample,
         this,
         "exactlyOneZero",
         params,
@@ -448,10 +448,10 @@ export class ALPHUSDTOracleInstance extends ContractInstance {
       );
     },
     zeroFloorSub: async (
-      params: ALPHUSDTOracleTypes.CallMethodParams<"zeroFloorSub">
-    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"zeroFloorSub">> => {
+      params: OracleExampleTypes.CallMethodParams<"zeroFloorSub">
+    ): Promise<OracleExampleTypes.CallMethodResult<"zeroFloorSub">> => {
       return callMethod(
-        ALPHUSDTOracle,
+        OracleExample,
         this,
         "zeroFloorSub",
         params,
@@ -459,10 +459,10 @@ export class ALPHUSDTOracleInstance extends ContractInstance {
       );
     },
     min: async (
-      params: ALPHUSDTOracleTypes.CallMethodParams<"min">
-    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"min">> => {
+      params: OracleExampleTypes.CallMethodParams<"min">
+    ): Promise<OracleExampleTypes.CallMethodResult<"min">> => {
       return callMethod(
-        ALPHUSDTOracle,
+        OracleExample,
         this,
         "min",
         params,
@@ -470,10 +470,10 @@ export class ALPHUSDTOracleInstance extends ContractInstance {
       );
     },
     toBaseUnits: async (
-      params: ALPHUSDTOracleTypes.CallMethodParams<"toBaseUnits">
-    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"toBaseUnits">> => {
+      params: OracleExampleTypes.CallMethodParams<"toBaseUnits">
+    ): Promise<OracleExampleTypes.CallMethodResult<"toBaseUnits">> => {
       return callMethod(
-        ALPHUSDTOracle,
+        OracleExample,
         this,
         "toBaseUnits",
         params,
@@ -484,89 +484,89 @@ export class ALPHUSDTOracleInstance extends ContractInstance {
 
   transact = {
     price: async (
-      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"price">
-    ): Promise<ALPHUSDTOracleTypes.SignExecuteMethodResult<"price">> => {
-      return signExecuteMethod(ALPHUSDTOracle, this, "price", params);
+      params: OracleExampleTypes.SignExecuteMethodParams<"price">
+    ): Promise<OracleExampleTypes.SignExecuteMethodResult<"price">> => {
+      return signExecuteMethod(OracleExample, this, "price", params);
     },
     init: async (
-      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"init">
-    ): Promise<ALPHUSDTOracleTypes.SignExecuteMethodResult<"init">> => {
-      return signExecuteMethod(ALPHUSDTOracle, this, "init", params);
+      params: OracleExampleTypes.SignExecuteMethodParams<"init">
+    ): Promise<OracleExampleTypes.SignExecuteMethodResult<"init">> => {
+      return signExecuteMethod(OracleExample, this, "init", params);
     },
     wMulDown: async (
-      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"wMulDown">
-    ): Promise<ALPHUSDTOracleTypes.SignExecuteMethodResult<"wMulDown">> => {
-      return signExecuteMethod(ALPHUSDTOracle, this, "wMulDown", params);
+      params: OracleExampleTypes.SignExecuteMethodParams<"wMulDown">
+    ): Promise<OracleExampleTypes.SignExecuteMethodResult<"wMulDown">> => {
+      return signExecuteMethod(OracleExample, this, "wMulDown", params);
     },
     wDivDown: async (
-      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"wDivDown">
-    ): Promise<ALPHUSDTOracleTypes.SignExecuteMethodResult<"wDivDown">> => {
-      return signExecuteMethod(ALPHUSDTOracle, this, "wDivDown", params);
+      params: OracleExampleTypes.SignExecuteMethodParams<"wDivDown">
+    ): Promise<OracleExampleTypes.SignExecuteMethodResult<"wDivDown">> => {
+      return signExecuteMethod(OracleExample, this, "wDivDown", params);
     },
     wDivUp: async (
-      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"wDivUp">
-    ): Promise<ALPHUSDTOracleTypes.SignExecuteMethodResult<"wDivUp">> => {
-      return signExecuteMethod(ALPHUSDTOracle, this, "wDivUp", params);
+      params: OracleExampleTypes.SignExecuteMethodParams<"wDivUp">
+    ): Promise<OracleExampleTypes.SignExecuteMethodResult<"wDivUp">> => {
+      return signExecuteMethod(OracleExample, this, "wDivUp", params);
     },
     mulDivDown: async (
-      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"mulDivDown">
-    ): Promise<ALPHUSDTOracleTypes.SignExecuteMethodResult<"mulDivDown">> => {
-      return signExecuteMethod(ALPHUSDTOracle, this, "mulDivDown", params);
+      params: OracleExampleTypes.SignExecuteMethodParams<"mulDivDown">
+    ): Promise<OracleExampleTypes.SignExecuteMethodResult<"mulDivDown">> => {
+      return signExecuteMethod(OracleExample, this, "mulDivDown", params);
     },
     mulDivUp: async (
-      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"mulDivUp">
-    ): Promise<ALPHUSDTOracleTypes.SignExecuteMethodResult<"mulDivUp">> => {
-      return signExecuteMethod(ALPHUSDTOracle, this, "mulDivUp", params);
+      params: OracleExampleTypes.SignExecuteMethodParams<"mulDivUp">
+    ): Promise<OracleExampleTypes.SignExecuteMethodResult<"mulDivUp">> => {
+      return signExecuteMethod(OracleExample, this, "mulDivUp", params);
     },
     wTaylorCompounded: async (
-      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"wTaylorCompounded">
+      params: OracleExampleTypes.SignExecuteMethodParams<"wTaylorCompounded">
     ): Promise<
-      ALPHUSDTOracleTypes.SignExecuteMethodResult<"wTaylorCompounded">
+      OracleExampleTypes.SignExecuteMethodResult<"wTaylorCompounded">
     > => {
       return signExecuteMethod(
-        ALPHUSDTOracle,
+        OracleExample,
         this,
         "wTaylorCompounded",
         params
       );
     },
     exactlyOneZero: async (
-      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"exactlyOneZero">
+      params: OracleExampleTypes.SignExecuteMethodParams<"exactlyOneZero">
     ): Promise<
-      ALPHUSDTOracleTypes.SignExecuteMethodResult<"exactlyOneZero">
+      OracleExampleTypes.SignExecuteMethodResult<"exactlyOneZero">
     > => {
-      return signExecuteMethod(ALPHUSDTOracle, this, "exactlyOneZero", params);
+      return signExecuteMethod(OracleExample, this, "exactlyOneZero", params);
     },
     zeroFloorSub: async (
-      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"zeroFloorSub">
-    ): Promise<ALPHUSDTOracleTypes.SignExecuteMethodResult<"zeroFloorSub">> => {
-      return signExecuteMethod(ALPHUSDTOracle, this, "zeroFloorSub", params);
+      params: OracleExampleTypes.SignExecuteMethodParams<"zeroFloorSub">
+    ): Promise<OracleExampleTypes.SignExecuteMethodResult<"zeroFloorSub">> => {
+      return signExecuteMethod(OracleExample, this, "zeroFloorSub", params);
     },
     min: async (
-      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"min">
-    ): Promise<ALPHUSDTOracleTypes.SignExecuteMethodResult<"min">> => {
-      return signExecuteMethod(ALPHUSDTOracle, this, "min", params);
+      params: OracleExampleTypes.SignExecuteMethodParams<"min">
+    ): Promise<OracleExampleTypes.SignExecuteMethodResult<"min">> => {
+      return signExecuteMethod(OracleExample, this, "min", params);
     },
     toBaseUnits: async (
-      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"toBaseUnits">
-    ): Promise<ALPHUSDTOracleTypes.SignExecuteMethodResult<"toBaseUnits">> => {
-      return signExecuteMethod(ALPHUSDTOracle, this, "toBaseUnits", params);
+      params: OracleExampleTypes.SignExecuteMethodParams<"toBaseUnits">
+    ): Promise<OracleExampleTypes.SignExecuteMethodResult<"toBaseUnits">> => {
+      return signExecuteMethod(OracleExample, this, "toBaseUnits", params);
     },
   };
 
-  async multicall<Calls extends ALPHUSDTOracleTypes.MultiCallParams>(
+  async multicall<Calls extends OracleExampleTypes.MultiCallParams>(
     calls: Calls
-  ): Promise<ALPHUSDTOracleTypes.MultiCallResults<Calls>>;
-  async multicall<Callss extends ALPHUSDTOracleTypes.MultiCallParams[]>(
+  ): Promise<OracleExampleTypes.MultiCallResults<Calls>>;
+  async multicall<Callss extends OracleExampleTypes.MultiCallParams[]>(
     callss: Narrow<Callss>
-  ): Promise<ALPHUSDTOracleTypes.MulticallReturnType<Callss>>;
+  ): Promise<OracleExampleTypes.MulticallReturnType<Callss>>;
   async multicall<
     Callss extends
-      | ALPHUSDTOracleTypes.MultiCallParams
-      | ALPHUSDTOracleTypes.MultiCallParams[]
+      | OracleExampleTypes.MultiCallParams
+      | OracleExampleTypes.MultiCallParams[]
   >(callss: Callss): Promise<unknown> {
     return await multicallMethods(
-      ALPHUSDTOracle,
+      OracleExample,
       this,
       callss,
       getContractByCodeHash

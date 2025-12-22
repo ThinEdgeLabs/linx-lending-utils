@@ -1,5 +1,5 @@
 {
-  "fullNodeVersion": "v4.2.5",
+  "fullNodeVersion": "v4.2.2",
   "compilerOptionsUsed": {
     "ignoreUnusedConstantsWarnings": false,
     "ignoreUnusedVariablesWarnings": false,
@@ -16,7 +16,7 @@
       "sourceFile": "oracles/ALPHUSDTOracle.ral",
       "sourceCodeHash": "7a2daf9d1a0a0ca163955dd59e7a9f18f21ad1db4e82d1bc497042cfc215a6ec",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "7f5a52b1204b38fc8d848ae1ff66605e375009b4efd38978090e38fbd03bcdbc"
+      "codeHashDebug": "8a3eb1223b39d37b94435a8d0cddcf757eb5c62cbefa726a0c4a14752ea0d3ff"
     },
     "CreateMarketAndAccrueInterest": {
       "sourceFile": "lib/linx-lending-core/contracts/test/CreateMarket.ral",
@@ -116,7 +116,7 @@
     },
     "LinxDiaOracle": {
       "sourceFile": "LinxDiaOracle.ral",
-      "sourceCodeHash": "39d817af744713932b3275ca3bb68035399b8ea24a712a51340b9129fbd9da0f",
+      "sourceCodeHash": "b410975025f4c104a4829dddf41cfa5ca442231a3ce76b3fb6aeaddab0c51b9f",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -161,6 +161,12 @@
       "sourceCodeHash": "4e3a1036f09dec9a47955efa73e9e128cebea788b2b066d54757b5900fe853f5",
       "bytecodeDebugPatch": "=6-2+55=2-2+91=11-1+a=76+7a7e0214696e73657274206174206d617020706174683a2000=152",
       "codeHashDebug": "55e3be8289094ade1e893c234b1e0ec1d0169afb728c008cb311d325c6c306f6"
+    },
+    "OracleExample": {
+      "sourceFile": "OracleExample.ral",
+      "sourceCodeHash": "926f65915274c97882b94959fc849c85ffad93f3937262a8dda23f6ce44ac07d",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "8a3eb1223b39d37b94435a8d0cddcf757eb5c62cbefa726a0c4a14752ea0d3ff"
     },
     "OracleMock": {
       "sourceFile": "lib/linx-lending-core/contracts/test/OracleMock.ral",
@@ -210,17 +216,23 @@
       "bytecodeDebugPatch": "",
       "codeHashDebug": "f9dac4e7d0bf28a2bc019f43138339e23afadde322d50441cdfe029993bf35f3"
     },
+    "USDCUSDTOracle": {
+      "sourceFile": "oracles/USDCUSDTOracle.ral",
+      "sourceCodeHash": "0a0a1f67a36ec72b6bbfd445f78c41bc69e7466ea5928a65d2a54eae0b9a9fa7",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "8a3eb1223b39d37b94435a8d0cddcf757eb5c62cbefa726a0c4a14752ea0d3ff"
+    },
     "WBTCETHOracle": {
       "sourceFile": "oracles/WBTCETHOracle.ral",
       "sourceCodeHash": "4ba72504e17e5e090c57981c6efc9d805ec53ef76b312ab35e85bd91e267b607",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "7f5a52b1204b38fc8d848ae1ff66605e375009b4efd38978090e38fbd03bcdbc"
+      "codeHashDebug": "8a3eb1223b39d37b94435a8d0cddcf757eb5c62cbefa726a0c4a14752ea0d3ff"
     },
     "WBTCUSDTOracle": {
       "sourceFile": "oracles/WBTCUSDTOracle.ral",
       "sourceCodeHash": "c27c0121ccc273e94e68c712eb1f9661f96fdd68b9bc3098842c333d67fa77a3",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "7f5a52b1204b38fc8d848ae1ff66605e375009b4efd38978090e38fbd03bcdbc"
+      "codeHashDebug": "8a3eb1223b39d37b94435a8d0cddcf757eb5c62cbefa726a0c4a14752ea0d3ff"
     }
   }
 }

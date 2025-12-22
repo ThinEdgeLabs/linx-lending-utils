@@ -206,7 +206,7 @@ class Factory extends ContractFactory<
 
   consts = {
     WAD: BigInt("1000000000000000000"),
-    ErrorCodes: { StalePrice: BigInt("0") },
+    ErrorCodes: { StalePrice: BigInt("0"), NotInitialized: BigInt("1") },
   };
 
   at(address: string): WBTCUSDTOracleInstance {
@@ -331,7 +331,7 @@ export const WBTCUSDTOracle = new Factory(
   Contract.fromJson(
     WBTCUSDTOracleContractJson,
     "",
-    "7f5a52b1204b38fc8d848ae1ff66605e375009b4efd38978090e38fbd03bcdbc",
+    "8a3eb1223b39d37b94435a8d0cddcf757eb5c62cbefa726a0c4a14752ea0d3ff",
     AllStructs
   )
 );
