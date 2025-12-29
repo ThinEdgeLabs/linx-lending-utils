@@ -14,6 +14,7 @@ import {
 import { getContractByCodeHash } from "./contracts";
 import { default as GetBorrowRateScriptJson } from "../GetBorrowRate.ral.json";
 import { default as GetBorrowRateAndUpdateScriptJson } from "../GetBorrowRateAndUpdate.ral.json";
+import { default as GetContractCodeHashScriptJson } from "../GetContractCodeHash.ral.json";
 import { default as SetFixedRateScriptJson } from "../SetFixedRate.ral.json";
 import * as types from "./types";
 
@@ -38,6 +39,14 @@ export const GetBorrowRateAndUpdate = new ExecutableScript<
   bigint
 >(
   Script.fromJson(GetBorrowRateAndUpdateScriptJson, "", types.AllStructs),
+  getContractByCodeHash
+);
+
+export const GetContractCodeHash = new ExecutableScript<
+  { contractId: HexString },
+  HexString
+>(
+  Script.fromJson(GetContractCodeHashScriptJson, "", types.AllStructs),
   getContractByCodeHash
 );
 

@@ -16,3 +16,9 @@ TxScript GetBorrowRate(irm: IInterestRate, marketParams: MarketParams, marketSta
 TxScript SetFixedRate(fixedRate: FixedRate, newBorrowRate: U256) {
     fixedRate.setBorrowRate(newBorrowRate)
 }
+
+TxScript GetContractCodeHash(contractId: ByteVec) {
+  pub fn main() -> ByteVec {
+    return contractCodeHash!(contractId)
+  }
+}
