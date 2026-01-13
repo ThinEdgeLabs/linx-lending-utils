@@ -36,7 +36,7 @@ const deployOracle: DeployFunction<Settings> = async (
       quoteTokenDecimals: oracleSettings.quoteTokenDecimals,
       owner: deployer.account.address,
       pendingOwner: NULL_CONTRACT_ADDRESS,
-      upgradeDelay: BigInt(7 * 86400), // 7 days
+      upgradeDelay: BigInt(7 * 86400000), // 7 days
       upgradeInitiated: BigInt(0),
       newCode: '',
       newImmFieldsEncoded: '',
