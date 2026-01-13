@@ -1,0 +1,27 @@
+{
+  "version": "v4.3.0",
+  "name": "GetOraclePrice",
+  "bytecodeTemplate": "010100000101070c0d{0}d45dd91db71700160002",
+  "fieldsSig": {
+    "names": [
+      "oracle"
+    ],
+    "types": [
+      "IOracle"
+    ],
+    "isMutable": [
+      false
+    ]
+  },
+  "functions": [
+    {
+      "name": "main",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "U256"
+      ]
+    }
+  ]
+}

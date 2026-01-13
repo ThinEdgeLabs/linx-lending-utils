@@ -55,17 +55,117 @@ export namespace WBTCUSDTOracleTypes {
     quoteTokenDecimals: bigint;
     heartbeatInterval: bigint;
     scaleFactor: bigint;
+    upgradeDelay: bigint;
+    owner: Address;
+    pendingOwner: Address;
+    upgradeInitiated: bigint;
+    newCode: HexString;
+    newImmFieldsEncoded: HexString;
+    newMutFieldsEncoded: HexString;
   };
 
   export type State = ContractState<Fields>;
+
+  export type MigrateInitiatedEvent = ContractEvent<{
+    owner: Address;
+    changeCode: HexString;
+  }>;
+  export type MigrateApplyEvent = ContractEvent<{
+    owner: Address;
+    changeCode: HexString;
+  }>;
+  export type MigrateWithFieldsInitiatedEvent = ContractEvent<{
+    owner: Address;
+    changeCode: HexString;
+    changeImmFieldsEncoded: HexString;
+    changeMutFieldsEncoded: HexString;
+  }>;
+  export type MigrateWithFieldsApplyEvent = ContractEvent<{
+    owner: Address;
+    changeCode: HexString;
+    changeImmFieldsEncoded: HexString;
+    changeMutFieldsEncoded: HexString;
+  }>;
 
   export interface CallMethodTable {
     price: {
       params: Omit<CallContractParams<{}>, "args">;
       result: CallContractResult<bigint>;
     };
+    owner: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<Address>;
+    };
+    changeOwner: {
+      params: CallContractParams<{ newOwner: Address }>;
+      result: CallContractResult<null>;
+    };
+    acceptOwnership: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    migrate: {
+      params: CallContractParams<{ changeCode: HexString }>;
+      result: CallContractResult<null>;
+    };
+    migrateWithFields: {
+      params: CallContractParams<{
+        changeCode: HexString;
+        changeImmFieldsEncoded: HexString;
+        changeMutFieldsEncoded: HexString;
+      }>;
+      result: CallContractResult<null>;
+    };
+    migrateApply: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    migrateWithFieldsApply: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    resetUpgrade: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
     init: {
       params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    getUpgradeDelay: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<bigint>;
+    };
+    getUpgradeInitiated: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<bigint>;
+    };
+    getNewCode: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<HexString>;
+    };
+    getNewImmFieldsEncoded: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<HexString>;
+    };
+    getNewMutFieldsEncoded: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<HexString>;
+    };
+    resetFields: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    assertUpgradeNotPending: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    assertUpgradeDelayElapsed: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    onlyOwner: {
+      params: CallContractParams<{ caller: Address }>;
       result: CallContractResult<null>;
     };
     wMulDown: {
@@ -130,8 +230,80 @@ export namespace WBTCUSDTOracleTypes {
       params: Omit<SignExecuteContractMethodParams<{}>, "args">;
       result: SignExecuteScriptTxResult;
     };
+    owner: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    changeOwner: {
+      params: SignExecuteContractMethodParams<{ newOwner: Address }>;
+      result: SignExecuteScriptTxResult;
+    };
+    acceptOwnership: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    migrate: {
+      params: SignExecuteContractMethodParams<{ changeCode: HexString }>;
+      result: SignExecuteScriptTxResult;
+    };
+    migrateWithFields: {
+      params: SignExecuteContractMethodParams<{
+        changeCode: HexString;
+        changeImmFieldsEncoded: HexString;
+        changeMutFieldsEncoded: HexString;
+      }>;
+      result: SignExecuteScriptTxResult;
+    };
+    migrateApply: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    migrateWithFieldsApply: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    resetUpgrade: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
     init: {
       params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getUpgradeDelay: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getUpgradeInitiated: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getNewCode: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getNewImmFieldsEncoded: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getNewMutFieldsEncoded: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    resetFields: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    assertUpgradeNotPending: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    assertUpgradeDelayElapsed: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    onlyOwner: {
+      params: SignExecuteContractMethodParams<{ caller: Address }>;
       result: SignExecuteScriptTxResult;
     };
     wMulDown: {
@@ -204,9 +376,23 @@ class Factory extends ContractFactory<
     );
   }
 
+  eventIndex = {
+    MigrateInitiated: 0,
+    MigrateApply: 1,
+    MigrateWithFieldsInitiated: 2,
+    MigrateWithFieldsApply: 3,
+  };
   consts = {
     WAD: BigInt("1000000000000000000"),
     ErrorCodes: { StalePrice: BigInt("0"), NotInitialized: BigInt("1") },
+    UpgradeErrorCodes: {
+      UpgradePending: BigInt("13000"),
+      UpgradeNotPending: BigInt("13001"),
+      UpgradeDelayNotExpired: BigInt("13002"),
+      MigrateNotPending: BigInt("13003"),
+      MigrateWithFieldsNotPending: BigInt("13004"),
+    },
+    Error: { NotOwner: BigInt("400"), NoPendingOwner: BigInt("401") },
   };
 
   at(address: string): WBTCUSDTOracleInstance {
@@ -222,6 +408,84 @@ class Factory extends ContractFactory<
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(this, "price", params, getContractByCodeHash);
     },
+    owner: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<WBTCUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<Address>> => {
+      return testMethod(this, "owner", params, getContractByCodeHash);
+    },
+    changeOwner: async (
+      params: TestContractParamsWithoutMaps<
+        WBTCUSDTOracleTypes.Fields,
+        { newOwner: Address }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "changeOwner", params, getContractByCodeHash);
+    },
+    acceptOwnership: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<WBTCUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "acceptOwnership", params, getContractByCodeHash);
+    },
+    migrate: async (
+      params: TestContractParamsWithoutMaps<
+        WBTCUSDTOracleTypes.Fields,
+        { changeCode: HexString }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "migrate", params, getContractByCodeHash);
+    },
+    migrateWithFields: async (
+      params: TestContractParamsWithoutMaps<
+        WBTCUSDTOracleTypes.Fields,
+        {
+          changeCode: HexString;
+          changeImmFieldsEncoded: HexString;
+          changeMutFieldsEncoded: HexString;
+        }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(
+        this,
+        "migrateWithFields",
+        params,
+        getContractByCodeHash
+      );
+    },
+    migrateApply: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<WBTCUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "migrateApply", params, getContractByCodeHash);
+    },
+    migrateWithFieldsApply: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<WBTCUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(
+        this,
+        "migrateWithFieldsApply",
+        params,
+        getContractByCodeHash
+      );
+    },
+    resetUpgrade: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<WBTCUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "resetUpgrade", params, getContractByCodeHash);
+    },
     init: async (
       params: Omit<
         TestContractParamsWithoutMaps<WBTCUSDTOracleTypes.Fields, never>,
@@ -229,6 +493,103 @@ class Factory extends ContractFactory<
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "init", params, getContractByCodeHash);
+    },
+    getUpgradeDelay: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<WBTCUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<bigint>> => {
+      return testMethod(this, "getUpgradeDelay", params, getContractByCodeHash);
+    },
+    getUpgradeInitiated: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<WBTCUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<bigint>> => {
+      return testMethod(
+        this,
+        "getUpgradeInitiated",
+        params,
+        getContractByCodeHash
+      );
+    },
+    getNewCode: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<WBTCUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<HexString>> => {
+      return testMethod(this, "getNewCode", params, getContractByCodeHash);
+    },
+    getNewImmFieldsEncoded: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<WBTCUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<HexString>> => {
+      return testMethod(
+        this,
+        "getNewImmFieldsEncoded",
+        params,
+        getContractByCodeHash
+      );
+    },
+    getNewMutFieldsEncoded: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<WBTCUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<HexString>> => {
+      return testMethod(
+        this,
+        "getNewMutFieldsEncoded",
+        params,
+        getContractByCodeHash
+      );
+    },
+    resetFields: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<WBTCUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "resetFields", params, getContractByCodeHash);
+    },
+    assertUpgradeNotPending: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<WBTCUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(
+        this,
+        "assertUpgradeNotPending",
+        params,
+        getContractByCodeHash
+      );
+    },
+    assertUpgradeDelayElapsed: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<WBTCUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(
+        this,
+        "assertUpgradeDelayElapsed",
+        params,
+        getContractByCodeHash
+      );
+    },
+    onlyOwner: async (
+      params: TestContractParamsWithoutMaps<
+        WBTCUSDTOracleTypes.Fields,
+        { caller: Address }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "onlyOwner", params, getContractByCodeHash);
     },
     wMulDown: async (
       params: TestContractParamsWithoutMaps<
@@ -331,7 +692,7 @@ export const WBTCUSDTOracle = new Factory(
   Contract.fromJson(
     WBTCUSDTOracleContractJson,
     "",
-    "8a3eb1223b39d37b94435a8d0cddcf757eb5c62cbefa726a0c4a14752ea0d3ff",
+    "9633357d0e6f9e06df697295bdceccacc5fe839ec8ba82dad0b554347bec7464",
     AllStructs
   )
 );
@@ -347,6 +708,79 @@ export class WBTCUSDTOracleInstance extends ContractInstance {
     return fetchContractState(WBTCUSDTOracle, this);
   }
 
+  async getContractEventsCurrentCount(): Promise<number> {
+    return getContractEventsCurrentCount(this.address);
+  }
+
+  subscribeMigrateInitiatedEvent(
+    options: EventSubscribeOptions<WBTCUSDTOracleTypes.MigrateInitiatedEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      WBTCUSDTOracle.contract,
+      this,
+      options,
+      "MigrateInitiated",
+      fromCount
+    );
+  }
+
+  subscribeMigrateApplyEvent(
+    options: EventSubscribeOptions<WBTCUSDTOracleTypes.MigrateApplyEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      WBTCUSDTOracle.contract,
+      this,
+      options,
+      "MigrateApply",
+      fromCount
+    );
+  }
+
+  subscribeMigrateWithFieldsInitiatedEvent(
+    options: EventSubscribeOptions<WBTCUSDTOracleTypes.MigrateWithFieldsInitiatedEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      WBTCUSDTOracle.contract,
+      this,
+      options,
+      "MigrateWithFieldsInitiated",
+      fromCount
+    );
+  }
+
+  subscribeMigrateWithFieldsApplyEvent(
+    options: EventSubscribeOptions<WBTCUSDTOracleTypes.MigrateWithFieldsApplyEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      WBTCUSDTOracle.contract,
+      this,
+      options,
+      "MigrateWithFieldsApply",
+      fromCount
+    );
+  }
+
+  subscribeAllEvents(
+    options: EventSubscribeOptions<
+      | WBTCUSDTOracleTypes.MigrateInitiatedEvent
+      | WBTCUSDTOracleTypes.MigrateApplyEvent
+      | WBTCUSDTOracleTypes.MigrateWithFieldsInitiatedEvent
+      | WBTCUSDTOracleTypes.MigrateWithFieldsApplyEvent
+    >,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvents(
+      WBTCUSDTOracle.contract,
+      this,
+      options,
+      fromCount
+    );
+  }
+
   view = {
     price: async (
       params?: WBTCUSDTOracleTypes.CallMethodParams<"price">
@@ -359,6 +793,96 @@ export class WBTCUSDTOracleInstance extends ContractInstance {
         getContractByCodeHash
       );
     },
+    owner: async (
+      params?: WBTCUSDTOracleTypes.CallMethodParams<"owner">
+    ): Promise<WBTCUSDTOracleTypes.CallMethodResult<"owner">> => {
+      return callMethod(
+        WBTCUSDTOracle,
+        this,
+        "owner",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    changeOwner: async (
+      params: WBTCUSDTOracleTypes.CallMethodParams<"changeOwner">
+    ): Promise<WBTCUSDTOracleTypes.CallMethodResult<"changeOwner">> => {
+      return callMethod(
+        WBTCUSDTOracle,
+        this,
+        "changeOwner",
+        params,
+        getContractByCodeHash
+      );
+    },
+    acceptOwnership: async (
+      params?: WBTCUSDTOracleTypes.CallMethodParams<"acceptOwnership">
+    ): Promise<WBTCUSDTOracleTypes.CallMethodResult<"acceptOwnership">> => {
+      return callMethod(
+        WBTCUSDTOracle,
+        this,
+        "acceptOwnership",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    migrate: async (
+      params: WBTCUSDTOracleTypes.CallMethodParams<"migrate">
+    ): Promise<WBTCUSDTOracleTypes.CallMethodResult<"migrate">> => {
+      return callMethod(
+        WBTCUSDTOracle,
+        this,
+        "migrate",
+        params,
+        getContractByCodeHash
+      );
+    },
+    migrateWithFields: async (
+      params: WBTCUSDTOracleTypes.CallMethodParams<"migrateWithFields">
+    ): Promise<WBTCUSDTOracleTypes.CallMethodResult<"migrateWithFields">> => {
+      return callMethod(
+        WBTCUSDTOracle,
+        this,
+        "migrateWithFields",
+        params,
+        getContractByCodeHash
+      );
+    },
+    migrateApply: async (
+      params?: WBTCUSDTOracleTypes.CallMethodParams<"migrateApply">
+    ): Promise<WBTCUSDTOracleTypes.CallMethodResult<"migrateApply">> => {
+      return callMethod(
+        WBTCUSDTOracle,
+        this,
+        "migrateApply",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    migrateWithFieldsApply: async (
+      params?: WBTCUSDTOracleTypes.CallMethodParams<"migrateWithFieldsApply">
+    ): Promise<
+      WBTCUSDTOracleTypes.CallMethodResult<"migrateWithFieldsApply">
+    > => {
+      return callMethod(
+        WBTCUSDTOracle,
+        this,
+        "migrateWithFieldsApply",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    resetUpgrade: async (
+      params?: WBTCUSDTOracleTypes.CallMethodParams<"resetUpgrade">
+    ): Promise<WBTCUSDTOracleTypes.CallMethodResult<"resetUpgrade">> => {
+      return callMethod(
+        WBTCUSDTOracle,
+        this,
+        "resetUpgrade",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
     init: async (
       params?: WBTCUSDTOracleTypes.CallMethodParams<"init">
     ): Promise<WBTCUSDTOracleTypes.CallMethodResult<"init">> => {
@@ -367,6 +891,113 @@ export class WBTCUSDTOracleInstance extends ContractInstance {
         this,
         "init",
         params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getUpgradeDelay: async (
+      params?: WBTCUSDTOracleTypes.CallMethodParams<"getUpgradeDelay">
+    ): Promise<WBTCUSDTOracleTypes.CallMethodResult<"getUpgradeDelay">> => {
+      return callMethod(
+        WBTCUSDTOracle,
+        this,
+        "getUpgradeDelay",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getUpgradeInitiated: async (
+      params?: WBTCUSDTOracleTypes.CallMethodParams<"getUpgradeInitiated">
+    ): Promise<WBTCUSDTOracleTypes.CallMethodResult<"getUpgradeInitiated">> => {
+      return callMethod(
+        WBTCUSDTOracle,
+        this,
+        "getUpgradeInitiated",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getNewCode: async (
+      params?: WBTCUSDTOracleTypes.CallMethodParams<"getNewCode">
+    ): Promise<WBTCUSDTOracleTypes.CallMethodResult<"getNewCode">> => {
+      return callMethod(
+        WBTCUSDTOracle,
+        this,
+        "getNewCode",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getNewImmFieldsEncoded: async (
+      params?: WBTCUSDTOracleTypes.CallMethodParams<"getNewImmFieldsEncoded">
+    ): Promise<
+      WBTCUSDTOracleTypes.CallMethodResult<"getNewImmFieldsEncoded">
+    > => {
+      return callMethod(
+        WBTCUSDTOracle,
+        this,
+        "getNewImmFieldsEncoded",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getNewMutFieldsEncoded: async (
+      params?: WBTCUSDTOracleTypes.CallMethodParams<"getNewMutFieldsEncoded">
+    ): Promise<
+      WBTCUSDTOracleTypes.CallMethodResult<"getNewMutFieldsEncoded">
+    > => {
+      return callMethod(
+        WBTCUSDTOracle,
+        this,
+        "getNewMutFieldsEncoded",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    resetFields: async (
+      params?: WBTCUSDTOracleTypes.CallMethodParams<"resetFields">
+    ): Promise<WBTCUSDTOracleTypes.CallMethodResult<"resetFields">> => {
+      return callMethod(
+        WBTCUSDTOracle,
+        this,
+        "resetFields",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    assertUpgradeNotPending: async (
+      params?: WBTCUSDTOracleTypes.CallMethodParams<"assertUpgradeNotPending">
+    ): Promise<
+      WBTCUSDTOracleTypes.CallMethodResult<"assertUpgradeNotPending">
+    > => {
+      return callMethod(
+        WBTCUSDTOracle,
+        this,
+        "assertUpgradeNotPending",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    assertUpgradeDelayElapsed: async (
+      params?: WBTCUSDTOracleTypes.CallMethodParams<"assertUpgradeDelayElapsed">
+    ): Promise<
+      WBTCUSDTOracleTypes.CallMethodResult<"assertUpgradeDelayElapsed">
+    > => {
+      return callMethod(
+        WBTCUSDTOracle,
+        this,
+        "assertUpgradeDelayElapsed",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    onlyOwner: async (
+      params: WBTCUSDTOracleTypes.CallMethodParams<"onlyOwner">
+    ): Promise<WBTCUSDTOracleTypes.CallMethodResult<"onlyOwner">> => {
+      return callMethod(
+        WBTCUSDTOracle,
+        this,
+        "onlyOwner",
+        params,
         getContractByCodeHash
       );
     },
@@ -488,10 +1119,148 @@ export class WBTCUSDTOracleInstance extends ContractInstance {
     ): Promise<WBTCUSDTOracleTypes.SignExecuteMethodResult<"price">> => {
       return signExecuteMethod(WBTCUSDTOracle, this, "price", params);
     },
+    owner: async (
+      params: WBTCUSDTOracleTypes.SignExecuteMethodParams<"owner">
+    ): Promise<WBTCUSDTOracleTypes.SignExecuteMethodResult<"owner">> => {
+      return signExecuteMethod(WBTCUSDTOracle, this, "owner", params);
+    },
+    changeOwner: async (
+      params: WBTCUSDTOracleTypes.SignExecuteMethodParams<"changeOwner">
+    ): Promise<WBTCUSDTOracleTypes.SignExecuteMethodResult<"changeOwner">> => {
+      return signExecuteMethod(WBTCUSDTOracle, this, "changeOwner", params);
+    },
+    acceptOwnership: async (
+      params: WBTCUSDTOracleTypes.SignExecuteMethodParams<"acceptOwnership">
+    ): Promise<
+      WBTCUSDTOracleTypes.SignExecuteMethodResult<"acceptOwnership">
+    > => {
+      return signExecuteMethod(WBTCUSDTOracle, this, "acceptOwnership", params);
+    },
+    migrate: async (
+      params: WBTCUSDTOracleTypes.SignExecuteMethodParams<"migrate">
+    ): Promise<WBTCUSDTOracleTypes.SignExecuteMethodResult<"migrate">> => {
+      return signExecuteMethod(WBTCUSDTOracle, this, "migrate", params);
+    },
+    migrateWithFields: async (
+      params: WBTCUSDTOracleTypes.SignExecuteMethodParams<"migrateWithFields">
+    ): Promise<
+      WBTCUSDTOracleTypes.SignExecuteMethodResult<"migrateWithFields">
+    > => {
+      return signExecuteMethod(
+        WBTCUSDTOracle,
+        this,
+        "migrateWithFields",
+        params
+      );
+    },
+    migrateApply: async (
+      params: WBTCUSDTOracleTypes.SignExecuteMethodParams<"migrateApply">
+    ): Promise<WBTCUSDTOracleTypes.SignExecuteMethodResult<"migrateApply">> => {
+      return signExecuteMethod(WBTCUSDTOracle, this, "migrateApply", params);
+    },
+    migrateWithFieldsApply: async (
+      params: WBTCUSDTOracleTypes.SignExecuteMethodParams<"migrateWithFieldsApply">
+    ): Promise<
+      WBTCUSDTOracleTypes.SignExecuteMethodResult<"migrateWithFieldsApply">
+    > => {
+      return signExecuteMethod(
+        WBTCUSDTOracle,
+        this,
+        "migrateWithFieldsApply",
+        params
+      );
+    },
+    resetUpgrade: async (
+      params: WBTCUSDTOracleTypes.SignExecuteMethodParams<"resetUpgrade">
+    ): Promise<WBTCUSDTOracleTypes.SignExecuteMethodResult<"resetUpgrade">> => {
+      return signExecuteMethod(WBTCUSDTOracle, this, "resetUpgrade", params);
+    },
     init: async (
       params: WBTCUSDTOracleTypes.SignExecuteMethodParams<"init">
     ): Promise<WBTCUSDTOracleTypes.SignExecuteMethodResult<"init">> => {
       return signExecuteMethod(WBTCUSDTOracle, this, "init", params);
+    },
+    getUpgradeDelay: async (
+      params: WBTCUSDTOracleTypes.SignExecuteMethodParams<"getUpgradeDelay">
+    ): Promise<
+      WBTCUSDTOracleTypes.SignExecuteMethodResult<"getUpgradeDelay">
+    > => {
+      return signExecuteMethod(WBTCUSDTOracle, this, "getUpgradeDelay", params);
+    },
+    getUpgradeInitiated: async (
+      params: WBTCUSDTOracleTypes.SignExecuteMethodParams<"getUpgradeInitiated">
+    ): Promise<
+      WBTCUSDTOracleTypes.SignExecuteMethodResult<"getUpgradeInitiated">
+    > => {
+      return signExecuteMethod(
+        WBTCUSDTOracle,
+        this,
+        "getUpgradeInitiated",
+        params
+      );
+    },
+    getNewCode: async (
+      params: WBTCUSDTOracleTypes.SignExecuteMethodParams<"getNewCode">
+    ): Promise<WBTCUSDTOracleTypes.SignExecuteMethodResult<"getNewCode">> => {
+      return signExecuteMethod(WBTCUSDTOracle, this, "getNewCode", params);
+    },
+    getNewImmFieldsEncoded: async (
+      params: WBTCUSDTOracleTypes.SignExecuteMethodParams<"getNewImmFieldsEncoded">
+    ): Promise<
+      WBTCUSDTOracleTypes.SignExecuteMethodResult<"getNewImmFieldsEncoded">
+    > => {
+      return signExecuteMethod(
+        WBTCUSDTOracle,
+        this,
+        "getNewImmFieldsEncoded",
+        params
+      );
+    },
+    getNewMutFieldsEncoded: async (
+      params: WBTCUSDTOracleTypes.SignExecuteMethodParams<"getNewMutFieldsEncoded">
+    ): Promise<
+      WBTCUSDTOracleTypes.SignExecuteMethodResult<"getNewMutFieldsEncoded">
+    > => {
+      return signExecuteMethod(
+        WBTCUSDTOracle,
+        this,
+        "getNewMutFieldsEncoded",
+        params
+      );
+    },
+    resetFields: async (
+      params: WBTCUSDTOracleTypes.SignExecuteMethodParams<"resetFields">
+    ): Promise<WBTCUSDTOracleTypes.SignExecuteMethodResult<"resetFields">> => {
+      return signExecuteMethod(WBTCUSDTOracle, this, "resetFields", params);
+    },
+    assertUpgradeNotPending: async (
+      params: WBTCUSDTOracleTypes.SignExecuteMethodParams<"assertUpgradeNotPending">
+    ): Promise<
+      WBTCUSDTOracleTypes.SignExecuteMethodResult<"assertUpgradeNotPending">
+    > => {
+      return signExecuteMethod(
+        WBTCUSDTOracle,
+        this,
+        "assertUpgradeNotPending",
+        params
+      );
+    },
+    assertUpgradeDelayElapsed: async (
+      params: WBTCUSDTOracleTypes.SignExecuteMethodParams<"assertUpgradeDelayElapsed">
+    ): Promise<
+      WBTCUSDTOracleTypes.SignExecuteMethodResult<"assertUpgradeDelayElapsed">
+    > => {
+      return signExecuteMethod(
+        WBTCUSDTOracle,
+        this,
+        "assertUpgradeDelayElapsed",
+        params
+      );
+    },
+    onlyOwner: async (
+      params: WBTCUSDTOracleTypes.SignExecuteMethodParams<"onlyOwner">
+    ): Promise<WBTCUSDTOracleTypes.SignExecuteMethodResult<"onlyOwner">> => {
+      return signExecuteMethod(WBTCUSDTOracle, this, "onlyOwner", params);
     },
     wMulDown: async (
       params: WBTCUSDTOracleTypes.SignExecuteMethodParams<"wMulDown">

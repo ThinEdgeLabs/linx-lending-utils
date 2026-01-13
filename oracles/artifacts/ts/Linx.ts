@@ -48,12 +48,38 @@ import { RalphMap } from "@alephium/web3";
 export namespace LinxTypes {
   export type Fields = {
     marketTemplate: HexString;
-    owner: Address;
     feeRecipient: Address;
+    upgradeDelay: bigint;
+    owner: Address;
+    pendingOwner: Address;
+    upgradeInitiated: bigint;
+    newCode: HexString;
+    newImmFieldsEncoded: HexString;
+    newMutFieldsEncoded: HexString;
   };
 
   export type State = ContractState<Fields>;
 
+  export type MigrateInitiatedEvent = ContractEvent<{
+    owner: Address;
+    changeCode: HexString;
+  }>;
+  export type MigrateApplyEvent = ContractEvent<{
+    owner: Address;
+    changeCode: HexString;
+  }>;
+  export type MigrateWithFieldsInitiatedEvent = ContractEvent<{
+    owner: Address;
+    changeCode: HexString;
+    changeImmFieldsEncoded: HexString;
+    changeMutFieldsEncoded: HexString;
+  }>;
+  export type MigrateWithFieldsApplyEvent = ContractEvent<{
+    owner: Address;
+    changeCode: HexString;
+    changeImmFieldsEncoded: HexString;
+    changeMutFieldsEncoded: HexString;
+  }>;
   export type MarketCreatedEvent = ContractEvent<{
     marketId: HexString;
     marketContractId: HexString;
@@ -142,10 +168,6 @@ export namespace LinxTypes {
   }>;
 
   export interface CallMethodTable {
-    owner: {
-      params: Omit<CallContractParams<{}>, "args">;
-      result: CallContractResult<Address>;
-    };
     feeRecipient: {
       params: Omit<CallContractParams<{}>, "args">;
       result: CallContractResult<Address>;
@@ -176,10 +198,6 @@ export namespace LinxTypes {
     };
     enableLoanToValue: {
       params: CallContractParams<{ loanToValue: bigint }>;
-      result: CallContractResult<null>;
-    };
-    setOwner: {
-      params: CallContractParams<{ newOwner: Address }>;
       result: CallContractResult<null>;
     };
     setFee: {
@@ -262,11 +280,80 @@ export namespace LinxTypes {
       params: CallContractParams<{ marketId: HexString }>;
       result: CallContractResult<null>;
     };
-    calcMarketId: {
+    owner: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<Address>;
+    };
+    changeOwner: {
+      params: CallContractParams<{ newOwner: Address }>;
+      result: CallContractResult<null>;
+    };
+    acceptOwnership: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    migrate: {
+      params: CallContractParams<{ changeCode: HexString }>;
+      result: CallContractResult<null>;
+    };
+    migrateWithFields: {
       params: CallContractParams<{
-        loanToken: HexString;
-        collateralToken: HexString;
+        changeCode: HexString;
+        changeImmFieldsEncoded: HexString;
+        changeMutFieldsEncoded: HexString;
       }>;
+      result: CallContractResult<null>;
+    };
+    migrateApply: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    migrateWithFieldsApply: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    resetUpgrade: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    getUpgradeDelay: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<bigint>;
+    };
+    getUpgradeInitiated: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<bigint>;
+    };
+    getNewCode: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<HexString>;
+    };
+    getNewImmFieldsEncoded: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<HexString>;
+    };
+    getNewMutFieldsEncoded: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<HexString>;
+    };
+    resetFields: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    assertUpgradeNotPending: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    assertUpgradeDelayElapsed: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    onlyOwner: {
+      params: CallContractParams<{ caller: Address }>;
+      result: CallContractResult<null>;
+    };
+    calcMarketId: {
+      params: CallContractParams<{ params: MarketParams }>;
       result: CallContractResult<HexString>;
     };
     createPositionKey: {
@@ -354,10 +441,7 @@ export namespace LinxTypes {
       result: CallContractResult<boolean>;
     };
     marketId: {
-      params: CallContractParams<{
-        loanToken: HexString;
-        collateralToken: HexString;
-      }>;
+      params: CallContractParams<{ marketParams: MarketParams }>;
       result: CallContractResult<HexString>;
     };
     marketContract: {
@@ -366,6 +450,10 @@ export namespace LinxTypes {
     };
     setAuthorized: {
       params: CallContractParams<{ user: Address; status: boolean }>;
+      result: CallContractResult<null>;
+    };
+    setupFeeRecipientPosition: {
+      params: CallContractParams<{ market: MarketParams }>;
       result: CallContractResult<null>;
     };
     isHealthyBorrow: {
@@ -394,10 +482,6 @@ export namespace LinxTypes {
   };
 
   export interface SignExecuteMethodTable {
-    owner: {
-      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
-      result: SignExecuteScriptTxResult;
-    };
     feeRecipient: {
       params: Omit<SignExecuteContractMethodParams<{}>, "args">;
       result: SignExecuteScriptTxResult;
@@ -431,10 +515,6 @@ export namespace LinxTypes {
     };
     enableLoanToValue: {
       params: SignExecuteContractMethodParams<{ loanToValue: bigint }>;
-      result: SignExecuteScriptTxResult;
-    };
-    setOwner: {
-      params: SignExecuteContractMethodParams<{ newOwner: Address }>;
       result: SignExecuteScriptTxResult;
     };
     setFee: {
@@ -520,11 +600,80 @@ export namespace LinxTypes {
       params: SignExecuteContractMethodParams<{ marketId: HexString }>;
       result: SignExecuteScriptTxResult;
     };
-    calcMarketId: {
+    owner: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    changeOwner: {
+      params: SignExecuteContractMethodParams<{ newOwner: Address }>;
+      result: SignExecuteScriptTxResult;
+    };
+    acceptOwnership: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    migrate: {
+      params: SignExecuteContractMethodParams<{ changeCode: HexString }>;
+      result: SignExecuteScriptTxResult;
+    };
+    migrateWithFields: {
       params: SignExecuteContractMethodParams<{
-        loanToken: HexString;
-        collateralToken: HexString;
+        changeCode: HexString;
+        changeImmFieldsEncoded: HexString;
+        changeMutFieldsEncoded: HexString;
       }>;
+      result: SignExecuteScriptTxResult;
+    };
+    migrateApply: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    migrateWithFieldsApply: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    resetUpgrade: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getUpgradeDelay: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getUpgradeInitiated: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getNewCode: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getNewImmFieldsEncoded: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getNewMutFieldsEncoded: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    resetFields: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    assertUpgradeNotPending: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    assertUpgradeDelayElapsed: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    onlyOwner: {
+      params: SignExecuteContractMethodParams<{ caller: Address }>;
+      result: SignExecuteScriptTxResult;
+    };
+    calcMarketId: {
+      params: SignExecuteContractMethodParams<{ params: MarketParams }>;
       result: SignExecuteScriptTxResult;
     };
     createPositionKey: {
@@ -629,10 +778,7 @@ export namespace LinxTypes {
       result: SignExecuteScriptTxResult;
     };
     marketId: {
-      params: SignExecuteContractMethodParams<{
-        loanToken: HexString;
-        collateralToken: HexString;
-      }>;
+      params: SignExecuteContractMethodParams<{ marketParams: MarketParams }>;
       result: SignExecuteScriptTxResult;
     };
     marketContract: {
@@ -644,6 +790,10 @@ export namespace LinxTypes {
         user: Address;
         status: boolean;
       }>;
+      result: SignExecuteScriptTxResult;
+    };
+    setupFeeRecipientPosition: {
+      params: SignExecuteContractMethodParams<{ market: MarketParams }>;
       result: SignExecuteScriptTxResult;
     };
     isHealthyBorrow: {
@@ -678,21 +828,25 @@ class Factory extends ContractFactory<LinxInstance, LinxTypes.Fields> {
   }
 
   eventIndex = {
-    MarketCreated: 0,
-    SetOwner: 1,
-    SetFee: 2,
-    SetFeeRecipient: 3,
-    EnabledRateModel: 4,
-    EnabledLoanToValue: 5,
-    Supply: 6,
-    Withdraw: 7,
-    Borrow: 8,
-    Repay: 9,
-    SupplyCollateral: 10,
-    WithdrawCollateral: 11,
-    Liquidate: 12,
-    AccrueInterest: 13,
-    SetAuthorized: 14,
+    MigrateInitiated: 0,
+    MigrateApply: 1,
+    MigrateWithFieldsInitiated: 2,
+    MigrateWithFieldsApply: 3,
+    MarketCreated: 4,
+    SetOwner: 5,
+    SetFee: 6,
+    SetFeeRecipient: 7,
+    EnabledRateModel: 8,
+    EnabledLoanToValue: 9,
+    Supply: 10,
+    Withdraw: 11,
+    Borrow: 12,
+    Repay: 13,
+    SupplyCollateral: 14,
+    WithdrawCollateral: 15,
+    Liquidate: 16,
+    AccrueInterest: 17,
+    SetAuthorized: 18,
   };
   consts = {
     MAX_FEE: BigInt("250000000000000000"),
@@ -702,6 +856,14 @@ class Factory extends ContractFactory<LinxInstance, LinxTypes.Fields> {
     VIRTUAL_SHARES: BigInt("1000000"),
     VIRTUAL_ASSETS: BigInt("1"),
     WAD: BigInt("1000000000000000000"),
+    UpgradeErrorCodes: {
+      UpgradePending: BigInt("13000"),
+      UpgradeNotPending: BigInt("13001"),
+      UpgradeDelayNotExpired: BigInt("13002"),
+      MigrateNotPending: BigInt("13003"),
+      MigrateWithFieldsNotPending: BigInt("13004"),
+    },
+    Error: { NotOwner: BigInt("400"), NoPendingOwner: BigInt("401") },
     ErrorCodes: {
       NotAuthorized: BigInt("0"),
       MarketExists: BigInt("1"),
@@ -727,14 +889,6 @@ class Factory extends ContractFactory<LinxInstance, LinxTypes.Fields> {
   }
 
   tests = {
-    owner: async (
-      params: Omit<
-        TestContractParams<LinxTypes.Fields, never, LinxTypes.Maps>,
-        "args"
-      >
-    ): Promise<TestContractResult<Address, LinxTypes.Maps>> => {
-      return testMethod(this, "owner", params, getContractByCodeHash);
-    },
     feeRecipient: async (
       params: Omit<
         TestContractParams<LinxTypes.Fields, never, LinxTypes.Maps>,
@@ -825,15 +979,6 @@ class Factory extends ContractFactory<LinxInstance, LinxTypes.Fields> {
         params,
         getContractByCodeHash
       );
-    },
-    setOwner: async (
-      params: TestContractParams<
-        LinxTypes.Fields,
-        { newOwner: Address },
-        LinxTypes.Maps
-      >
-    ): Promise<TestContractResult<null, LinxTypes.Maps>> => {
-      return testMethod(this, "setOwner", params, getContractByCodeHash);
     },
     setFee: async (
       params: TestContractParams<
@@ -976,10 +1121,189 @@ class Factory extends ContractFactory<LinxInstance, LinxTypes.Fields> {
     ): Promise<TestContractResult<null, LinxTypes.Maps>> => {
       return testMethod(this, "accrueInterest", params, getContractByCodeHash);
     },
+    owner: async (
+      params: Omit<
+        TestContractParams<LinxTypes.Fields, never, LinxTypes.Maps>,
+        "args"
+      >
+    ): Promise<TestContractResult<Address, LinxTypes.Maps>> => {
+      return testMethod(this, "owner", params, getContractByCodeHash);
+    },
+    changeOwner: async (
+      params: TestContractParams<
+        LinxTypes.Fields,
+        { newOwner: Address },
+        LinxTypes.Maps
+      >
+    ): Promise<TestContractResult<null, LinxTypes.Maps>> => {
+      return testMethod(this, "changeOwner", params, getContractByCodeHash);
+    },
+    acceptOwnership: async (
+      params: Omit<
+        TestContractParams<LinxTypes.Fields, never, LinxTypes.Maps>,
+        "args"
+      >
+    ): Promise<TestContractResult<null, LinxTypes.Maps>> => {
+      return testMethod(this, "acceptOwnership", params, getContractByCodeHash);
+    },
+    migrate: async (
+      params: TestContractParams<
+        LinxTypes.Fields,
+        { changeCode: HexString },
+        LinxTypes.Maps
+      >
+    ): Promise<TestContractResult<null, LinxTypes.Maps>> => {
+      return testMethod(this, "migrate", params, getContractByCodeHash);
+    },
+    migrateWithFields: async (
+      params: TestContractParams<
+        LinxTypes.Fields,
+        {
+          changeCode: HexString;
+          changeImmFieldsEncoded: HexString;
+          changeMutFieldsEncoded: HexString;
+        },
+        LinxTypes.Maps
+      >
+    ): Promise<TestContractResult<null, LinxTypes.Maps>> => {
+      return testMethod(
+        this,
+        "migrateWithFields",
+        params,
+        getContractByCodeHash
+      );
+    },
+    migrateApply: async (
+      params: Omit<
+        TestContractParams<LinxTypes.Fields, never, LinxTypes.Maps>,
+        "args"
+      >
+    ): Promise<TestContractResult<null, LinxTypes.Maps>> => {
+      return testMethod(this, "migrateApply", params, getContractByCodeHash);
+    },
+    migrateWithFieldsApply: async (
+      params: Omit<
+        TestContractParams<LinxTypes.Fields, never, LinxTypes.Maps>,
+        "args"
+      >
+    ): Promise<TestContractResult<null, LinxTypes.Maps>> => {
+      return testMethod(
+        this,
+        "migrateWithFieldsApply",
+        params,
+        getContractByCodeHash
+      );
+    },
+    resetUpgrade: async (
+      params: Omit<
+        TestContractParams<LinxTypes.Fields, never, LinxTypes.Maps>,
+        "args"
+      >
+    ): Promise<TestContractResult<null, LinxTypes.Maps>> => {
+      return testMethod(this, "resetUpgrade", params, getContractByCodeHash);
+    },
+    getUpgradeDelay: async (
+      params: Omit<
+        TestContractParams<LinxTypes.Fields, never, LinxTypes.Maps>,
+        "args"
+      >
+    ): Promise<TestContractResult<bigint, LinxTypes.Maps>> => {
+      return testMethod(this, "getUpgradeDelay", params, getContractByCodeHash);
+    },
+    getUpgradeInitiated: async (
+      params: Omit<
+        TestContractParams<LinxTypes.Fields, never, LinxTypes.Maps>,
+        "args"
+      >
+    ): Promise<TestContractResult<bigint, LinxTypes.Maps>> => {
+      return testMethod(
+        this,
+        "getUpgradeInitiated",
+        params,
+        getContractByCodeHash
+      );
+    },
+    getNewCode: async (
+      params: Omit<
+        TestContractParams<LinxTypes.Fields, never, LinxTypes.Maps>,
+        "args"
+      >
+    ): Promise<TestContractResult<HexString, LinxTypes.Maps>> => {
+      return testMethod(this, "getNewCode", params, getContractByCodeHash);
+    },
+    getNewImmFieldsEncoded: async (
+      params: Omit<
+        TestContractParams<LinxTypes.Fields, never, LinxTypes.Maps>,
+        "args"
+      >
+    ): Promise<TestContractResult<HexString, LinxTypes.Maps>> => {
+      return testMethod(
+        this,
+        "getNewImmFieldsEncoded",
+        params,
+        getContractByCodeHash
+      );
+    },
+    getNewMutFieldsEncoded: async (
+      params: Omit<
+        TestContractParams<LinxTypes.Fields, never, LinxTypes.Maps>,
+        "args"
+      >
+    ): Promise<TestContractResult<HexString, LinxTypes.Maps>> => {
+      return testMethod(
+        this,
+        "getNewMutFieldsEncoded",
+        params,
+        getContractByCodeHash
+      );
+    },
+    resetFields: async (
+      params: Omit<
+        TestContractParams<LinxTypes.Fields, never, LinxTypes.Maps>,
+        "args"
+      >
+    ): Promise<TestContractResult<null, LinxTypes.Maps>> => {
+      return testMethod(this, "resetFields", params, getContractByCodeHash);
+    },
+    assertUpgradeNotPending: async (
+      params: Omit<
+        TestContractParams<LinxTypes.Fields, never, LinxTypes.Maps>,
+        "args"
+      >
+    ): Promise<TestContractResult<null, LinxTypes.Maps>> => {
+      return testMethod(
+        this,
+        "assertUpgradeNotPending",
+        params,
+        getContractByCodeHash
+      );
+    },
+    assertUpgradeDelayElapsed: async (
+      params: Omit<
+        TestContractParams<LinxTypes.Fields, never, LinxTypes.Maps>,
+        "args"
+      >
+    ): Promise<TestContractResult<null, LinxTypes.Maps>> => {
+      return testMethod(
+        this,
+        "assertUpgradeDelayElapsed",
+        params,
+        getContractByCodeHash
+      );
+    },
+    onlyOwner: async (
+      params: TestContractParams<
+        LinxTypes.Fields,
+        { caller: Address },
+        LinxTypes.Maps
+      >
+    ): Promise<TestContractResult<null, LinxTypes.Maps>> => {
+      return testMethod(this, "onlyOwner", params, getContractByCodeHash);
+    },
     calcMarketId: async (
       params: TestContractParams<
         LinxTypes.Fields,
-        { loanToken: HexString; collateralToken: HexString },
+        { params: MarketParams },
         LinxTypes.Maps
       >
     ): Promise<TestContractResult<HexString, LinxTypes.Maps>> => {
@@ -1151,7 +1475,7 @@ class Factory extends ContractFactory<LinxInstance, LinxTypes.Fields> {
     marketId: async (
       params: TestContractParams<
         LinxTypes.Fields,
-        { loanToken: HexString; collateralToken: HexString },
+        { marketParams: MarketParams },
         LinxTypes.Maps
       >
     ): Promise<TestContractResult<HexString, LinxTypes.Maps>> => {
@@ -1174,6 +1498,20 @@ class Factory extends ContractFactory<LinxInstance, LinxTypes.Fields> {
       >
     ): Promise<TestContractResult<null, LinxTypes.Maps>> => {
       return testMethod(this, "setAuthorized", params, getContractByCodeHash);
+    },
+    setupFeeRecipientPosition: async (
+      params: TestContractParams<
+        LinxTypes.Fields,
+        { market: MarketParams },
+        LinxTypes.Maps
+      >
+    ): Promise<TestContractResult<null, LinxTypes.Maps>> => {
+      return testMethod(
+        this,
+        "setupFeeRecipientPosition",
+        params,
+        getContractByCodeHash
+      );
     },
     isHealthyBorrow: async (
       params: TestContractParams<
@@ -1204,8 +1542,8 @@ class Factory extends ContractFactory<LinxInstance, LinxTypes.Fields> {
 export const Linx = new Factory(
   Contract.fromJson(
     LinxContractJson,
-    "=32-2+9c=1-3+20e=1+23=1-2=2-1=1+c=2-4=1-1+f=2-2+17=2-2+5f=2-2+35=2-2+57=2-2+38=2-1=1-18=1-1=1-1=2+3=1-1=1-1+aa=1-1=1-1+12=3-1+f=3-1+c=3-1+a=3-2=1-2=2-2+82=2-2+a6=2-1+c=3+e14e=1-1+8=3-1+f=2+1e=1+f3=3-2+70=3+34fa=4-1+f4ffb=2+4=1-1+50535076=2-2+f0517f=645-1+e=110+7a7e0214696e73657274206174206d617020706174683a2000=31-1+5=146+7a7e0214696e73657274206174206d617020706174683a2000=417-1+c=578+7a7e0214696e73657274206174206d617020706174683a2000=27-1+d=283-1+d=38+7a7e0214696e73657274206174206d617020706174683a2000=283-1+5=137-1+d=38+7a7e0214696e73657274206174206d617020706174683a2000=3507-1+f=161+3=1+6007e021b4e6f2074696d6520656c617073656420666f72206d61726b6574201b2c20736b697070696e6720696e746572657374206163637275616c=1661-1+5=71-1+9=32+7a7e0214696e73657274206174206d617020706174683a2000=362",
-    "73485c6e1e2cd11bcfaa29bc51d9b36156c33cc54f9f073992b9ff6a83874412",
+    "=30-2+8f=1-2+2=1-3=3-2+8=1-1+42=3-3+3f3=2-2+36=2-2+07=2-2+2f=2-2+16=2-2=2-2=1-1+a=1-2=2-4=1-5+8=1-2=2-2+f5=3-1+3=2-2+15=2-1+2=4-1+7=2-2+83=2-1+b=3+f=1-1=1-3+f08=1-3+f16=1-6+f2=2-2+f=1+2=1-1=1-1=1-1=1-1=2-2+4e=2-2+66=2-2+74=3-1+d=2-2+9c=3-1+3=2-2+c0=2+c=1-1=3-1+2=2+165=1-1+3a=2-2=1-2=3-1+7=3-1+8c50=1+3=2-1+b250c=3+045=1-1+27=3-1+e=3-1+3=2-1=1+f51d551ed=3-1+0=2+8=1+530553=1+4=617-1+e=110+7a7e0214696e73657274206174206d617020706174683a2000=33-1+5=146+7a7e0214696e73657274206174206d617020706174683a2000=365-1+d=584+7a7e0214696e73657274206174206d617020706174683a2000=27-1+d=295-1+d=38+7a7e0214696e73657274206174206d617020706174683a2000=261-1+5=149-1+d=38+7a7e0214696e73657274206174206d617020706174683a2000=3519-1+f=161+3=1+6007e021b4e6f2074696d6520656c617073656420666f72206d61726b6574201b2c20736b697070696e6720696e746572657374206163637275616c=2539-1+5=71-1+9=32+7a7e0214696e73657274206174206d617020706174683a2000=89-1+c=135-1+b=32+7a7e0214696e73657274206174206d617020706174683a2000=300",
+    "c6c967419988465b7151f69dce5f2842524cce26fe13712a26b5f80e782b42b1",
     AllStructs
   )
 );
@@ -1246,6 +1584,58 @@ export class LinxInstance extends ContractInstance {
 
   async getContractEventsCurrentCount(): Promise<number> {
     return getContractEventsCurrentCount(this.address);
+  }
+
+  subscribeMigrateInitiatedEvent(
+    options: EventSubscribeOptions<LinxTypes.MigrateInitiatedEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      Linx.contract,
+      this,
+      options,
+      "MigrateInitiated",
+      fromCount
+    );
+  }
+
+  subscribeMigrateApplyEvent(
+    options: EventSubscribeOptions<LinxTypes.MigrateApplyEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      Linx.contract,
+      this,
+      options,
+      "MigrateApply",
+      fromCount
+    );
+  }
+
+  subscribeMigrateWithFieldsInitiatedEvent(
+    options: EventSubscribeOptions<LinxTypes.MigrateWithFieldsInitiatedEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      Linx.contract,
+      this,
+      options,
+      "MigrateWithFieldsInitiated",
+      fromCount
+    );
+  }
+
+  subscribeMigrateWithFieldsApplyEvent(
+    options: EventSubscribeOptions<LinxTypes.MigrateWithFieldsApplyEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      Linx.contract,
+      this,
+      options,
+      "MigrateWithFieldsApply",
+      fromCount
+    );
   }
 
   subscribeMarketCreatedEvent(
@@ -1445,6 +1835,10 @@ export class LinxInstance extends ContractInstance {
 
   subscribeAllEvents(
     options: EventSubscribeOptions<
+      | LinxTypes.MigrateInitiatedEvent
+      | LinxTypes.MigrateApplyEvent
+      | LinxTypes.MigrateWithFieldsInitiatedEvent
+      | LinxTypes.MigrateWithFieldsApplyEvent
       | LinxTypes.MarketCreatedEvent
       | LinxTypes.SetOwnerEvent
       | LinxTypes.SetFeeEvent
@@ -1467,17 +1861,6 @@ export class LinxInstance extends ContractInstance {
   }
 
   view = {
-    owner: async (
-      params?: LinxTypes.CallMethodParams<"owner">
-    ): Promise<LinxTypes.CallMethodResult<"owner">> => {
-      return callMethod(
-        Linx,
-        this,
-        "owner",
-        params === undefined ? {} : params,
-        getContractByCodeHash
-      );
-    },
     feeRecipient: async (
       params?: LinxTypes.CallMethodParams<"feeRecipient">
     ): Promise<LinxTypes.CallMethodResult<"feeRecipient">> => {
@@ -1553,11 +1936,6 @@ export class LinxInstance extends ContractInstance {
         params,
         getContractByCodeHash
       );
-    },
-    setOwner: async (
-      params: LinxTypes.CallMethodParams<"setOwner">
-    ): Promise<LinxTypes.CallMethodResult<"setOwner">> => {
-      return callMethod(Linx, this, "setOwner", params, getContractByCodeHash);
     },
     setFee: async (
       params: LinxTypes.CallMethodParams<"setFee">
@@ -1643,6 +2021,181 @@ export class LinxInstance extends ContractInstance {
         params,
         getContractByCodeHash
       );
+    },
+    owner: async (
+      params?: LinxTypes.CallMethodParams<"owner">
+    ): Promise<LinxTypes.CallMethodResult<"owner">> => {
+      return callMethod(
+        Linx,
+        this,
+        "owner",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    changeOwner: async (
+      params: LinxTypes.CallMethodParams<"changeOwner">
+    ): Promise<LinxTypes.CallMethodResult<"changeOwner">> => {
+      return callMethod(
+        Linx,
+        this,
+        "changeOwner",
+        params,
+        getContractByCodeHash
+      );
+    },
+    acceptOwnership: async (
+      params?: LinxTypes.CallMethodParams<"acceptOwnership">
+    ): Promise<LinxTypes.CallMethodResult<"acceptOwnership">> => {
+      return callMethod(
+        Linx,
+        this,
+        "acceptOwnership",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    migrate: async (
+      params: LinxTypes.CallMethodParams<"migrate">
+    ): Promise<LinxTypes.CallMethodResult<"migrate">> => {
+      return callMethod(Linx, this, "migrate", params, getContractByCodeHash);
+    },
+    migrateWithFields: async (
+      params: LinxTypes.CallMethodParams<"migrateWithFields">
+    ): Promise<LinxTypes.CallMethodResult<"migrateWithFields">> => {
+      return callMethod(
+        Linx,
+        this,
+        "migrateWithFields",
+        params,
+        getContractByCodeHash
+      );
+    },
+    migrateApply: async (
+      params?: LinxTypes.CallMethodParams<"migrateApply">
+    ): Promise<LinxTypes.CallMethodResult<"migrateApply">> => {
+      return callMethod(
+        Linx,
+        this,
+        "migrateApply",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    migrateWithFieldsApply: async (
+      params?: LinxTypes.CallMethodParams<"migrateWithFieldsApply">
+    ): Promise<LinxTypes.CallMethodResult<"migrateWithFieldsApply">> => {
+      return callMethod(
+        Linx,
+        this,
+        "migrateWithFieldsApply",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    resetUpgrade: async (
+      params?: LinxTypes.CallMethodParams<"resetUpgrade">
+    ): Promise<LinxTypes.CallMethodResult<"resetUpgrade">> => {
+      return callMethod(
+        Linx,
+        this,
+        "resetUpgrade",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getUpgradeDelay: async (
+      params?: LinxTypes.CallMethodParams<"getUpgradeDelay">
+    ): Promise<LinxTypes.CallMethodResult<"getUpgradeDelay">> => {
+      return callMethod(
+        Linx,
+        this,
+        "getUpgradeDelay",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getUpgradeInitiated: async (
+      params?: LinxTypes.CallMethodParams<"getUpgradeInitiated">
+    ): Promise<LinxTypes.CallMethodResult<"getUpgradeInitiated">> => {
+      return callMethod(
+        Linx,
+        this,
+        "getUpgradeInitiated",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getNewCode: async (
+      params?: LinxTypes.CallMethodParams<"getNewCode">
+    ): Promise<LinxTypes.CallMethodResult<"getNewCode">> => {
+      return callMethod(
+        Linx,
+        this,
+        "getNewCode",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getNewImmFieldsEncoded: async (
+      params?: LinxTypes.CallMethodParams<"getNewImmFieldsEncoded">
+    ): Promise<LinxTypes.CallMethodResult<"getNewImmFieldsEncoded">> => {
+      return callMethod(
+        Linx,
+        this,
+        "getNewImmFieldsEncoded",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getNewMutFieldsEncoded: async (
+      params?: LinxTypes.CallMethodParams<"getNewMutFieldsEncoded">
+    ): Promise<LinxTypes.CallMethodResult<"getNewMutFieldsEncoded">> => {
+      return callMethod(
+        Linx,
+        this,
+        "getNewMutFieldsEncoded",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    resetFields: async (
+      params?: LinxTypes.CallMethodParams<"resetFields">
+    ): Promise<LinxTypes.CallMethodResult<"resetFields">> => {
+      return callMethod(
+        Linx,
+        this,
+        "resetFields",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    assertUpgradeNotPending: async (
+      params?: LinxTypes.CallMethodParams<"assertUpgradeNotPending">
+    ): Promise<LinxTypes.CallMethodResult<"assertUpgradeNotPending">> => {
+      return callMethod(
+        Linx,
+        this,
+        "assertUpgradeNotPending",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    assertUpgradeDelayElapsed: async (
+      params?: LinxTypes.CallMethodParams<"assertUpgradeDelayElapsed">
+    ): Promise<LinxTypes.CallMethodResult<"assertUpgradeDelayElapsed">> => {
+      return callMethod(
+        Linx,
+        this,
+        "assertUpgradeDelayElapsed",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    onlyOwner: async (
+      params: LinxTypes.CallMethodParams<"onlyOwner">
+    ): Promise<LinxTypes.CallMethodResult<"onlyOwner">> => {
+      return callMethod(Linx, this, "onlyOwner", params, getContractByCodeHash);
     },
     calcMarketId: async (
       params: LinxTypes.CallMethodParams<"calcMarketId">
@@ -1839,6 +2392,17 @@ export class LinxInstance extends ContractInstance {
         getContractByCodeHash
       );
     },
+    setupFeeRecipientPosition: async (
+      params: LinxTypes.CallMethodParams<"setupFeeRecipientPosition">
+    ): Promise<LinxTypes.CallMethodResult<"setupFeeRecipientPosition">> => {
+      return callMethod(
+        Linx,
+        this,
+        "setupFeeRecipientPosition",
+        params,
+        getContractByCodeHash
+      );
+    },
     isHealthyBorrow: async (
       params: LinxTypes.CallMethodParams<"isHealthyBorrow">
     ): Promise<LinxTypes.CallMethodResult<"isHealthyBorrow">> => {
@@ -1853,11 +2417,6 @@ export class LinxInstance extends ContractInstance {
   };
 
   transact = {
-    owner: async (
-      params: LinxTypes.SignExecuteMethodParams<"owner">
-    ): Promise<LinxTypes.SignExecuteMethodResult<"owner">> => {
-      return signExecuteMethod(Linx, this, "owner", params);
-    },
     feeRecipient: async (
       params: LinxTypes.SignExecuteMethodParams<"feeRecipient">
     ): Promise<LinxTypes.SignExecuteMethodResult<"feeRecipient">> => {
@@ -1897,11 +2456,6 @@ export class LinxInstance extends ContractInstance {
       params: LinxTypes.SignExecuteMethodParams<"enableLoanToValue">
     ): Promise<LinxTypes.SignExecuteMethodResult<"enableLoanToValue">> => {
       return signExecuteMethod(Linx, this, "enableLoanToValue", params);
-    },
-    setOwner: async (
-      params: LinxTypes.SignExecuteMethodParams<"setOwner">
-    ): Promise<LinxTypes.SignExecuteMethodResult<"setOwner">> => {
-      return signExecuteMethod(Linx, this, "setOwner", params);
     },
     setFee: async (
       params: LinxTypes.SignExecuteMethodParams<"setFee">
@@ -1957,6 +2511,95 @@ export class LinxInstance extends ContractInstance {
       params: LinxTypes.SignExecuteMethodParams<"accrueInterest">
     ): Promise<LinxTypes.SignExecuteMethodResult<"accrueInterest">> => {
       return signExecuteMethod(Linx, this, "accrueInterest", params);
+    },
+    owner: async (
+      params: LinxTypes.SignExecuteMethodParams<"owner">
+    ): Promise<LinxTypes.SignExecuteMethodResult<"owner">> => {
+      return signExecuteMethod(Linx, this, "owner", params);
+    },
+    changeOwner: async (
+      params: LinxTypes.SignExecuteMethodParams<"changeOwner">
+    ): Promise<LinxTypes.SignExecuteMethodResult<"changeOwner">> => {
+      return signExecuteMethod(Linx, this, "changeOwner", params);
+    },
+    acceptOwnership: async (
+      params: LinxTypes.SignExecuteMethodParams<"acceptOwnership">
+    ): Promise<LinxTypes.SignExecuteMethodResult<"acceptOwnership">> => {
+      return signExecuteMethod(Linx, this, "acceptOwnership", params);
+    },
+    migrate: async (
+      params: LinxTypes.SignExecuteMethodParams<"migrate">
+    ): Promise<LinxTypes.SignExecuteMethodResult<"migrate">> => {
+      return signExecuteMethod(Linx, this, "migrate", params);
+    },
+    migrateWithFields: async (
+      params: LinxTypes.SignExecuteMethodParams<"migrateWithFields">
+    ): Promise<LinxTypes.SignExecuteMethodResult<"migrateWithFields">> => {
+      return signExecuteMethod(Linx, this, "migrateWithFields", params);
+    },
+    migrateApply: async (
+      params: LinxTypes.SignExecuteMethodParams<"migrateApply">
+    ): Promise<LinxTypes.SignExecuteMethodResult<"migrateApply">> => {
+      return signExecuteMethod(Linx, this, "migrateApply", params);
+    },
+    migrateWithFieldsApply: async (
+      params: LinxTypes.SignExecuteMethodParams<"migrateWithFieldsApply">
+    ): Promise<LinxTypes.SignExecuteMethodResult<"migrateWithFieldsApply">> => {
+      return signExecuteMethod(Linx, this, "migrateWithFieldsApply", params);
+    },
+    resetUpgrade: async (
+      params: LinxTypes.SignExecuteMethodParams<"resetUpgrade">
+    ): Promise<LinxTypes.SignExecuteMethodResult<"resetUpgrade">> => {
+      return signExecuteMethod(Linx, this, "resetUpgrade", params);
+    },
+    getUpgradeDelay: async (
+      params: LinxTypes.SignExecuteMethodParams<"getUpgradeDelay">
+    ): Promise<LinxTypes.SignExecuteMethodResult<"getUpgradeDelay">> => {
+      return signExecuteMethod(Linx, this, "getUpgradeDelay", params);
+    },
+    getUpgradeInitiated: async (
+      params: LinxTypes.SignExecuteMethodParams<"getUpgradeInitiated">
+    ): Promise<LinxTypes.SignExecuteMethodResult<"getUpgradeInitiated">> => {
+      return signExecuteMethod(Linx, this, "getUpgradeInitiated", params);
+    },
+    getNewCode: async (
+      params: LinxTypes.SignExecuteMethodParams<"getNewCode">
+    ): Promise<LinxTypes.SignExecuteMethodResult<"getNewCode">> => {
+      return signExecuteMethod(Linx, this, "getNewCode", params);
+    },
+    getNewImmFieldsEncoded: async (
+      params: LinxTypes.SignExecuteMethodParams<"getNewImmFieldsEncoded">
+    ): Promise<LinxTypes.SignExecuteMethodResult<"getNewImmFieldsEncoded">> => {
+      return signExecuteMethod(Linx, this, "getNewImmFieldsEncoded", params);
+    },
+    getNewMutFieldsEncoded: async (
+      params: LinxTypes.SignExecuteMethodParams<"getNewMutFieldsEncoded">
+    ): Promise<LinxTypes.SignExecuteMethodResult<"getNewMutFieldsEncoded">> => {
+      return signExecuteMethod(Linx, this, "getNewMutFieldsEncoded", params);
+    },
+    resetFields: async (
+      params: LinxTypes.SignExecuteMethodParams<"resetFields">
+    ): Promise<LinxTypes.SignExecuteMethodResult<"resetFields">> => {
+      return signExecuteMethod(Linx, this, "resetFields", params);
+    },
+    assertUpgradeNotPending: async (
+      params: LinxTypes.SignExecuteMethodParams<"assertUpgradeNotPending">
+    ): Promise<
+      LinxTypes.SignExecuteMethodResult<"assertUpgradeNotPending">
+    > => {
+      return signExecuteMethod(Linx, this, "assertUpgradeNotPending", params);
+    },
+    assertUpgradeDelayElapsed: async (
+      params: LinxTypes.SignExecuteMethodParams<"assertUpgradeDelayElapsed">
+    ): Promise<
+      LinxTypes.SignExecuteMethodResult<"assertUpgradeDelayElapsed">
+    > => {
+      return signExecuteMethod(Linx, this, "assertUpgradeDelayElapsed", params);
+    },
+    onlyOwner: async (
+      params: LinxTypes.SignExecuteMethodParams<"onlyOwner">
+    ): Promise<LinxTypes.SignExecuteMethodResult<"onlyOwner">> => {
+      return signExecuteMethod(Linx, this, "onlyOwner", params);
     },
     calcMarketId: async (
       params: LinxTypes.SignExecuteMethodParams<"calcMarketId">
@@ -2062,6 +2705,13 @@ export class LinxInstance extends ContractInstance {
       params: LinxTypes.SignExecuteMethodParams<"setAuthorized">
     ): Promise<LinxTypes.SignExecuteMethodResult<"setAuthorized">> => {
       return signExecuteMethod(Linx, this, "setAuthorized", params);
+    },
+    setupFeeRecipientPosition: async (
+      params: LinxTypes.SignExecuteMethodParams<"setupFeeRecipientPosition">
+    ): Promise<
+      LinxTypes.SignExecuteMethodResult<"setupFeeRecipientPosition">
+    > => {
+      return signExecuteMethod(Linx, this, "setupFeeRecipientPosition", params);
     },
     isHealthyBorrow: async (
       params: LinxTypes.SignExecuteMethodParams<"isHealthyBorrow">

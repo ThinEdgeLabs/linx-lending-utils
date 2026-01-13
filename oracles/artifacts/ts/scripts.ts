@@ -12,8 +12,20 @@ import {
   HexString,
 } from "@alephium/web3";
 import { getContractByCodeHash } from "./contracts";
+import { default as CalculateInterestScriptJson } from "../lib/linx-lending-core/contracts/CalculateInterest.ral.json";
 import { default as CreateMarketAndAccrueInterestScriptJson } from "../lib/linx-lending-core/contracts/test/CreateMarketAndAccrueInterest.ral.json";
+import { default as GetBorrowRateScriptJson } from "../lib/linx-lending-core/contracts/GetBorrowRate.ral.json";
+import { default as GetMarketStateScriptJson } from "../lib/linx-lending-core/contracts/GetMarketState.ral.json";
+import { default as GetOraclePriceScriptJson } from "../lib/linx-lending-core/contracts/GetOraclePrice.ral.json";
 import { default as GetRawOraclePriceScriptJson } from "../GetRawOraclePrice.ral.json";
+import { default as GetRawOraclePriceWithTimestampScriptJson } from "../GetRawOraclePriceWithTimestamp.ral.json";
+import { default as IUpgradableMigrateApplyTXScriptJson } from "../lib/linx-ralph-libs/contracts/lib/IUpgradableMigrateApplyTX.ral.json";
+import { default as IUpgradableMigrateTXScriptJson } from "../lib/linx-ralph-libs/contracts/lib/IUpgradableMigrateTX.ral.json";
+import { default as IUpgradableMigrateWithFieldsApplyTXScriptJson } from "../lib/linx-ralph-libs/contracts/lib/IUpgradableMigrateWithFieldsApplyTX.ral.json";
+import { default as IUpgradableMigrateWithFieldsTXScriptJson } from "../lib/linx-ralph-libs/contracts/lib/IUpgradableMigrateWithFieldsTX.ral.json";
+import { default as IUpgradableResetUpgradeTXScriptJson } from "../lib/linx-ralph-libs/contracts/lib/IUpgradableResetUpgradeTX.ral.json";
+import { default as RepayAndWithdrawCollateralScriptJson } from "../lib/linx-lending-core/contracts/RepayAndWithdrawCollateral.ral.json";
+import { default as SupplyCollateralAndBorrowScriptJson } from "../lib/linx-lending-core/contracts/SupplyCollateralAndBorrow.ral.json";
 import {
   DIAOracleValue,
   MarketParams,
@@ -21,6 +33,20 @@ import {
   Position,
   AllStructs,
 } from "./types";
+
+export const CalculateInterest = new ExecutableScript<
+  {
+    linxHelper: HexString;
+    irm: HexString;
+    marketParams: MarketParams;
+    marketState: MarketState;
+    currentTime: bigint;
+  },
+  bigint
+>(
+  Script.fromJson(CalculateInterestScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
 
 export const CreateMarketAndAccrueInterest = new ExecutableScript<{
   linx: HexString;
@@ -30,10 +56,104 @@ export const CreateMarketAndAccrueInterest = new ExecutableScript<{
   getContractByCodeHash
 );
 
+export const GetBorrowRate = new ExecutableScript<
+  { irm: HexString; marketParams: MarketParams; marketState: MarketState },
+  bigint
+>(
+  Script.fromJson(GetBorrowRateScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
+
+export const GetMarketState = new ExecutableScript<
+  { linx: HexString; marketId: HexString },
+  MarketState
+>(
+  Script.fromJson(GetMarketStateScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
+
+export const GetOraclePrice = new ExecutableScript<
+  { oracle: HexString },
+  bigint
+>(
+  Script.fromJson(GetOraclePriceScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
+
 export const GetRawOraclePrice = new ExecutableScript<
   { oracle: HexString; key: HexString },
   bigint
 >(
   Script.fromJson(GetRawOraclePriceScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
+
+export const GetRawOraclePriceWithTimestamp = new ExecutableScript<
+  { oracle: HexString; key: HexString },
+  [bigint, bigint]
+>(
+  Script.fromJson(GetRawOraclePriceWithTimestampScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
+
+export const IUpgradableMigrateApplyTX = new ExecutableScript<{
+  upgradable: HexString;
+}>(
+  Script.fromJson(IUpgradableMigrateApplyTXScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
+
+export const IUpgradableMigrateTX = new ExecutableScript<{
+  upgradable: HexString;
+  changeCode: HexString;
+}>(
+  Script.fromJson(IUpgradableMigrateTXScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
+
+export const IUpgradableMigrateWithFieldsApplyTX = new ExecutableScript<{
+  upgradable: HexString;
+}>(
+  Script.fromJson(
+    IUpgradableMigrateWithFieldsApplyTXScriptJson,
+    "",
+    AllStructs
+  ),
+  getContractByCodeHash
+);
+
+export const IUpgradableMigrateWithFieldsTX = new ExecutableScript<{
+  upgradable: HexString;
+  changeCode: HexString;
+  changeImmFieldsEncoded: HexString;
+  changeMutFieldsEncoded: HexString;
+}>(
+  Script.fromJson(IUpgradableMigrateWithFieldsTXScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
+
+export const IUpgradableResetUpgradeTX = new ExecutableScript<{
+  upgradable: HexString;
+}>(
+  Script.fromJson(IUpgradableResetUpgradeTXScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
+
+export const RepayAndWithdrawCollateral = new ExecutableScript<{
+  linx: HexString;
+  marketParams: MarketParams;
+  repayAssets: bigint;
+}>(
+  Script.fromJson(RepayAndWithdrawCollateralScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
+
+export const SupplyCollateralAndBorrow = new ExecutableScript<{
+  linx: HexString;
+  marketParams: MarketParams;
+  loanAssets: bigint;
+  collateralAssets: bigint;
+}>(
+  Script.fromJson(SupplyCollateralAndBorrowScriptJson, "", AllStructs),
   getContractByCodeHash
 );

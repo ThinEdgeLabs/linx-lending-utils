@@ -1,0 +1,34 @@
+{
+  "version": "v4.3.0",
+  "name": "SupplyCollateralAndBorrow",
+  "bytecodeTemplate": "0101030006004030{1}{2}{3}{4}{5}17041703170217011700b4170516057a1601{7}a3d113c3038d7ea4c680002aa216001601160216031604{7}160513070c{0}010c160513c3038d7ea4c68000a216001601160216031604{6}0c1605160513090c{0}010f",
+  "fieldsSig": {
+    "names": [
+      "linx",
+      "marketParams",
+      "loanAssets",
+      "collateralAssets"
+    ],
+    "types": [
+      "Linx",
+      "MarketParams",
+      "U256",
+      "U256"
+    ],
+    "isMutable": [
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "functions": [
+    {
+      "name": "main",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": []
+    }
+  ]
+}

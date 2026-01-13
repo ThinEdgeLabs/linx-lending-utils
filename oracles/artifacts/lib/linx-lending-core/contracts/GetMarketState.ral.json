@@ -1,0 +1,30 @@
+{
+  "version": "v4.3.0",
+  "name": "GetMarketState",
+  "bytecodeTemplate": "0101000000060b{1}0d0c{0}0112{1}0d1306{0}010402",
+  "fieldsSig": {
+    "names": [
+      "linx",
+      "marketId"
+    ],
+    "types": [
+      "Linx",
+      "ByteVec"
+    ],
+    "isMutable": [
+      false,
+      false
+    ]
+  },
+  "functions": [
+    {
+      "name": "main",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "MarketState"
+      ]
+    }
+  ]
+}

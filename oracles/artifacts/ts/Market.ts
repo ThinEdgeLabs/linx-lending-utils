@@ -364,7 +364,7 @@ export const Market = new Factory(
   Contract.fromJson(
     MarketContractJson,
     "",
-    "54a33eac32852f590a65ee64e1db00404b2274fe9c0036d4efbc52cf9938fa26",
+    "89a6e4bc6ca244b12343ef6d4e531970334cc2f6f42ad27ae27a4556a87b4270",
     AllStructs
   )
 );

@@ -55,17 +55,117 @@ export namespace USDCUSDTOracleTypes {
     quoteTokenDecimals: bigint;
     heartbeatInterval: bigint;
     scaleFactor: bigint;
+    upgradeDelay: bigint;
+    owner: Address;
+    pendingOwner: Address;
+    upgradeInitiated: bigint;
+    newCode: HexString;
+    newImmFieldsEncoded: HexString;
+    newMutFieldsEncoded: HexString;
   };
 
   export type State = ContractState<Fields>;
+
+  export type MigrateInitiatedEvent = ContractEvent<{
+    owner: Address;
+    changeCode: HexString;
+  }>;
+  export type MigrateApplyEvent = ContractEvent<{
+    owner: Address;
+    changeCode: HexString;
+  }>;
+  export type MigrateWithFieldsInitiatedEvent = ContractEvent<{
+    owner: Address;
+    changeCode: HexString;
+    changeImmFieldsEncoded: HexString;
+    changeMutFieldsEncoded: HexString;
+  }>;
+  export type MigrateWithFieldsApplyEvent = ContractEvent<{
+    owner: Address;
+    changeCode: HexString;
+    changeImmFieldsEncoded: HexString;
+    changeMutFieldsEncoded: HexString;
+  }>;
 
   export interface CallMethodTable {
     price: {
       params: Omit<CallContractParams<{}>, "args">;
       result: CallContractResult<bigint>;
     };
+    owner: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<Address>;
+    };
+    changeOwner: {
+      params: CallContractParams<{ newOwner: Address }>;
+      result: CallContractResult<null>;
+    };
+    acceptOwnership: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    migrate: {
+      params: CallContractParams<{ changeCode: HexString }>;
+      result: CallContractResult<null>;
+    };
+    migrateWithFields: {
+      params: CallContractParams<{
+        changeCode: HexString;
+        changeImmFieldsEncoded: HexString;
+        changeMutFieldsEncoded: HexString;
+      }>;
+      result: CallContractResult<null>;
+    };
+    migrateApply: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    migrateWithFieldsApply: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    resetUpgrade: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
     init: {
       params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    getUpgradeDelay: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<bigint>;
+    };
+    getUpgradeInitiated: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<bigint>;
+    };
+    getNewCode: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<HexString>;
+    };
+    getNewImmFieldsEncoded: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<HexString>;
+    };
+    getNewMutFieldsEncoded: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<HexString>;
+    };
+    resetFields: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    assertUpgradeNotPending: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    assertUpgradeDelayElapsed: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    onlyOwner: {
+      params: CallContractParams<{ caller: Address }>;
       result: CallContractResult<null>;
     };
     wMulDown: {
@@ -130,8 +230,80 @@ export namespace USDCUSDTOracleTypes {
       params: Omit<SignExecuteContractMethodParams<{}>, "args">;
       result: SignExecuteScriptTxResult;
     };
+    owner: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    changeOwner: {
+      params: SignExecuteContractMethodParams<{ newOwner: Address }>;
+      result: SignExecuteScriptTxResult;
+    };
+    acceptOwnership: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    migrate: {
+      params: SignExecuteContractMethodParams<{ changeCode: HexString }>;
+      result: SignExecuteScriptTxResult;
+    };
+    migrateWithFields: {
+      params: SignExecuteContractMethodParams<{
+        changeCode: HexString;
+        changeImmFieldsEncoded: HexString;
+        changeMutFieldsEncoded: HexString;
+      }>;
+      result: SignExecuteScriptTxResult;
+    };
+    migrateApply: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    migrateWithFieldsApply: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    resetUpgrade: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
     init: {
       params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getUpgradeDelay: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getUpgradeInitiated: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getNewCode: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getNewImmFieldsEncoded: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getNewMutFieldsEncoded: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    resetFields: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    assertUpgradeNotPending: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    assertUpgradeDelayElapsed: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    onlyOwner: {
+      params: SignExecuteContractMethodParams<{ caller: Address }>;
       result: SignExecuteScriptTxResult;
     };
     wMulDown: {
@@ -204,9 +376,23 @@ class Factory extends ContractFactory<
     );
   }
 
+  eventIndex = {
+    MigrateInitiated: 0,
+    MigrateApply: 1,
+    MigrateWithFieldsInitiated: 2,
+    MigrateWithFieldsApply: 3,
+  };
   consts = {
     WAD: BigInt("1000000000000000000"),
     ErrorCodes: { StalePrice: BigInt("0"), NotInitialized: BigInt("1") },
+    UpgradeErrorCodes: {
+      UpgradePending: BigInt("13000"),
+      UpgradeNotPending: BigInt("13001"),
+      UpgradeDelayNotExpired: BigInt("13002"),
+      MigrateNotPending: BigInt("13003"),
+      MigrateWithFieldsNotPending: BigInt("13004"),
+    },
+    Error: { NotOwner: BigInt("400"), NoPendingOwner: BigInt("401") },
   };
 
   at(address: string): USDCUSDTOracleInstance {
@@ -222,6 +408,84 @@ class Factory extends ContractFactory<
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(this, "price", params, getContractByCodeHash);
     },
+    owner: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<USDCUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<Address>> => {
+      return testMethod(this, "owner", params, getContractByCodeHash);
+    },
+    changeOwner: async (
+      params: TestContractParamsWithoutMaps<
+        USDCUSDTOracleTypes.Fields,
+        { newOwner: Address }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "changeOwner", params, getContractByCodeHash);
+    },
+    acceptOwnership: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<USDCUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "acceptOwnership", params, getContractByCodeHash);
+    },
+    migrate: async (
+      params: TestContractParamsWithoutMaps<
+        USDCUSDTOracleTypes.Fields,
+        { changeCode: HexString }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "migrate", params, getContractByCodeHash);
+    },
+    migrateWithFields: async (
+      params: TestContractParamsWithoutMaps<
+        USDCUSDTOracleTypes.Fields,
+        {
+          changeCode: HexString;
+          changeImmFieldsEncoded: HexString;
+          changeMutFieldsEncoded: HexString;
+        }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(
+        this,
+        "migrateWithFields",
+        params,
+        getContractByCodeHash
+      );
+    },
+    migrateApply: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<USDCUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "migrateApply", params, getContractByCodeHash);
+    },
+    migrateWithFieldsApply: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<USDCUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(
+        this,
+        "migrateWithFieldsApply",
+        params,
+        getContractByCodeHash
+      );
+    },
+    resetUpgrade: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<USDCUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "resetUpgrade", params, getContractByCodeHash);
+    },
     init: async (
       params: Omit<
         TestContractParamsWithoutMaps<USDCUSDTOracleTypes.Fields, never>,
@@ -229,6 +493,103 @@ class Factory extends ContractFactory<
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "init", params, getContractByCodeHash);
+    },
+    getUpgradeDelay: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<USDCUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<bigint>> => {
+      return testMethod(this, "getUpgradeDelay", params, getContractByCodeHash);
+    },
+    getUpgradeInitiated: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<USDCUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<bigint>> => {
+      return testMethod(
+        this,
+        "getUpgradeInitiated",
+        params,
+        getContractByCodeHash
+      );
+    },
+    getNewCode: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<USDCUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<HexString>> => {
+      return testMethod(this, "getNewCode", params, getContractByCodeHash);
+    },
+    getNewImmFieldsEncoded: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<USDCUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<HexString>> => {
+      return testMethod(
+        this,
+        "getNewImmFieldsEncoded",
+        params,
+        getContractByCodeHash
+      );
+    },
+    getNewMutFieldsEncoded: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<USDCUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<HexString>> => {
+      return testMethod(
+        this,
+        "getNewMutFieldsEncoded",
+        params,
+        getContractByCodeHash
+      );
+    },
+    resetFields: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<USDCUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "resetFields", params, getContractByCodeHash);
+    },
+    assertUpgradeNotPending: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<USDCUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(
+        this,
+        "assertUpgradeNotPending",
+        params,
+        getContractByCodeHash
+      );
+    },
+    assertUpgradeDelayElapsed: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<USDCUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(
+        this,
+        "assertUpgradeDelayElapsed",
+        params,
+        getContractByCodeHash
+      );
+    },
+    onlyOwner: async (
+      params: TestContractParamsWithoutMaps<
+        USDCUSDTOracleTypes.Fields,
+        { caller: Address }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "onlyOwner", params, getContractByCodeHash);
     },
     wMulDown: async (
       params: TestContractParamsWithoutMaps<
@@ -331,7 +692,7 @@ export const USDCUSDTOracle = new Factory(
   Contract.fromJson(
     USDCUSDTOracleContractJson,
     "",
-    "8a3eb1223b39d37b94435a8d0cddcf757eb5c62cbefa726a0c4a14752ea0d3ff",
+    "9633357d0e6f9e06df697295bdceccacc5fe839ec8ba82dad0b554347bec7464",
     AllStructs
   )
 );
@@ -347,6 +708,79 @@ export class USDCUSDTOracleInstance extends ContractInstance {
     return fetchContractState(USDCUSDTOracle, this);
   }
 
+  async getContractEventsCurrentCount(): Promise<number> {
+    return getContractEventsCurrentCount(this.address);
+  }
+
+  subscribeMigrateInitiatedEvent(
+    options: EventSubscribeOptions<USDCUSDTOracleTypes.MigrateInitiatedEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      USDCUSDTOracle.contract,
+      this,
+      options,
+      "MigrateInitiated",
+      fromCount
+    );
+  }
+
+  subscribeMigrateApplyEvent(
+    options: EventSubscribeOptions<USDCUSDTOracleTypes.MigrateApplyEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      USDCUSDTOracle.contract,
+      this,
+      options,
+      "MigrateApply",
+      fromCount
+    );
+  }
+
+  subscribeMigrateWithFieldsInitiatedEvent(
+    options: EventSubscribeOptions<USDCUSDTOracleTypes.MigrateWithFieldsInitiatedEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      USDCUSDTOracle.contract,
+      this,
+      options,
+      "MigrateWithFieldsInitiated",
+      fromCount
+    );
+  }
+
+  subscribeMigrateWithFieldsApplyEvent(
+    options: EventSubscribeOptions<USDCUSDTOracleTypes.MigrateWithFieldsApplyEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      USDCUSDTOracle.contract,
+      this,
+      options,
+      "MigrateWithFieldsApply",
+      fromCount
+    );
+  }
+
+  subscribeAllEvents(
+    options: EventSubscribeOptions<
+      | USDCUSDTOracleTypes.MigrateInitiatedEvent
+      | USDCUSDTOracleTypes.MigrateApplyEvent
+      | USDCUSDTOracleTypes.MigrateWithFieldsInitiatedEvent
+      | USDCUSDTOracleTypes.MigrateWithFieldsApplyEvent
+    >,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvents(
+      USDCUSDTOracle.contract,
+      this,
+      options,
+      fromCount
+    );
+  }
+
   view = {
     price: async (
       params?: USDCUSDTOracleTypes.CallMethodParams<"price">
@@ -359,6 +793,96 @@ export class USDCUSDTOracleInstance extends ContractInstance {
         getContractByCodeHash
       );
     },
+    owner: async (
+      params?: USDCUSDTOracleTypes.CallMethodParams<"owner">
+    ): Promise<USDCUSDTOracleTypes.CallMethodResult<"owner">> => {
+      return callMethod(
+        USDCUSDTOracle,
+        this,
+        "owner",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    changeOwner: async (
+      params: USDCUSDTOracleTypes.CallMethodParams<"changeOwner">
+    ): Promise<USDCUSDTOracleTypes.CallMethodResult<"changeOwner">> => {
+      return callMethod(
+        USDCUSDTOracle,
+        this,
+        "changeOwner",
+        params,
+        getContractByCodeHash
+      );
+    },
+    acceptOwnership: async (
+      params?: USDCUSDTOracleTypes.CallMethodParams<"acceptOwnership">
+    ): Promise<USDCUSDTOracleTypes.CallMethodResult<"acceptOwnership">> => {
+      return callMethod(
+        USDCUSDTOracle,
+        this,
+        "acceptOwnership",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    migrate: async (
+      params: USDCUSDTOracleTypes.CallMethodParams<"migrate">
+    ): Promise<USDCUSDTOracleTypes.CallMethodResult<"migrate">> => {
+      return callMethod(
+        USDCUSDTOracle,
+        this,
+        "migrate",
+        params,
+        getContractByCodeHash
+      );
+    },
+    migrateWithFields: async (
+      params: USDCUSDTOracleTypes.CallMethodParams<"migrateWithFields">
+    ): Promise<USDCUSDTOracleTypes.CallMethodResult<"migrateWithFields">> => {
+      return callMethod(
+        USDCUSDTOracle,
+        this,
+        "migrateWithFields",
+        params,
+        getContractByCodeHash
+      );
+    },
+    migrateApply: async (
+      params?: USDCUSDTOracleTypes.CallMethodParams<"migrateApply">
+    ): Promise<USDCUSDTOracleTypes.CallMethodResult<"migrateApply">> => {
+      return callMethod(
+        USDCUSDTOracle,
+        this,
+        "migrateApply",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    migrateWithFieldsApply: async (
+      params?: USDCUSDTOracleTypes.CallMethodParams<"migrateWithFieldsApply">
+    ): Promise<
+      USDCUSDTOracleTypes.CallMethodResult<"migrateWithFieldsApply">
+    > => {
+      return callMethod(
+        USDCUSDTOracle,
+        this,
+        "migrateWithFieldsApply",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    resetUpgrade: async (
+      params?: USDCUSDTOracleTypes.CallMethodParams<"resetUpgrade">
+    ): Promise<USDCUSDTOracleTypes.CallMethodResult<"resetUpgrade">> => {
+      return callMethod(
+        USDCUSDTOracle,
+        this,
+        "resetUpgrade",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
     init: async (
       params?: USDCUSDTOracleTypes.CallMethodParams<"init">
     ): Promise<USDCUSDTOracleTypes.CallMethodResult<"init">> => {
@@ -367,6 +891,113 @@ export class USDCUSDTOracleInstance extends ContractInstance {
         this,
         "init",
         params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getUpgradeDelay: async (
+      params?: USDCUSDTOracleTypes.CallMethodParams<"getUpgradeDelay">
+    ): Promise<USDCUSDTOracleTypes.CallMethodResult<"getUpgradeDelay">> => {
+      return callMethod(
+        USDCUSDTOracle,
+        this,
+        "getUpgradeDelay",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getUpgradeInitiated: async (
+      params?: USDCUSDTOracleTypes.CallMethodParams<"getUpgradeInitiated">
+    ): Promise<USDCUSDTOracleTypes.CallMethodResult<"getUpgradeInitiated">> => {
+      return callMethod(
+        USDCUSDTOracle,
+        this,
+        "getUpgradeInitiated",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getNewCode: async (
+      params?: USDCUSDTOracleTypes.CallMethodParams<"getNewCode">
+    ): Promise<USDCUSDTOracleTypes.CallMethodResult<"getNewCode">> => {
+      return callMethod(
+        USDCUSDTOracle,
+        this,
+        "getNewCode",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getNewImmFieldsEncoded: async (
+      params?: USDCUSDTOracleTypes.CallMethodParams<"getNewImmFieldsEncoded">
+    ): Promise<
+      USDCUSDTOracleTypes.CallMethodResult<"getNewImmFieldsEncoded">
+    > => {
+      return callMethod(
+        USDCUSDTOracle,
+        this,
+        "getNewImmFieldsEncoded",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getNewMutFieldsEncoded: async (
+      params?: USDCUSDTOracleTypes.CallMethodParams<"getNewMutFieldsEncoded">
+    ): Promise<
+      USDCUSDTOracleTypes.CallMethodResult<"getNewMutFieldsEncoded">
+    > => {
+      return callMethod(
+        USDCUSDTOracle,
+        this,
+        "getNewMutFieldsEncoded",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    resetFields: async (
+      params?: USDCUSDTOracleTypes.CallMethodParams<"resetFields">
+    ): Promise<USDCUSDTOracleTypes.CallMethodResult<"resetFields">> => {
+      return callMethod(
+        USDCUSDTOracle,
+        this,
+        "resetFields",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    assertUpgradeNotPending: async (
+      params?: USDCUSDTOracleTypes.CallMethodParams<"assertUpgradeNotPending">
+    ): Promise<
+      USDCUSDTOracleTypes.CallMethodResult<"assertUpgradeNotPending">
+    > => {
+      return callMethod(
+        USDCUSDTOracle,
+        this,
+        "assertUpgradeNotPending",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    assertUpgradeDelayElapsed: async (
+      params?: USDCUSDTOracleTypes.CallMethodParams<"assertUpgradeDelayElapsed">
+    ): Promise<
+      USDCUSDTOracleTypes.CallMethodResult<"assertUpgradeDelayElapsed">
+    > => {
+      return callMethod(
+        USDCUSDTOracle,
+        this,
+        "assertUpgradeDelayElapsed",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    onlyOwner: async (
+      params: USDCUSDTOracleTypes.CallMethodParams<"onlyOwner">
+    ): Promise<USDCUSDTOracleTypes.CallMethodResult<"onlyOwner">> => {
+      return callMethod(
+        USDCUSDTOracle,
+        this,
+        "onlyOwner",
+        params,
         getContractByCodeHash
       );
     },
@@ -488,10 +1119,148 @@ export class USDCUSDTOracleInstance extends ContractInstance {
     ): Promise<USDCUSDTOracleTypes.SignExecuteMethodResult<"price">> => {
       return signExecuteMethod(USDCUSDTOracle, this, "price", params);
     },
+    owner: async (
+      params: USDCUSDTOracleTypes.SignExecuteMethodParams<"owner">
+    ): Promise<USDCUSDTOracleTypes.SignExecuteMethodResult<"owner">> => {
+      return signExecuteMethod(USDCUSDTOracle, this, "owner", params);
+    },
+    changeOwner: async (
+      params: USDCUSDTOracleTypes.SignExecuteMethodParams<"changeOwner">
+    ): Promise<USDCUSDTOracleTypes.SignExecuteMethodResult<"changeOwner">> => {
+      return signExecuteMethod(USDCUSDTOracle, this, "changeOwner", params);
+    },
+    acceptOwnership: async (
+      params: USDCUSDTOracleTypes.SignExecuteMethodParams<"acceptOwnership">
+    ): Promise<
+      USDCUSDTOracleTypes.SignExecuteMethodResult<"acceptOwnership">
+    > => {
+      return signExecuteMethod(USDCUSDTOracle, this, "acceptOwnership", params);
+    },
+    migrate: async (
+      params: USDCUSDTOracleTypes.SignExecuteMethodParams<"migrate">
+    ): Promise<USDCUSDTOracleTypes.SignExecuteMethodResult<"migrate">> => {
+      return signExecuteMethod(USDCUSDTOracle, this, "migrate", params);
+    },
+    migrateWithFields: async (
+      params: USDCUSDTOracleTypes.SignExecuteMethodParams<"migrateWithFields">
+    ): Promise<
+      USDCUSDTOracleTypes.SignExecuteMethodResult<"migrateWithFields">
+    > => {
+      return signExecuteMethod(
+        USDCUSDTOracle,
+        this,
+        "migrateWithFields",
+        params
+      );
+    },
+    migrateApply: async (
+      params: USDCUSDTOracleTypes.SignExecuteMethodParams<"migrateApply">
+    ): Promise<USDCUSDTOracleTypes.SignExecuteMethodResult<"migrateApply">> => {
+      return signExecuteMethod(USDCUSDTOracle, this, "migrateApply", params);
+    },
+    migrateWithFieldsApply: async (
+      params: USDCUSDTOracleTypes.SignExecuteMethodParams<"migrateWithFieldsApply">
+    ): Promise<
+      USDCUSDTOracleTypes.SignExecuteMethodResult<"migrateWithFieldsApply">
+    > => {
+      return signExecuteMethod(
+        USDCUSDTOracle,
+        this,
+        "migrateWithFieldsApply",
+        params
+      );
+    },
+    resetUpgrade: async (
+      params: USDCUSDTOracleTypes.SignExecuteMethodParams<"resetUpgrade">
+    ): Promise<USDCUSDTOracleTypes.SignExecuteMethodResult<"resetUpgrade">> => {
+      return signExecuteMethod(USDCUSDTOracle, this, "resetUpgrade", params);
+    },
     init: async (
       params: USDCUSDTOracleTypes.SignExecuteMethodParams<"init">
     ): Promise<USDCUSDTOracleTypes.SignExecuteMethodResult<"init">> => {
       return signExecuteMethod(USDCUSDTOracle, this, "init", params);
+    },
+    getUpgradeDelay: async (
+      params: USDCUSDTOracleTypes.SignExecuteMethodParams<"getUpgradeDelay">
+    ): Promise<
+      USDCUSDTOracleTypes.SignExecuteMethodResult<"getUpgradeDelay">
+    > => {
+      return signExecuteMethod(USDCUSDTOracle, this, "getUpgradeDelay", params);
+    },
+    getUpgradeInitiated: async (
+      params: USDCUSDTOracleTypes.SignExecuteMethodParams<"getUpgradeInitiated">
+    ): Promise<
+      USDCUSDTOracleTypes.SignExecuteMethodResult<"getUpgradeInitiated">
+    > => {
+      return signExecuteMethod(
+        USDCUSDTOracle,
+        this,
+        "getUpgradeInitiated",
+        params
+      );
+    },
+    getNewCode: async (
+      params: USDCUSDTOracleTypes.SignExecuteMethodParams<"getNewCode">
+    ): Promise<USDCUSDTOracleTypes.SignExecuteMethodResult<"getNewCode">> => {
+      return signExecuteMethod(USDCUSDTOracle, this, "getNewCode", params);
+    },
+    getNewImmFieldsEncoded: async (
+      params: USDCUSDTOracleTypes.SignExecuteMethodParams<"getNewImmFieldsEncoded">
+    ): Promise<
+      USDCUSDTOracleTypes.SignExecuteMethodResult<"getNewImmFieldsEncoded">
+    > => {
+      return signExecuteMethod(
+        USDCUSDTOracle,
+        this,
+        "getNewImmFieldsEncoded",
+        params
+      );
+    },
+    getNewMutFieldsEncoded: async (
+      params: USDCUSDTOracleTypes.SignExecuteMethodParams<"getNewMutFieldsEncoded">
+    ): Promise<
+      USDCUSDTOracleTypes.SignExecuteMethodResult<"getNewMutFieldsEncoded">
+    > => {
+      return signExecuteMethod(
+        USDCUSDTOracle,
+        this,
+        "getNewMutFieldsEncoded",
+        params
+      );
+    },
+    resetFields: async (
+      params: USDCUSDTOracleTypes.SignExecuteMethodParams<"resetFields">
+    ): Promise<USDCUSDTOracleTypes.SignExecuteMethodResult<"resetFields">> => {
+      return signExecuteMethod(USDCUSDTOracle, this, "resetFields", params);
+    },
+    assertUpgradeNotPending: async (
+      params: USDCUSDTOracleTypes.SignExecuteMethodParams<"assertUpgradeNotPending">
+    ): Promise<
+      USDCUSDTOracleTypes.SignExecuteMethodResult<"assertUpgradeNotPending">
+    > => {
+      return signExecuteMethod(
+        USDCUSDTOracle,
+        this,
+        "assertUpgradeNotPending",
+        params
+      );
+    },
+    assertUpgradeDelayElapsed: async (
+      params: USDCUSDTOracleTypes.SignExecuteMethodParams<"assertUpgradeDelayElapsed">
+    ): Promise<
+      USDCUSDTOracleTypes.SignExecuteMethodResult<"assertUpgradeDelayElapsed">
+    > => {
+      return signExecuteMethod(
+        USDCUSDTOracle,
+        this,
+        "assertUpgradeDelayElapsed",
+        params
+      );
+    },
+    onlyOwner: async (
+      params: USDCUSDTOracleTypes.SignExecuteMethodParams<"onlyOwner">
+    ): Promise<USDCUSDTOracleTypes.SignExecuteMethodResult<"onlyOwner">> => {
+      return signExecuteMethod(USDCUSDTOracle, this, "onlyOwner", params);
     },
     wMulDown: async (
       params: USDCUSDTOracleTypes.SignExecuteMethodParams<"wMulDown">

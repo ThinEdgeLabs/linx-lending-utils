@@ -1,0 +1,31 @@
+{
+  "version": "v4.3.0",
+  "name": "GetRawOraclePriceWithTimestamp",
+  "bytecodeTemplate": "01010000000206{1}0d0e{0}d4a0e6c23102",
+  "fieldsSig": {
+    "names": [
+      "oracle",
+      "key"
+    ],
+    "types": [
+      "IDIAOracle",
+      "ByteVec"
+    ],
+    "isMutable": [
+      false,
+      false
+    ]
+  },
+  "functions": [
+    {
+      "name": "main",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "U256",
+        "U256"
+      ]
+    }
+  ]
+}

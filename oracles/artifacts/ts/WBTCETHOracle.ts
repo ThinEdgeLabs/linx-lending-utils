@@ -55,17 +55,117 @@ export namespace WBTCETHOracleTypes {
     quoteTokenDecimals: bigint;
     heartbeatInterval: bigint;
     scaleFactor: bigint;
+    upgradeDelay: bigint;
+    owner: Address;
+    pendingOwner: Address;
+    upgradeInitiated: bigint;
+    newCode: HexString;
+    newImmFieldsEncoded: HexString;
+    newMutFieldsEncoded: HexString;
   };
 
   export type State = ContractState<Fields>;
+
+  export type MigrateInitiatedEvent = ContractEvent<{
+    owner: Address;
+    changeCode: HexString;
+  }>;
+  export type MigrateApplyEvent = ContractEvent<{
+    owner: Address;
+    changeCode: HexString;
+  }>;
+  export type MigrateWithFieldsInitiatedEvent = ContractEvent<{
+    owner: Address;
+    changeCode: HexString;
+    changeImmFieldsEncoded: HexString;
+    changeMutFieldsEncoded: HexString;
+  }>;
+  export type MigrateWithFieldsApplyEvent = ContractEvent<{
+    owner: Address;
+    changeCode: HexString;
+    changeImmFieldsEncoded: HexString;
+    changeMutFieldsEncoded: HexString;
+  }>;
 
   export interface CallMethodTable {
     price: {
       params: Omit<CallContractParams<{}>, "args">;
       result: CallContractResult<bigint>;
     };
+    owner: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<Address>;
+    };
+    changeOwner: {
+      params: CallContractParams<{ newOwner: Address }>;
+      result: CallContractResult<null>;
+    };
+    acceptOwnership: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    migrate: {
+      params: CallContractParams<{ changeCode: HexString }>;
+      result: CallContractResult<null>;
+    };
+    migrateWithFields: {
+      params: CallContractParams<{
+        changeCode: HexString;
+        changeImmFieldsEncoded: HexString;
+        changeMutFieldsEncoded: HexString;
+      }>;
+      result: CallContractResult<null>;
+    };
+    migrateApply: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    migrateWithFieldsApply: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    resetUpgrade: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
     init: {
       params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    getUpgradeDelay: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<bigint>;
+    };
+    getUpgradeInitiated: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<bigint>;
+    };
+    getNewCode: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<HexString>;
+    };
+    getNewImmFieldsEncoded: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<HexString>;
+    };
+    getNewMutFieldsEncoded: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<HexString>;
+    };
+    resetFields: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    assertUpgradeNotPending: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    assertUpgradeDelayElapsed: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    onlyOwner: {
+      params: CallContractParams<{ caller: Address }>;
       result: CallContractResult<null>;
     };
     wMulDown: {
@@ -130,8 +230,80 @@ export namespace WBTCETHOracleTypes {
       params: Omit<SignExecuteContractMethodParams<{}>, "args">;
       result: SignExecuteScriptTxResult;
     };
+    owner: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    changeOwner: {
+      params: SignExecuteContractMethodParams<{ newOwner: Address }>;
+      result: SignExecuteScriptTxResult;
+    };
+    acceptOwnership: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    migrate: {
+      params: SignExecuteContractMethodParams<{ changeCode: HexString }>;
+      result: SignExecuteScriptTxResult;
+    };
+    migrateWithFields: {
+      params: SignExecuteContractMethodParams<{
+        changeCode: HexString;
+        changeImmFieldsEncoded: HexString;
+        changeMutFieldsEncoded: HexString;
+      }>;
+      result: SignExecuteScriptTxResult;
+    };
+    migrateApply: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    migrateWithFieldsApply: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    resetUpgrade: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
     init: {
       params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getUpgradeDelay: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getUpgradeInitiated: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getNewCode: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getNewImmFieldsEncoded: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getNewMutFieldsEncoded: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    resetFields: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    assertUpgradeNotPending: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    assertUpgradeDelayElapsed: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    onlyOwner: {
+      params: SignExecuteContractMethodParams<{ caller: Address }>;
       result: SignExecuteScriptTxResult;
     };
     wMulDown: {
@@ -204,9 +376,23 @@ class Factory extends ContractFactory<
     );
   }
 
+  eventIndex = {
+    MigrateInitiated: 0,
+    MigrateApply: 1,
+    MigrateWithFieldsInitiated: 2,
+    MigrateWithFieldsApply: 3,
+  };
   consts = {
     WAD: BigInt("1000000000000000000"),
     ErrorCodes: { StalePrice: BigInt("0"), NotInitialized: BigInt("1") },
+    UpgradeErrorCodes: {
+      UpgradePending: BigInt("13000"),
+      UpgradeNotPending: BigInt("13001"),
+      UpgradeDelayNotExpired: BigInt("13002"),
+      MigrateNotPending: BigInt("13003"),
+      MigrateWithFieldsNotPending: BigInt("13004"),
+    },
+    Error: { NotOwner: BigInt("400"), NoPendingOwner: BigInt("401") },
   };
 
   at(address: string): WBTCETHOracleInstance {
@@ -222,6 +408,84 @@ class Factory extends ContractFactory<
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(this, "price", params, getContractByCodeHash);
     },
+    owner: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<WBTCETHOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<Address>> => {
+      return testMethod(this, "owner", params, getContractByCodeHash);
+    },
+    changeOwner: async (
+      params: TestContractParamsWithoutMaps<
+        WBTCETHOracleTypes.Fields,
+        { newOwner: Address }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "changeOwner", params, getContractByCodeHash);
+    },
+    acceptOwnership: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<WBTCETHOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "acceptOwnership", params, getContractByCodeHash);
+    },
+    migrate: async (
+      params: TestContractParamsWithoutMaps<
+        WBTCETHOracleTypes.Fields,
+        { changeCode: HexString }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "migrate", params, getContractByCodeHash);
+    },
+    migrateWithFields: async (
+      params: TestContractParamsWithoutMaps<
+        WBTCETHOracleTypes.Fields,
+        {
+          changeCode: HexString;
+          changeImmFieldsEncoded: HexString;
+          changeMutFieldsEncoded: HexString;
+        }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(
+        this,
+        "migrateWithFields",
+        params,
+        getContractByCodeHash
+      );
+    },
+    migrateApply: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<WBTCETHOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "migrateApply", params, getContractByCodeHash);
+    },
+    migrateWithFieldsApply: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<WBTCETHOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(
+        this,
+        "migrateWithFieldsApply",
+        params,
+        getContractByCodeHash
+      );
+    },
+    resetUpgrade: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<WBTCETHOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "resetUpgrade", params, getContractByCodeHash);
+    },
     init: async (
       params: Omit<
         TestContractParamsWithoutMaps<WBTCETHOracleTypes.Fields, never>,
@@ -229,6 +493,103 @@ class Factory extends ContractFactory<
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "init", params, getContractByCodeHash);
+    },
+    getUpgradeDelay: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<WBTCETHOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<bigint>> => {
+      return testMethod(this, "getUpgradeDelay", params, getContractByCodeHash);
+    },
+    getUpgradeInitiated: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<WBTCETHOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<bigint>> => {
+      return testMethod(
+        this,
+        "getUpgradeInitiated",
+        params,
+        getContractByCodeHash
+      );
+    },
+    getNewCode: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<WBTCETHOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<HexString>> => {
+      return testMethod(this, "getNewCode", params, getContractByCodeHash);
+    },
+    getNewImmFieldsEncoded: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<WBTCETHOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<HexString>> => {
+      return testMethod(
+        this,
+        "getNewImmFieldsEncoded",
+        params,
+        getContractByCodeHash
+      );
+    },
+    getNewMutFieldsEncoded: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<WBTCETHOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<HexString>> => {
+      return testMethod(
+        this,
+        "getNewMutFieldsEncoded",
+        params,
+        getContractByCodeHash
+      );
+    },
+    resetFields: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<WBTCETHOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "resetFields", params, getContractByCodeHash);
+    },
+    assertUpgradeNotPending: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<WBTCETHOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(
+        this,
+        "assertUpgradeNotPending",
+        params,
+        getContractByCodeHash
+      );
+    },
+    assertUpgradeDelayElapsed: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<WBTCETHOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(
+        this,
+        "assertUpgradeDelayElapsed",
+        params,
+        getContractByCodeHash
+      );
+    },
+    onlyOwner: async (
+      params: TestContractParamsWithoutMaps<
+        WBTCETHOracleTypes.Fields,
+        { caller: Address }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "onlyOwner", params, getContractByCodeHash);
     },
     wMulDown: async (
       params: TestContractParamsWithoutMaps<
@@ -331,7 +692,7 @@ export const WBTCETHOracle = new Factory(
   Contract.fromJson(
     WBTCETHOracleContractJson,
     "",
-    "8a3eb1223b39d37b94435a8d0cddcf757eb5c62cbefa726a0c4a14752ea0d3ff",
+    "9633357d0e6f9e06df697295bdceccacc5fe839ec8ba82dad0b554347bec7464",
     AllStructs
   )
 );
@@ -347,6 +708,79 @@ export class WBTCETHOracleInstance extends ContractInstance {
     return fetchContractState(WBTCETHOracle, this);
   }
 
+  async getContractEventsCurrentCount(): Promise<number> {
+    return getContractEventsCurrentCount(this.address);
+  }
+
+  subscribeMigrateInitiatedEvent(
+    options: EventSubscribeOptions<WBTCETHOracleTypes.MigrateInitiatedEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      WBTCETHOracle.contract,
+      this,
+      options,
+      "MigrateInitiated",
+      fromCount
+    );
+  }
+
+  subscribeMigrateApplyEvent(
+    options: EventSubscribeOptions<WBTCETHOracleTypes.MigrateApplyEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      WBTCETHOracle.contract,
+      this,
+      options,
+      "MigrateApply",
+      fromCount
+    );
+  }
+
+  subscribeMigrateWithFieldsInitiatedEvent(
+    options: EventSubscribeOptions<WBTCETHOracleTypes.MigrateWithFieldsInitiatedEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      WBTCETHOracle.contract,
+      this,
+      options,
+      "MigrateWithFieldsInitiated",
+      fromCount
+    );
+  }
+
+  subscribeMigrateWithFieldsApplyEvent(
+    options: EventSubscribeOptions<WBTCETHOracleTypes.MigrateWithFieldsApplyEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      WBTCETHOracle.contract,
+      this,
+      options,
+      "MigrateWithFieldsApply",
+      fromCount
+    );
+  }
+
+  subscribeAllEvents(
+    options: EventSubscribeOptions<
+      | WBTCETHOracleTypes.MigrateInitiatedEvent
+      | WBTCETHOracleTypes.MigrateApplyEvent
+      | WBTCETHOracleTypes.MigrateWithFieldsInitiatedEvent
+      | WBTCETHOracleTypes.MigrateWithFieldsApplyEvent
+    >,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvents(
+      WBTCETHOracle.contract,
+      this,
+      options,
+      fromCount
+    );
+  }
+
   view = {
     price: async (
       params?: WBTCETHOracleTypes.CallMethodParams<"price">
@@ -359,6 +793,96 @@ export class WBTCETHOracleInstance extends ContractInstance {
         getContractByCodeHash
       );
     },
+    owner: async (
+      params?: WBTCETHOracleTypes.CallMethodParams<"owner">
+    ): Promise<WBTCETHOracleTypes.CallMethodResult<"owner">> => {
+      return callMethod(
+        WBTCETHOracle,
+        this,
+        "owner",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    changeOwner: async (
+      params: WBTCETHOracleTypes.CallMethodParams<"changeOwner">
+    ): Promise<WBTCETHOracleTypes.CallMethodResult<"changeOwner">> => {
+      return callMethod(
+        WBTCETHOracle,
+        this,
+        "changeOwner",
+        params,
+        getContractByCodeHash
+      );
+    },
+    acceptOwnership: async (
+      params?: WBTCETHOracleTypes.CallMethodParams<"acceptOwnership">
+    ): Promise<WBTCETHOracleTypes.CallMethodResult<"acceptOwnership">> => {
+      return callMethod(
+        WBTCETHOracle,
+        this,
+        "acceptOwnership",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    migrate: async (
+      params: WBTCETHOracleTypes.CallMethodParams<"migrate">
+    ): Promise<WBTCETHOracleTypes.CallMethodResult<"migrate">> => {
+      return callMethod(
+        WBTCETHOracle,
+        this,
+        "migrate",
+        params,
+        getContractByCodeHash
+      );
+    },
+    migrateWithFields: async (
+      params: WBTCETHOracleTypes.CallMethodParams<"migrateWithFields">
+    ): Promise<WBTCETHOracleTypes.CallMethodResult<"migrateWithFields">> => {
+      return callMethod(
+        WBTCETHOracle,
+        this,
+        "migrateWithFields",
+        params,
+        getContractByCodeHash
+      );
+    },
+    migrateApply: async (
+      params?: WBTCETHOracleTypes.CallMethodParams<"migrateApply">
+    ): Promise<WBTCETHOracleTypes.CallMethodResult<"migrateApply">> => {
+      return callMethod(
+        WBTCETHOracle,
+        this,
+        "migrateApply",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    migrateWithFieldsApply: async (
+      params?: WBTCETHOracleTypes.CallMethodParams<"migrateWithFieldsApply">
+    ): Promise<
+      WBTCETHOracleTypes.CallMethodResult<"migrateWithFieldsApply">
+    > => {
+      return callMethod(
+        WBTCETHOracle,
+        this,
+        "migrateWithFieldsApply",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    resetUpgrade: async (
+      params?: WBTCETHOracleTypes.CallMethodParams<"resetUpgrade">
+    ): Promise<WBTCETHOracleTypes.CallMethodResult<"resetUpgrade">> => {
+      return callMethod(
+        WBTCETHOracle,
+        this,
+        "resetUpgrade",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
     init: async (
       params?: WBTCETHOracleTypes.CallMethodParams<"init">
     ): Promise<WBTCETHOracleTypes.CallMethodResult<"init">> => {
@@ -367,6 +891,113 @@ export class WBTCETHOracleInstance extends ContractInstance {
         this,
         "init",
         params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getUpgradeDelay: async (
+      params?: WBTCETHOracleTypes.CallMethodParams<"getUpgradeDelay">
+    ): Promise<WBTCETHOracleTypes.CallMethodResult<"getUpgradeDelay">> => {
+      return callMethod(
+        WBTCETHOracle,
+        this,
+        "getUpgradeDelay",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getUpgradeInitiated: async (
+      params?: WBTCETHOracleTypes.CallMethodParams<"getUpgradeInitiated">
+    ): Promise<WBTCETHOracleTypes.CallMethodResult<"getUpgradeInitiated">> => {
+      return callMethod(
+        WBTCETHOracle,
+        this,
+        "getUpgradeInitiated",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getNewCode: async (
+      params?: WBTCETHOracleTypes.CallMethodParams<"getNewCode">
+    ): Promise<WBTCETHOracleTypes.CallMethodResult<"getNewCode">> => {
+      return callMethod(
+        WBTCETHOracle,
+        this,
+        "getNewCode",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getNewImmFieldsEncoded: async (
+      params?: WBTCETHOracleTypes.CallMethodParams<"getNewImmFieldsEncoded">
+    ): Promise<
+      WBTCETHOracleTypes.CallMethodResult<"getNewImmFieldsEncoded">
+    > => {
+      return callMethod(
+        WBTCETHOracle,
+        this,
+        "getNewImmFieldsEncoded",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getNewMutFieldsEncoded: async (
+      params?: WBTCETHOracleTypes.CallMethodParams<"getNewMutFieldsEncoded">
+    ): Promise<
+      WBTCETHOracleTypes.CallMethodResult<"getNewMutFieldsEncoded">
+    > => {
+      return callMethod(
+        WBTCETHOracle,
+        this,
+        "getNewMutFieldsEncoded",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    resetFields: async (
+      params?: WBTCETHOracleTypes.CallMethodParams<"resetFields">
+    ): Promise<WBTCETHOracleTypes.CallMethodResult<"resetFields">> => {
+      return callMethod(
+        WBTCETHOracle,
+        this,
+        "resetFields",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    assertUpgradeNotPending: async (
+      params?: WBTCETHOracleTypes.CallMethodParams<"assertUpgradeNotPending">
+    ): Promise<
+      WBTCETHOracleTypes.CallMethodResult<"assertUpgradeNotPending">
+    > => {
+      return callMethod(
+        WBTCETHOracle,
+        this,
+        "assertUpgradeNotPending",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    assertUpgradeDelayElapsed: async (
+      params?: WBTCETHOracleTypes.CallMethodParams<"assertUpgradeDelayElapsed">
+    ): Promise<
+      WBTCETHOracleTypes.CallMethodResult<"assertUpgradeDelayElapsed">
+    > => {
+      return callMethod(
+        WBTCETHOracle,
+        this,
+        "assertUpgradeDelayElapsed",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    onlyOwner: async (
+      params: WBTCETHOracleTypes.CallMethodParams<"onlyOwner">
+    ): Promise<WBTCETHOracleTypes.CallMethodResult<"onlyOwner">> => {
+      return callMethod(
+        WBTCETHOracle,
+        this,
+        "onlyOwner",
+        params,
         getContractByCodeHash
       );
     },
@@ -488,10 +1119,148 @@ export class WBTCETHOracleInstance extends ContractInstance {
     ): Promise<WBTCETHOracleTypes.SignExecuteMethodResult<"price">> => {
       return signExecuteMethod(WBTCETHOracle, this, "price", params);
     },
+    owner: async (
+      params: WBTCETHOracleTypes.SignExecuteMethodParams<"owner">
+    ): Promise<WBTCETHOracleTypes.SignExecuteMethodResult<"owner">> => {
+      return signExecuteMethod(WBTCETHOracle, this, "owner", params);
+    },
+    changeOwner: async (
+      params: WBTCETHOracleTypes.SignExecuteMethodParams<"changeOwner">
+    ): Promise<WBTCETHOracleTypes.SignExecuteMethodResult<"changeOwner">> => {
+      return signExecuteMethod(WBTCETHOracle, this, "changeOwner", params);
+    },
+    acceptOwnership: async (
+      params: WBTCETHOracleTypes.SignExecuteMethodParams<"acceptOwnership">
+    ): Promise<
+      WBTCETHOracleTypes.SignExecuteMethodResult<"acceptOwnership">
+    > => {
+      return signExecuteMethod(WBTCETHOracle, this, "acceptOwnership", params);
+    },
+    migrate: async (
+      params: WBTCETHOracleTypes.SignExecuteMethodParams<"migrate">
+    ): Promise<WBTCETHOracleTypes.SignExecuteMethodResult<"migrate">> => {
+      return signExecuteMethod(WBTCETHOracle, this, "migrate", params);
+    },
+    migrateWithFields: async (
+      params: WBTCETHOracleTypes.SignExecuteMethodParams<"migrateWithFields">
+    ): Promise<
+      WBTCETHOracleTypes.SignExecuteMethodResult<"migrateWithFields">
+    > => {
+      return signExecuteMethod(
+        WBTCETHOracle,
+        this,
+        "migrateWithFields",
+        params
+      );
+    },
+    migrateApply: async (
+      params: WBTCETHOracleTypes.SignExecuteMethodParams<"migrateApply">
+    ): Promise<WBTCETHOracleTypes.SignExecuteMethodResult<"migrateApply">> => {
+      return signExecuteMethod(WBTCETHOracle, this, "migrateApply", params);
+    },
+    migrateWithFieldsApply: async (
+      params: WBTCETHOracleTypes.SignExecuteMethodParams<"migrateWithFieldsApply">
+    ): Promise<
+      WBTCETHOracleTypes.SignExecuteMethodResult<"migrateWithFieldsApply">
+    > => {
+      return signExecuteMethod(
+        WBTCETHOracle,
+        this,
+        "migrateWithFieldsApply",
+        params
+      );
+    },
+    resetUpgrade: async (
+      params: WBTCETHOracleTypes.SignExecuteMethodParams<"resetUpgrade">
+    ): Promise<WBTCETHOracleTypes.SignExecuteMethodResult<"resetUpgrade">> => {
+      return signExecuteMethod(WBTCETHOracle, this, "resetUpgrade", params);
+    },
     init: async (
       params: WBTCETHOracleTypes.SignExecuteMethodParams<"init">
     ): Promise<WBTCETHOracleTypes.SignExecuteMethodResult<"init">> => {
       return signExecuteMethod(WBTCETHOracle, this, "init", params);
+    },
+    getUpgradeDelay: async (
+      params: WBTCETHOracleTypes.SignExecuteMethodParams<"getUpgradeDelay">
+    ): Promise<
+      WBTCETHOracleTypes.SignExecuteMethodResult<"getUpgradeDelay">
+    > => {
+      return signExecuteMethod(WBTCETHOracle, this, "getUpgradeDelay", params);
+    },
+    getUpgradeInitiated: async (
+      params: WBTCETHOracleTypes.SignExecuteMethodParams<"getUpgradeInitiated">
+    ): Promise<
+      WBTCETHOracleTypes.SignExecuteMethodResult<"getUpgradeInitiated">
+    > => {
+      return signExecuteMethod(
+        WBTCETHOracle,
+        this,
+        "getUpgradeInitiated",
+        params
+      );
+    },
+    getNewCode: async (
+      params: WBTCETHOracleTypes.SignExecuteMethodParams<"getNewCode">
+    ): Promise<WBTCETHOracleTypes.SignExecuteMethodResult<"getNewCode">> => {
+      return signExecuteMethod(WBTCETHOracle, this, "getNewCode", params);
+    },
+    getNewImmFieldsEncoded: async (
+      params: WBTCETHOracleTypes.SignExecuteMethodParams<"getNewImmFieldsEncoded">
+    ): Promise<
+      WBTCETHOracleTypes.SignExecuteMethodResult<"getNewImmFieldsEncoded">
+    > => {
+      return signExecuteMethod(
+        WBTCETHOracle,
+        this,
+        "getNewImmFieldsEncoded",
+        params
+      );
+    },
+    getNewMutFieldsEncoded: async (
+      params: WBTCETHOracleTypes.SignExecuteMethodParams<"getNewMutFieldsEncoded">
+    ): Promise<
+      WBTCETHOracleTypes.SignExecuteMethodResult<"getNewMutFieldsEncoded">
+    > => {
+      return signExecuteMethod(
+        WBTCETHOracle,
+        this,
+        "getNewMutFieldsEncoded",
+        params
+      );
+    },
+    resetFields: async (
+      params: WBTCETHOracleTypes.SignExecuteMethodParams<"resetFields">
+    ): Promise<WBTCETHOracleTypes.SignExecuteMethodResult<"resetFields">> => {
+      return signExecuteMethod(WBTCETHOracle, this, "resetFields", params);
+    },
+    assertUpgradeNotPending: async (
+      params: WBTCETHOracleTypes.SignExecuteMethodParams<"assertUpgradeNotPending">
+    ): Promise<
+      WBTCETHOracleTypes.SignExecuteMethodResult<"assertUpgradeNotPending">
+    > => {
+      return signExecuteMethod(
+        WBTCETHOracle,
+        this,
+        "assertUpgradeNotPending",
+        params
+      );
+    },
+    assertUpgradeDelayElapsed: async (
+      params: WBTCETHOracleTypes.SignExecuteMethodParams<"assertUpgradeDelayElapsed">
+    ): Promise<
+      WBTCETHOracleTypes.SignExecuteMethodResult<"assertUpgradeDelayElapsed">
+    > => {
+      return signExecuteMethod(
+        WBTCETHOracle,
+        this,
+        "assertUpgradeDelayElapsed",
+        params
+      );
+    },
+    onlyOwner: async (
+      params: WBTCETHOracleTypes.SignExecuteMethodParams<"onlyOwner">
+    ): Promise<WBTCETHOracleTypes.SignExecuteMethodResult<"onlyOwner">> => {
+      return signExecuteMethod(WBTCETHOracle, this, "onlyOwner", params);
     },
     wMulDown: async (
       params: WBTCETHOracleTypes.SignExecuteMethodParams<"wMulDown">

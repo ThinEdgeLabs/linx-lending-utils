@@ -1,5 +1,5 @@
 {
-  "fullNodeVersion": "v4.2.2",
+  "fullNodeVersion": "v4.3.0",
   "compilerOptionsUsed": {
     "ignoreUnusedConstantsWarnings": false,
     "ignoreUnusedVariablesWarnings": false,
@@ -14,13 +14,19 @@
   "infos": {
     "ALPHUSDTOracle": {
       "sourceFile": "oracles/ALPHUSDTOracle.ral",
-      "sourceCodeHash": "7a2daf9d1a0a0ca163955dd59e7a9f18f21ad1db4e82d1bc497042cfc215a6ec",
+      "sourceCodeHash": "2222850e3d39a0f7e46a4c0122e0c5f44922de3bcf1b67802fcb0792e36aef7f",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "8a3eb1223b39d37b94435a8d0cddcf757eb5c62cbefa726a0c4a14752ea0d3ff"
+      "codeHashDebug": "9633357d0e6f9e06df697295bdceccacc5fe839ec8ba82dad0b554347bec7464"
+    },
+    "CalculateInterest": {
+      "sourceFile": "lib/linx-lending-core/contracts/scripts.ral",
+      "sourceCodeHash": "75514c37698de09703f88b1d30c89741b3b1a938af9c68d6a55de052141af096",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
     },
     "CreateMarketAndAccrueInterest": {
       "sourceFile": "lib/linx-lending-core/contracts/test/CreateMarket.ral",
-      "sourceCodeHash": "c7a833aeea2e897c2f48edb36d2064535b4063ddb4e6c5e5782bfaa345876940",
+      "sourceCodeHash": "a0312abae2a64fff24c449cfd8f7b4aaae7458735e2ad0a3f915a4d4140fb069",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -48,9 +54,33 @@
       "bytecodeDebugPatch": "",
       "codeHashDebug": "f9dac4e7d0bf28a2bc019f43138339e23afadde322d50441cdfe029993bf35f3"
     },
+    "GetBorrowRate": {
+      "sourceFile": "lib/linx-lending-core/contracts/scripts.ral",
+      "sourceCodeHash": "75514c37698de09703f88b1d30c89741b3b1a938af9c68d6a55de052141af096",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "GetMarketState": {
+      "sourceFile": "lib/linx-lending-core/contracts/scripts.ral",
+      "sourceCodeHash": "75514c37698de09703f88b1d30c89741b3b1a938af9c68d6a55de052141af096",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "GetOraclePrice": {
+      "sourceFile": "lib/linx-lending-core/contracts/scripts.ral",
+      "sourceCodeHash": "75514c37698de09703f88b1d30c89741b3b1a938af9c68d6a55de052141af096",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
     "GetRawOraclePrice": {
       "sourceFile": "scripts.ral",
-      "sourceCodeHash": "1f46b22ff7d6422b5957b433741f8253f0f4bc546006e7586e85cfdb3453b8d7",
+      "sourceCodeHash": "b8cf5cca8ae84dfdd2c136211b63896823f585d64929decd34ce080a4dc1ab78",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "GetRawOraclePriceWithTimestamp": {
+      "sourceFile": "scripts.ral",
+      "sourceCodeHash": "b8cf5cca8ae84dfdd2c136211b63896823f585d64929decd34ce080a4dc1ab78",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -60,15 +90,9 @@
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
-    "IDynamicRate": {
-      "sourceFile": "lib/linx-lending-core/contracts/interfaces/IInterestRate.ral",
-      "sourceCodeHash": "fa7e849a2705e5c769252172e71124a5d54069c94927107403e3c2369ae12a71",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": ""
-    },
     "IFixedRate": {
       "sourceFile": "lib/linx-lending-core/contracts/interfaces/IInterestRate.ral",
-      "sourceCodeHash": "fa7e849a2705e5c769252172e71124a5d54069c94927107403e3c2369ae12a71",
+      "sourceCodeHash": "836c2ff8d69a32818f9a6bb642bcf32998648999e3290e583dd6d393dc5030d5",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -80,13 +104,13 @@
     },
     "IInterestRate": {
       "sourceFile": "lib/linx-lending-core/contracts/interfaces/IInterestRate.ral",
-      "sourceCodeHash": "fa7e849a2705e5c769252172e71124a5d54069c94927107403e3c2369ae12a71",
+      "sourceCodeHash": "836c2ff8d69a32818f9a6bb642bcf32998648999e3290e583dd6d393dc5030d5",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "ILinx": {
       "sourceFile": "lib/linx-lending-core/contracts/interfaces/ILinx.ral",
-      "sourceCodeHash": "996d433f6c81eefc74926119da3ae886773bbad33d5a3af2e749a7c585e79d67",
+      "sourceCodeHash": "3ae09a7af2179357ff5169fafd10bd778585de03815c7bb41d8a495fbee43c6d",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -102,11 +126,53 @@
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
+    "IOwnable": {
+      "sourceFile": "lib/linx-ralph-libs/contracts/lib/iownable.ral",
+      "sourceCodeHash": "4c20e526e8b2c884a6489312fa1eac9c9c8a4fd3b358db6be71bdafe4e173c09",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "IUpgradable": {
+      "sourceFile": "lib/linx-ralph-libs/contracts/lib/iupgradable.ral",
+      "sourceCodeHash": "1fcbd17d2602a295369424e4e93ee2a1af816ebba2d2f3e0abbc35f0a5808e2a",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "IUpgradableMigrateApplyTX": {
+      "sourceFile": "lib/linx-ralph-libs/contracts/lib/iupgradable.ral",
+      "sourceCodeHash": "1fcbd17d2602a295369424e4e93ee2a1af816ebba2d2f3e0abbc35f0a5808e2a",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "IUpgradableMigrateTX": {
+      "sourceFile": "lib/linx-ralph-libs/contracts/lib/iupgradable.ral",
+      "sourceCodeHash": "1fcbd17d2602a295369424e4e93ee2a1af816ebba2d2f3e0abbc35f0a5808e2a",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "IUpgradableMigrateWithFieldsApplyTX": {
+      "sourceFile": "lib/linx-ralph-libs/contracts/lib/iupgradable.ral",
+      "sourceCodeHash": "1fcbd17d2602a295369424e4e93ee2a1af816ebba2d2f3e0abbc35f0a5808e2a",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "IUpgradableMigrateWithFieldsTX": {
+      "sourceFile": "lib/linx-ralph-libs/contracts/lib/iupgradable.ral",
+      "sourceCodeHash": "1fcbd17d2602a295369424e4e93ee2a1af816ebba2d2f3e0abbc35f0a5808e2a",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "IUpgradableResetUpgradeTX": {
+      "sourceFile": "lib/linx-ralph-libs/contracts/lib/iupgradable.ral",
+      "sourceCodeHash": "1fcbd17d2602a295369424e4e93ee2a1af816ebba2d2f3e0abbc35f0a5808e2a",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
     "Linx": {
       "sourceFile": "lib/linx-lending-core/contracts/Linx.ral",
-      "sourceCodeHash": "ed7ad1ea5dc8dbdacf4f67eb8255704d4f3cb1a8471841aea362210b9d269a67",
-      "bytecodeDebugPatch": "=32-2+9c=1-3+20e=1+23=1-2=2-1=1+c=2-4=1-1+f=2-2+17=2-2+5f=2-2+35=2-2+57=2-2+38=2-1=1-18=1-1=1-1=2+3=1-1=1-1+aa=1-1=1-1+12=3-1+f=3-1+c=3-1+a=3-2=1-2=2-2+82=2-2+a6=2-1+c=3+e14e=1-1+8=3-1+f=2+1e=1+f3=3-2+70=3+34fa=4-1+f4ffb=2+4=1-1+50535076=2-2+f0517f=645-1+e=110+7a7e0214696e73657274206174206d617020706174683a2000=31-1+5=146+7a7e0214696e73657274206174206d617020706174683a2000=417-1+c=578+7a7e0214696e73657274206174206d617020706174683a2000=27-1+d=283-1+d=38+7a7e0214696e73657274206174206d617020706174683a2000=283-1+5=137-1+d=38+7a7e0214696e73657274206174206d617020706174683a2000=3507-1+f=161+3=1+6007e021b4e6f2074696d6520656c617073656420666f72206d61726b6574201b2c20736b697070696e6720696e746572657374206163637275616c=1661-1+5=71-1+9=32+7a7e0214696e73657274206174206d617020706174683a2000=362",
-      "codeHashDebug": "73485c6e1e2cd11bcfaa29bc51d9b36156c33cc54f9f073992b9ff6a83874412"
+      "sourceCodeHash": "f522f14131b485894d2ed7b0dc9e06bfc676efeeefdc44b37782c3cee7b71486",
+      "bytecodeDebugPatch": "=30-2+8f=1-2+2=1-3=3-2+8=1-1+42=3-3+3f3=2-2+36=2-2+07=2-2+2f=2-2+16=2-2=2-2=1-1+a=1-2=2-4=1-5+8=1-2=2-2+f5=3-1+3=2-2+15=2-1+2=4-1+7=2-2+83=2-1+b=3+f=1-1=1-3+f08=1-3+f16=1-6+f2=2-2+f=1+2=1-1=1-1=1-1=1-1=2-2+4e=2-2+66=2-2+74=3-1+d=2-2+9c=3-1+3=2-2+c0=2+c=1-1=3-1+2=2+165=1-1+3a=2-2=1-2=3-1+7=3-1+8c50=1+3=2-1+b250c=3+045=1-1+27=3-1+e=3-1+3=2-1=1+f51d551ed=3-1+0=2+8=1+530553=1+4=617-1+e=110+7a7e0214696e73657274206174206d617020706174683a2000=33-1+5=146+7a7e0214696e73657274206174206d617020706174683a2000=365-1+d=584+7a7e0214696e73657274206174206d617020706174683a2000=27-1+d=295-1+d=38+7a7e0214696e73657274206174206d617020706174683a2000=261-1+5=149-1+d=38+7a7e0214696e73657274206174206d617020706174683a2000=3519-1+f=161+3=1+6007e021b4e6f2074696d6520656c617073656420666f72206d61726b6574201b2c20736b697070696e6720696e746572657374206163637275616c=2539-1+5=71-1+9=32+7a7e0214696e73657274206174206d617020706174683a2000=89-1+c=135-1+b=32+7a7e0214696e73657274206174206d617020706174683a2000=300",
+      "codeHashDebug": "c6c967419988465b7151f69dce5f2842524cce26fe13712a26b5f80e782b42b1"
     },
     "LinxConstants": {
       "sourceFile": "lib/linx-lending-core/contracts/utils/constants.ral",
@@ -116,7 +182,7 @@
     },
     "LinxDiaOracle": {
       "sourceFile": "LinxDiaOracle.ral",
-      "sourceCodeHash": "b410975025f4c104a4829dddf41cfa5ca442231a3ce76b3fb6aeaddab0c51b9f",
+      "sourceCodeHash": "fb23ffb3240c4b62870746ea7b6721f2cb3d0a50b67a2be30e97f3f885e33705",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -132,11 +198,17 @@
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
+    "LinxHelper": {
+      "sourceFile": "lib/linx-lending-core/contracts/LinxHelper.ral",
+      "sourceCodeHash": "cefc93d7f41539d5117ca73c1f22166f3b4191092c31a4c86a989b228c20bbce",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "031deccc6305f8dc8304ebdca5908f90967cf40b9fd427af747618be5d7cec99"
+    },
     "Market": {
       "sourceFile": "lib/linx-lending-core/contracts/Market.ral",
-      "sourceCodeHash": "9e6cfe0999ed109f0a8656e5759ccd493ec165b897c2b95d4253fff53a8dac41",
+      "sourceCodeHash": "616ebc28b953a350a1eacdd2e1fcef1276a0cf5426742d25e2d33e03344fb7a9",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "54a33eac32852f590a65ee64e1db00404b2274fe9c0036d4efbc52cf9938fa26"
+      "codeHashDebug": "89a6e4bc6ca244b12343ef6d4e531970334cc2f6f42ad27ae27a4556a87b4270"
     },
     "MarketParams": {
       "sourceFile": "lib/linx-lending-core/contracts/types/structs.ral",
@@ -164,9 +236,9 @@
     },
     "OracleExample": {
       "sourceFile": "OracleExample.ral",
-      "sourceCodeHash": "926f65915274c97882b94959fc849c85ffad93f3937262a8dda23f6ce44ac07d",
+      "sourceCodeHash": "c9a2b2e80760163cbe6ffdd1f46254efde8b045be973a96ff1f42eaf5f92b1e2",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "8a3eb1223b39d37b94435a8d0cddcf757eb5c62cbefa726a0c4a14752ea0d3ff"
+      "codeHashDebug": "9633357d0e6f9e06df697295bdceccacc5fe839ec8ba82dad0b554347bec7464"
     },
     "OracleMock": {
       "sourceFile": "lib/linx-lending-core/contracts/test/OracleMock.ral",
@@ -174,27 +246,51 @@
       "bytecodeDebugPatch": "",
       "codeHashDebug": "63880767e7aab740e59a6166622cac29d502da75fa87f74ebc9fcf49f46252d8"
     },
+    "Ownable": {
+      "sourceFile": "lib/linx-ralph-libs/contracts/ownable.ral",
+      "sourceCodeHash": "75b4a5983264ddb67accfe7d226c201ae100e35d06c1ba9055d126133a25001e",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
     "Position": {
       "sourceFile": "lib/linx-lending-core/contracts/types/structs.ral",
       "sourceCodeHash": "9464f9c04acf82218f0be6ee1c6f9493e591b50c3f19aacc845aa588e8d75938",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
+    "RepayAndWithdrawCollateral": {
+      "sourceFile": "lib/linx-lending-core/contracts/scripts.ral",
+      "sourceCodeHash": "75514c37698de09703f88b1d30c89741b3b1a938af9c68d6a55de052141af096",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
     "Shares": {
       "sourceFile": "lib/linx-ralph-libs/contracts/shares.ral",
-      "sourceCodeHash": "d448a78d362ac3837c4ddf5d8a11b8931c313810f6b5c8777dbff95a8c67c421",
+      "sourceCodeHash": "558d6c5b82b73fa18fd69072fc25cc43748f73d060c7bc5f0dcb52702cf82ae7",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "StringUtils": {
       "sourceFile": "lib/linx-lending-core/contracts/utils/string.ral",
-      "sourceCodeHash": "54e9447b29777a16d89230b568d5b9494805fbeaa7c7d9fda563994c429e2ee4",
+      "sourceCodeHash": "6b6b7a028c87075845aa9fb45a7300e2a45737ec024d9db12f2af700b4be546d",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "SupplyCollateralAndBorrow": {
+      "sourceFile": "lib/linx-lending-core/contracts/scripts.ral",
+      "sourceCodeHash": "75514c37698de09703f88b1d30c89741b3b1a938af9c68d6a55de052141af096",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "TestBTC": {
       "sourceFile": "lib/linx-lending-core/contracts/testnet/TestBTC.ral",
       "sourceCodeHash": "61d85b50485b490f284c8c14b62fcd836ec8f7706f4cbf94f0a7f019679bba66",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "f9dac4e7d0bf28a2bc019f43138339e23afadde322d50441cdfe029993bf35f3"
+    },
+    "TestETH": {
+      "sourceFile": "lib/linx-lending-core/contracts/testnet/TestETH.ral",
+      "sourceCodeHash": "812079570f9f19d75c2d22f7da0e5b5d217565febf8a18e06c1061253bd7c041",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "f9dac4e7d0bf28a2bc019f43138339e23afadde322d50441cdfe029993bf35f3"
     },
@@ -210,6 +306,12 @@
       "bytecodeDebugPatch": "",
       "codeHashDebug": "f9dac4e7d0bf28a2bc019f43138339e23afadde322d50441cdfe029993bf35f3"
     },
+    "TestUSDC": {
+      "sourceFile": "lib/linx-lending-core/contracts/testnet/TestUSDC.ral",
+      "sourceCodeHash": "d331c78d27be716fb748465901dc587762d0d9fb6af49e3600afed04819df175",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "f9dac4e7d0bf28a2bc019f43138339e23afadde322d50441cdfe029993bf35f3"
+    },
     "TestUSDT": {
       "sourceFile": "lib/linx-lending-core/contracts/testnet/TestUSDT.ral",
       "sourceCodeHash": "1792d6cee1153a965170a86bd9caf9960483c64dc2ae7fec5cdd2ea84fae23ce",
@@ -218,21 +320,27 @@
     },
     "USDCUSDTOracle": {
       "sourceFile": "oracles/USDCUSDTOracle.ral",
-      "sourceCodeHash": "0a0a1f67a36ec72b6bbfd445f78c41bc69e7466ea5928a65d2a54eae0b9a9fa7",
+      "sourceCodeHash": "c4412ad67f9dd7dc6c44c755fdc4bd3adad7fa49cf8e238a03893cef1c977887",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "8a3eb1223b39d37b94435a8d0cddcf757eb5c62cbefa726a0c4a14752ea0d3ff"
+      "codeHashDebug": "9633357d0e6f9e06df697295bdceccacc5fe839ec8ba82dad0b554347bec7464"
+    },
+    "Upgradable": {
+      "sourceFile": "lib/linx-ralph-libs/contracts/upgradable.ral",
+      "sourceCodeHash": "65f6acf648adea257c293267ab32f29b2e2fc45d02285a8f4d162e8abc980496",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
     },
     "WBTCETHOracle": {
       "sourceFile": "oracles/WBTCETHOracle.ral",
-      "sourceCodeHash": "4ba72504e17e5e090c57981c6efc9d805ec53ef76b312ab35e85bd91e267b607",
+      "sourceCodeHash": "a1ba9b7e574d8085154acf3068ee17649f43f3e517ab607ec7ef01014592a1b6",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "8a3eb1223b39d37b94435a8d0cddcf757eb5c62cbefa726a0c4a14752ea0d3ff"
+      "codeHashDebug": "9633357d0e6f9e06df697295bdceccacc5fe839ec8ba82dad0b554347bec7464"
     },
     "WBTCUSDTOracle": {
       "sourceFile": "oracles/WBTCUSDTOracle.ral",
-      "sourceCodeHash": "c27c0121ccc273e94e68c712eb1f9661f96fdd68b9bc3098842c333d67fa77a3",
+      "sourceCodeHash": "52cbc5554674c5f148409ca50943491dd21ea46756ab13a54998163db587f293",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "8a3eb1223b39d37b94435a8d0cddcf757eb5c62cbefa726a0c4a14752ea0d3ff"
+      "codeHashDebug": "9633357d0e6f9e06df697295bdceccacc5fe839ec8ba82dad0b554347bec7464"
     }
   }
 }

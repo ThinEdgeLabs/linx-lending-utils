@@ -1,0 +1,347 @@
+{
+  "version": "v4.3.0",
+  "name": "LinxHelper",
+  "bytecode": "001017402e40454054406840a640c940e040f5413141554179419d41c1420842d20000020201051600160113c40de0b6b3a7640000000302000002020105160013c40de0b6b3a76400001601000302000002020105160013c40de0b6b3a76400001601000402000003030106160016012c16022d0200000303010a160016012c16020d2b2a16022d02000002050118160016012c1702160216020e13c40de0b6b3a76400002c00031703160316020f13c40de0b6b3a76400002c00031704160216032a16042a0200000202011616000c2f7a4c041816010c307a4b0a1816000c307a4c041816010c2f0200000202010b16001601334c05160016012b024a020c0200000202010916001601314c031600024a021601020000020401402016011312314c0b130a131216012b831702160016022c024a1116011312334c0b130a160113122b831703160016032d024a021600020000030401110c170316000c334c091600160213800f42402a16010d2a000317031603020000030401110c170316000c334c09160016010d2a160213800f42402a000317031603020000030401110c170316000c334c091600160213800f42402a16010d2a000417031603020000030401110c170316000c334c09160016010d2a160213800f42402a0004170316030201000d10011fd3befdfc1a160c160a2b1343e82d170d160116021603160416051606160716081609160a160b130b0d1600d4eb25f9c4170e1608160e160d00050000170f160f0201000113064067d3042d3f631600cb17010c13061601d449f97c3f1707170617051704170317020c111601d421cb7c04170c170b170a170917085616062b170d160d0c307a4c041816040c307a4c0418160b1400424c403516081609160a160b160c160216031604160516061607130b0d160bd401307689170e1604160e160d00050000170f1604160f2a17041602160f2a17020c171016070c304c11160f160700001711160216112b1712161116121603000a1710160316102a170316021603160416051606160702",
+  "codeHash": "031deccc6305f8dc8304ebdca5908f90967cf40b9fd427af747618be5d7cec99",
+  "fieldsSig": {
+    "names": [],
+    "types": [],
+    "isMutable": []
+  },
+  "eventsSig": [],
+  "functions": [
+    {
+      "name": "wMulDown",
+      "paramNames": [
+        "x",
+        "y"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "wDivDown",
+      "paramNames": [
+        "x",
+        "y"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "wDivUp",
+      "paramNames": [
+        "x",
+        "y"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "mulDivDown",
+      "paramNames": [
+        "x",
+        "y",
+        "d"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "mulDivUp",
+      "paramNames": [
+        "x",
+        "y",
+        "d"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "wTaylorCompounded",
+      "paramNames": [
+        "x",
+        "n"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "exactlyOneZero",
+      "paramNames": [
+        "a",
+        "b"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "Bool"
+      ]
+    },
+    {
+      "name": "zeroFloorSub",
+      "paramNames": [
+        "x",
+        "y"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "min",
+      "paramNames": [
+        "a",
+        "b"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "toBaseUnits",
+      "paramNames": [
+        "amount",
+        "tokenDecimals"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "toSharesDown",
+      "paramNames": [
+        "assets",
+        "totalAssets",
+        "totalShares"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "toAssetsDown",
+      "paramNames": [
+        "shares",
+        "totalAssets",
+        "totalShares"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "toSharesUp",
+      "paramNames": [
+        "assets",
+        "totalAssets",
+        "totalShares"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "toAssetsUp",
+      "paramNames": [
+        "shares",
+        "totalAssets",
+        "totalShares"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "calculateInterest",
+      "paramNames": [
+        "irm",
+        "marketParams",
+        "marketState",
+        "currentTime"
+      ],
+      "paramTypes": [
+        "ByteVec",
+        "MarketParams",
+        "MarketState",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "getExpectedMarketState",
+      "paramNames": [
+        "marketId"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": [
+        "MarketState"
+      ]
+    }
+  ],
+  "constants": [
+    {
+      "name": "WAD",
+      "value": {
+        "type": "U256",
+        "value": "1000000000000000000"
+      }
+    },
+    {
+      "name": "VIRTUAL_SHARES",
+      "value": {
+        "type": "U256",
+        "value": "1000000"
+      }
+    },
+    {
+      "name": "VIRTUAL_ASSETS",
+      "value": {
+        "type": "U256",
+        "value": "1"
+      }
+    }
+  ],
+  "enums": []
+}

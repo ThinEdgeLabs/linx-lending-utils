@@ -55,17 +55,117 @@ export namespace OracleExampleTypes {
     quoteTokenDecimals: bigint;
     heartbeatInterval: bigint;
     scaleFactor: bigint;
+    upgradeDelay: bigint;
+    owner: Address;
+    pendingOwner: Address;
+    upgradeInitiated: bigint;
+    newCode: HexString;
+    newImmFieldsEncoded: HexString;
+    newMutFieldsEncoded: HexString;
   };
 
   export type State = ContractState<Fields>;
+
+  export type MigrateInitiatedEvent = ContractEvent<{
+    owner: Address;
+    changeCode: HexString;
+  }>;
+  export type MigrateApplyEvent = ContractEvent<{
+    owner: Address;
+    changeCode: HexString;
+  }>;
+  export type MigrateWithFieldsInitiatedEvent = ContractEvent<{
+    owner: Address;
+    changeCode: HexString;
+    changeImmFieldsEncoded: HexString;
+    changeMutFieldsEncoded: HexString;
+  }>;
+  export type MigrateWithFieldsApplyEvent = ContractEvent<{
+    owner: Address;
+    changeCode: HexString;
+    changeImmFieldsEncoded: HexString;
+    changeMutFieldsEncoded: HexString;
+  }>;
 
   export interface CallMethodTable {
     price: {
       params: Omit<CallContractParams<{}>, "args">;
       result: CallContractResult<bigint>;
     };
+    owner: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<Address>;
+    };
+    changeOwner: {
+      params: CallContractParams<{ newOwner: Address }>;
+      result: CallContractResult<null>;
+    };
+    acceptOwnership: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    migrate: {
+      params: CallContractParams<{ changeCode: HexString }>;
+      result: CallContractResult<null>;
+    };
+    migrateWithFields: {
+      params: CallContractParams<{
+        changeCode: HexString;
+        changeImmFieldsEncoded: HexString;
+        changeMutFieldsEncoded: HexString;
+      }>;
+      result: CallContractResult<null>;
+    };
+    migrateApply: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    migrateWithFieldsApply: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    resetUpgrade: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
     init: {
       params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    getUpgradeDelay: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<bigint>;
+    };
+    getUpgradeInitiated: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<bigint>;
+    };
+    getNewCode: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<HexString>;
+    };
+    getNewImmFieldsEncoded: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<HexString>;
+    };
+    getNewMutFieldsEncoded: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<HexString>;
+    };
+    resetFields: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    assertUpgradeNotPending: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    assertUpgradeDelayElapsed: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    onlyOwner: {
+      params: CallContractParams<{ caller: Address }>;
       result: CallContractResult<null>;
     };
     wMulDown: {
@@ -130,8 +230,80 @@ export namespace OracleExampleTypes {
       params: Omit<SignExecuteContractMethodParams<{}>, "args">;
       result: SignExecuteScriptTxResult;
     };
+    owner: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    changeOwner: {
+      params: SignExecuteContractMethodParams<{ newOwner: Address }>;
+      result: SignExecuteScriptTxResult;
+    };
+    acceptOwnership: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    migrate: {
+      params: SignExecuteContractMethodParams<{ changeCode: HexString }>;
+      result: SignExecuteScriptTxResult;
+    };
+    migrateWithFields: {
+      params: SignExecuteContractMethodParams<{
+        changeCode: HexString;
+        changeImmFieldsEncoded: HexString;
+        changeMutFieldsEncoded: HexString;
+      }>;
+      result: SignExecuteScriptTxResult;
+    };
+    migrateApply: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    migrateWithFieldsApply: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    resetUpgrade: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
     init: {
       params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getUpgradeDelay: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getUpgradeInitiated: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getNewCode: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getNewImmFieldsEncoded: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getNewMutFieldsEncoded: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    resetFields: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    assertUpgradeNotPending: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    assertUpgradeDelayElapsed: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    onlyOwner: {
+      params: SignExecuteContractMethodParams<{ caller: Address }>;
       result: SignExecuteScriptTxResult;
     };
     wMulDown: {
@@ -204,9 +376,23 @@ class Factory extends ContractFactory<
     );
   }
 
+  eventIndex = {
+    MigrateInitiated: 0,
+    MigrateApply: 1,
+    MigrateWithFieldsInitiated: 2,
+    MigrateWithFieldsApply: 3,
+  };
   consts = {
     WAD: BigInt("1000000000000000000"),
     ErrorCodes: { StalePrice: BigInt("0"), NotInitialized: BigInt("1") },
+    UpgradeErrorCodes: {
+      UpgradePending: BigInt("13000"),
+      UpgradeNotPending: BigInt("13001"),
+      UpgradeDelayNotExpired: BigInt("13002"),
+      MigrateNotPending: BigInt("13003"),
+      MigrateWithFieldsNotPending: BigInt("13004"),
+    },
+    Error: { NotOwner: BigInt("400"), NoPendingOwner: BigInt("401") },
   };
 
   at(address: string): OracleExampleInstance {
@@ -222,6 +408,84 @@ class Factory extends ContractFactory<
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(this, "price", params, getContractByCodeHash);
     },
+    owner: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<OracleExampleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<Address>> => {
+      return testMethod(this, "owner", params, getContractByCodeHash);
+    },
+    changeOwner: async (
+      params: TestContractParamsWithoutMaps<
+        OracleExampleTypes.Fields,
+        { newOwner: Address }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "changeOwner", params, getContractByCodeHash);
+    },
+    acceptOwnership: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<OracleExampleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "acceptOwnership", params, getContractByCodeHash);
+    },
+    migrate: async (
+      params: TestContractParamsWithoutMaps<
+        OracleExampleTypes.Fields,
+        { changeCode: HexString }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "migrate", params, getContractByCodeHash);
+    },
+    migrateWithFields: async (
+      params: TestContractParamsWithoutMaps<
+        OracleExampleTypes.Fields,
+        {
+          changeCode: HexString;
+          changeImmFieldsEncoded: HexString;
+          changeMutFieldsEncoded: HexString;
+        }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(
+        this,
+        "migrateWithFields",
+        params,
+        getContractByCodeHash
+      );
+    },
+    migrateApply: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<OracleExampleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "migrateApply", params, getContractByCodeHash);
+    },
+    migrateWithFieldsApply: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<OracleExampleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(
+        this,
+        "migrateWithFieldsApply",
+        params,
+        getContractByCodeHash
+      );
+    },
+    resetUpgrade: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<OracleExampleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "resetUpgrade", params, getContractByCodeHash);
+    },
     init: async (
       params: Omit<
         TestContractParamsWithoutMaps<OracleExampleTypes.Fields, never>,
@@ -229,6 +493,103 @@ class Factory extends ContractFactory<
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "init", params, getContractByCodeHash);
+    },
+    getUpgradeDelay: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<OracleExampleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<bigint>> => {
+      return testMethod(this, "getUpgradeDelay", params, getContractByCodeHash);
+    },
+    getUpgradeInitiated: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<OracleExampleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<bigint>> => {
+      return testMethod(
+        this,
+        "getUpgradeInitiated",
+        params,
+        getContractByCodeHash
+      );
+    },
+    getNewCode: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<OracleExampleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<HexString>> => {
+      return testMethod(this, "getNewCode", params, getContractByCodeHash);
+    },
+    getNewImmFieldsEncoded: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<OracleExampleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<HexString>> => {
+      return testMethod(
+        this,
+        "getNewImmFieldsEncoded",
+        params,
+        getContractByCodeHash
+      );
+    },
+    getNewMutFieldsEncoded: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<OracleExampleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<HexString>> => {
+      return testMethod(
+        this,
+        "getNewMutFieldsEncoded",
+        params,
+        getContractByCodeHash
+      );
+    },
+    resetFields: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<OracleExampleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "resetFields", params, getContractByCodeHash);
+    },
+    assertUpgradeNotPending: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<OracleExampleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(
+        this,
+        "assertUpgradeNotPending",
+        params,
+        getContractByCodeHash
+      );
+    },
+    assertUpgradeDelayElapsed: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<OracleExampleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(
+        this,
+        "assertUpgradeDelayElapsed",
+        params,
+        getContractByCodeHash
+      );
+    },
+    onlyOwner: async (
+      params: TestContractParamsWithoutMaps<
+        OracleExampleTypes.Fields,
+        { caller: Address }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "onlyOwner", params, getContractByCodeHash);
     },
     wMulDown: async (
       params: TestContractParamsWithoutMaps<
@@ -331,7 +692,7 @@ export const OracleExample = new Factory(
   Contract.fromJson(
     OracleExampleContractJson,
     "",
-    "8a3eb1223b39d37b94435a8d0cddcf757eb5c62cbefa726a0c4a14752ea0d3ff",
+    "9633357d0e6f9e06df697295bdceccacc5fe839ec8ba82dad0b554347bec7464",
     AllStructs
   )
 );
@@ -347,6 +708,79 @@ export class OracleExampleInstance extends ContractInstance {
     return fetchContractState(OracleExample, this);
   }
 
+  async getContractEventsCurrentCount(): Promise<number> {
+    return getContractEventsCurrentCount(this.address);
+  }
+
+  subscribeMigrateInitiatedEvent(
+    options: EventSubscribeOptions<OracleExampleTypes.MigrateInitiatedEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      OracleExample.contract,
+      this,
+      options,
+      "MigrateInitiated",
+      fromCount
+    );
+  }
+
+  subscribeMigrateApplyEvent(
+    options: EventSubscribeOptions<OracleExampleTypes.MigrateApplyEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      OracleExample.contract,
+      this,
+      options,
+      "MigrateApply",
+      fromCount
+    );
+  }
+
+  subscribeMigrateWithFieldsInitiatedEvent(
+    options: EventSubscribeOptions<OracleExampleTypes.MigrateWithFieldsInitiatedEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      OracleExample.contract,
+      this,
+      options,
+      "MigrateWithFieldsInitiated",
+      fromCount
+    );
+  }
+
+  subscribeMigrateWithFieldsApplyEvent(
+    options: EventSubscribeOptions<OracleExampleTypes.MigrateWithFieldsApplyEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      OracleExample.contract,
+      this,
+      options,
+      "MigrateWithFieldsApply",
+      fromCount
+    );
+  }
+
+  subscribeAllEvents(
+    options: EventSubscribeOptions<
+      | OracleExampleTypes.MigrateInitiatedEvent
+      | OracleExampleTypes.MigrateApplyEvent
+      | OracleExampleTypes.MigrateWithFieldsInitiatedEvent
+      | OracleExampleTypes.MigrateWithFieldsApplyEvent
+    >,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvents(
+      OracleExample.contract,
+      this,
+      options,
+      fromCount
+    );
+  }
+
   view = {
     price: async (
       params?: OracleExampleTypes.CallMethodParams<"price">
@@ -359,6 +793,96 @@ export class OracleExampleInstance extends ContractInstance {
         getContractByCodeHash
       );
     },
+    owner: async (
+      params?: OracleExampleTypes.CallMethodParams<"owner">
+    ): Promise<OracleExampleTypes.CallMethodResult<"owner">> => {
+      return callMethod(
+        OracleExample,
+        this,
+        "owner",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    changeOwner: async (
+      params: OracleExampleTypes.CallMethodParams<"changeOwner">
+    ): Promise<OracleExampleTypes.CallMethodResult<"changeOwner">> => {
+      return callMethod(
+        OracleExample,
+        this,
+        "changeOwner",
+        params,
+        getContractByCodeHash
+      );
+    },
+    acceptOwnership: async (
+      params?: OracleExampleTypes.CallMethodParams<"acceptOwnership">
+    ): Promise<OracleExampleTypes.CallMethodResult<"acceptOwnership">> => {
+      return callMethod(
+        OracleExample,
+        this,
+        "acceptOwnership",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    migrate: async (
+      params: OracleExampleTypes.CallMethodParams<"migrate">
+    ): Promise<OracleExampleTypes.CallMethodResult<"migrate">> => {
+      return callMethod(
+        OracleExample,
+        this,
+        "migrate",
+        params,
+        getContractByCodeHash
+      );
+    },
+    migrateWithFields: async (
+      params: OracleExampleTypes.CallMethodParams<"migrateWithFields">
+    ): Promise<OracleExampleTypes.CallMethodResult<"migrateWithFields">> => {
+      return callMethod(
+        OracleExample,
+        this,
+        "migrateWithFields",
+        params,
+        getContractByCodeHash
+      );
+    },
+    migrateApply: async (
+      params?: OracleExampleTypes.CallMethodParams<"migrateApply">
+    ): Promise<OracleExampleTypes.CallMethodResult<"migrateApply">> => {
+      return callMethod(
+        OracleExample,
+        this,
+        "migrateApply",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    migrateWithFieldsApply: async (
+      params?: OracleExampleTypes.CallMethodParams<"migrateWithFieldsApply">
+    ): Promise<
+      OracleExampleTypes.CallMethodResult<"migrateWithFieldsApply">
+    > => {
+      return callMethod(
+        OracleExample,
+        this,
+        "migrateWithFieldsApply",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    resetUpgrade: async (
+      params?: OracleExampleTypes.CallMethodParams<"resetUpgrade">
+    ): Promise<OracleExampleTypes.CallMethodResult<"resetUpgrade">> => {
+      return callMethod(
+        OracleExample,
+        this,
+        "resetUpgrade",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
     init: async (
       params?: OracleExampleTypes.CallMethodParams<"init">
     ): Promise<OracleExampleTypes.CallMethodResult<"init">> => {
@@ -367,6 +891,113 @@ export class OracleExampleInstance extends ContractInstance {
         this,
         "init",
         params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getUpgradeDelay: async (
+      params?: OracleExampleTypes.CallMethodParams<"getUpgradeDelay">
+    ): Promise<OracleExampleTypes.CallMethodResult<"getUpgradeDelay">> => {
+      return callMethod(
+        OracleExample,
+        this,
+        "getUpgradeDelay",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getUpgradeInitiated: async (
+      params?: OracleExampleTypes.CallMethodParams<"getUpgradeInitiated">
+    ): Promise<OracleExampleTypes.CallMethodResult<"getUpgradeInitiated">> => {
+      return callMethod(
+        OracleExample,
+        this,
+        "getUpgradeInitiated",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getNewCode: async (
+      params?: OracleExampleTypes.CallMethodParams<"getNewCode">
+    ): Promise<OracleExampleTypes.CallMethodResult<"getNewCode">> => {
+      return callMethod(
+        OracleExample,
+        this,
+        "getNewCode",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getNewImmFieldsEncoded: async (
+      params?: OracleExampleTypes.CallMethodParams<"getNewImmFieldsEncoded">
+    ): Promise<
+      OracleExampleTypes.CallMethodResult<"getNewImmFieldsEncoded">
+    > => {
+      return callMethod(
+        OracleExample,
+        this,
+        "getNewImmFieldsEncoded",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getNewMutFieldsEncoded: async (
+      params?: OracleExampleTypes.CallMethodParams<"getNewMutFieldsEncoded">
+    ): Promise<
+      OracleExampleTypes.CallMethodResult<"getNewMutFieldsEncoded">
+    > => {
+      return callMethod(
+        OracleExample,
+        this,
+        "getNewMutFieldsEncoded",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    resetFields: async (
+      params?: OracleExampleTypes.CallMethodParams<"resetFields">
+    ): Promise<OracleExampleTypes.CallMethodResult<"resetFields">> => {
+      return callMethod(
+        OracleExample,
+        this,
+        "resetFields",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    assertUpgradeNotPending: async (
+      params?: OracleExampleTypes.CallMethodParams<"assertUpgradeNotPending">
+    ): Promise<
+      OracleExampleTypes.CallMethodResult<"assertUpgradeNotPending">
+    > => {
+      return callMethod(
+        OracleExample,
+        this,
+        "assertUpgradeNotPending",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    assertUpgradeDelayElapsed: async (
+      params?: OracleExampleTypes.CallMethodParams<"assertUpgradeDelayElapsed">
+    ): Promise<
+      OracleExampleTypes.CallMethodResult<"assertUpgradeDelayElapsed">
+    > => {
+      return callMethod(
+        OracleExample,
+        this,
+        "assertUpgradeDelayElapsed",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    onlyOwner: async (
+      params: OracleExampleTypes.CallMethodParams<"onlyOwner">
+    ): Promise<OracleExampleTypes.CallMethodResult<"onlyOwner">> => {
+      return callMethod(
+        OracleExample,
+        this,
+        "onlyOwner",
+        params,
         getContractByCodeHash
       );
     },
@@ -488,10 +1119,148 @@ export class OracleExampleInstance extends ContractInstance {
     ): Promise<OracleExampleTypes.SignExecuteMethodResult<"price">> => {
       return signExecuteMethod(OracleExample, this, "price", params);
     },
+    owner: async (
+      params: OracleExampleTypes.SignExecuteMethodParams<"owner">
+    ): Promise<OracleExampleTypes.SignExecuteMethodResult<"owner">> => {
+      return signExecuteMethod(OracleExample, this, "owner", params);
+    },
+    changeOwner: async (
+      params: OracleExampleTypes.SignExecuteMethodParams<"changeOwner">
+    ): Promise<OracleExampleTypes.SignExecuteMethodResult<"changeOwner">> => {
+      return signExecuteMethod(OracleExample, this, "changeOwner", params);
+    },
+    acceptOwnership: async (
+      params: OracleExampleTypes.SignExecuteMethodParams<"acceptOwnership">
+    ): Promise<
+      OracleExampleTypes.SignExecuteMethodResult<"acceptOwnership">
+    > => {
+      return signExecuteMethod(OracleExample, this, "acceptOwnership", params);
+    },
+    migrate: async (
+      params: OracleExampleTypes.SignExecuteMethodParams<"migrate">
+    ): Promise<OracleExampleTypes.SignExecuteMethodResult<"migrate">> => {
+      return signExecuteMethod(OracleExample, this, "migrate", params);
+    },
+    migrateWithFields: async (
+      params: OracleExampleTypes.SignExecuteMethodParams<"migrateWithFields">
+    ): Promise<
+      OracleExampleTypes.SignExecuteMethodResult<"migrateWithFields">
+    > => {
+      return signExecuteMethod(
+        OracleExample,
+        this,
+        "migrateWithFields",
+        params
+      );
+    },
+    migrateApply: async (
+      params: OracleExampleTypes.SignExecuteMethodParams<"migrateApply">
+    ): Promise<OracleExampleTypes.SignExecuteMethodResult<"migrateApply">> => {
+      return signExecuteMethod(OracleExample, this, "migrateApply", params);
+    },
+    migrateWithFieldsApply: async (
+      params: OracleExampleTypes.SignExecuteMethodParams<"migrateWithFieldsApply">
+    ): Promise<
+      OracleExampleTypes.SignExecuteMethodResult<"migrateWithFieldsApply">
+    > => {
+      return signExecuteMethod(
+        OracleExample,
+        this,
+        "migrateWithFieldsApply",
+        params
+      );
+    },
+    resetUpgrade: async (
+      params: OracleExampleTypes.SignExecuteMethodParams<"resetUpgrade">
+    ): Promise<OracleExampleTypes.SignExecuteMethodResult<"resetUpgrade">> => {
+      return signExecuteMethod(OracleExample, this, "resetUpgrade", params);
+    },
     init: async (
       params: OracleExampleTypes.SignExecuteMethodParams<"init">
     ): Promise<OracleExampleTypes.SignExecuteMethodResult<"init">> => {
       return signExecuteMethod(OracleExample, this, "init", params);
+    },
+    getUpgradeDelay: async (
+      params: OracleExampleTypes.SignExecuteMethodParams<"getUpgradeDelay">
+    ): Promise<
+      OracleExampleTypes.SignExecuteMethodResult<"getUpgradeDelay">
+    > => {
+      return signExecuteMethod(OracleExample, this, "getUpgradeDelay", params);
+    },
+    getUpgradeInitiated: async (
+      params: OracleExampleTypes.SignExecuteMethodParams<"getUpgradeInitiated">
+    ): Promise<
+      OracleExampleTypes.SignExecuteMethodResult<"getUpgradeInitiated">
+    > => {
+      return signExecuteMethod(
+        OracleExample,
+        this,
+        "getUpgradeInitiated",
+        params
+      );
+    },
+    getNewCode: async (
+      params: OracleExampleTypes.SignExecuteMethodParams<"getNewCode">
+    ): Promise<OracleExampleTypes.SignExecuteMethodResult<"getNewCode">> => {
+      return signExecuteMethod(OracleExample, this, "getNewCode", params);
+    },
+    getNewImmFieldsEncoded: async (
+      params: OracleExampleTypes.SignExecuteMethodParams<"getNewImmFieldsEncoded">
+    ): Promise<
+      OracleExampleTypes.SignExecuteMethodResult<"getNewImmFieldsEncoded">
+    > => {
+      return signExecuteMethod(
+        OracleExample,
+        this,
+        "getNewImmFieldsEncoded",
+        params
+      );
+    },
+    getNewMutFieldsEncoded: async (
+      params: OracleExampleTypes.SignExecuteMethodParams<"getNewMutFieldsEncoded">
+    ): Promise<
+      OracleExampleTypes.SignExecuteMethodResult<"getNewMutFieldsEncoded">
+    > => {
+      return signExecuteMethod(
+        OracleExample,
+        this,
+        "getNewMutFieldsEncoded",
+        params
+      );
+    },
+    resetFields: async (
+      params: OracleExampleTypes.SignExecuteMethodParams<"resetFields">
+    ): Promise<OracleExampleTypes.SignExecuteMethodResult<"resetFields">> => {
+      return signExecuteMethod(OracleExample, this, "resetFields", params);
+    },
+    assertUpgradeNotPending: async (
+      params: OracleExampleTypes.SignExecuteMethodParams<"assertUpgradeNotPending">
+    ): Promise<
+      OracleExampleTypes.SignExecuteMethodResult<"assertUpgradeNotPending">
+    > => {
+      return signExecuteMethod(
+        OracleExample,
+        this,
+        "assertUpgradeNotPending",
+        params
+      );
+    },
+    assertUpgradeDelayElapsed: async (
+      params: OracleExampleTypes.SignExecuteMethodParams<"assertUpgradeDelayElapsed">
+    ): Promise<
+      OracleExampleTypes.SignExecuteMethodResult<"assertUpgradeDelayElapsed">
+    > => {
+      return signExecuteMethod(
+        OracleExample,
+        this,
+        "assertUpgradeDelayElapsed",
+        params
+      );
+    },
+    onlyOwner: async (
+      params: OracleExampleTypes.SignExecuteMethodParams<"onlyOwner">
+    ): Promise<OracleExampleTypes.SignExecuteMethodResult<"onlyOwner">> => {
+      return signExecuteMethod(OracleExample, this, "onlyOwner", params);
     },
     wMulDown: async (
       params: OracleExampleTypes.SignExecuteMethodParams<"wMulDown">

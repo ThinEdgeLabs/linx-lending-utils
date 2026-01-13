@@ -1,8 +1,8 @@
 {
-  "version": "v4.2.3",
+  "version": "v4.3.0",
   "name": "WBTCETHOracle",
-  "bytecode": "090c404b40694080409740ae40bd40d1410f41324149415e419a01000004014027d35dd91db7a0000c300d7bce010d0ece00d4a0e6c231170117005616012bce07320c7bce020d0ece00d4a0e6c231170317025616032bce07320c7ba0001600160200050201000000000dd3142dcbe6130a1324ce062ace042ace052bce032b83a1000000020201051600160113c40de0b6b3a7640000000502000002020105160013c40de0b6b3a76400001601000502000002020105160013c40de0b6b3a76400001601000602000003030106160016012c16022d0200000303010a160016012c16020d2b2a16022d02000002050118160016012c1702160216020e13c40de0b6b3a76400002c00051703160316020f13c40de0b6b3a76400002c00051704160216032a16042a0200000202011616000c2f7a4c041816010c307a4b0a1816000c307a4c041816010c2f0200000202010b16001601334c05160016012b024a020c0200000202010916001601314c031600024a021601020000020401402016011312314c0b130a131216012b831702160016022c024a1116011312334c0b130a160113122b831703160016032d024a02160002",
-  "codeHash": "8a3eb1223b39d37b94435a8d0cddcf757eb5c62cbefa726a0c4a14752ea0d3ff",
+  "bytecode": "101d404b4059406b408540ad40d9410f414e415e417c418a419841a641b441c241da41e8420142104227423e42554264427842b642d942f04305434101000004014027d35dd91db7a0000c300d7bce010d0ece00d4a0e6c231170117005616012bce07320c7bce020d0ece00d4a0e6c231170317025616032bce07320c7ba00016001602001602010000000103d3c7497323a00102010001010005d3e8e81bc9b400121600a10201000000000ad3f745dc01b4a002451341917ba002a101caa102010001010012d3c7e7c76db400120010caa1021600a1041400a1051400a10656a10305a001a0045f010003030014d3faf4fa3cb400120010caa1021600a1041601a1051602a10656a10307a001a004a005a0066101000000001cd359022261b400120011a0041400427a4c0418a0051400417a4c0418a0061400411372cb7ba004ba06a001a0045f000f01000000004020d3c3f859f4b400120011a0041400427a4c0418a0051400427a4c0418a0061400421372cc7ba004a005a006bb08a001a004a005a00661000f010000000004d37a8fa0fdb40012000f01000000000dd3142dcbe6130a1324ce062ace042ace052bce032b83a100010000000103d3d88dd69bce0802010000000103d33849fdc7a00302010000000103d37dbbcbc9a00402010000000103d3f6b008faa00502010000000103d3ec4f54cda0060200000000000a0ca103caa1021400a1041400a1051400a106000000000005a0030c2f1372c87b00000000000ca0030c301372c97b56a003ce082a331372ca7b0000010100051600a001451341907b0000020201051600160113c40de0b6b3a7640000001602000002020105160013c40de0b6b3a76400001601001602000002020105160013c40de0b6b3a76400001601001702000003030106160016012c16022d0200000303010a160016012c16020d2b2a16022d02000002050118160016012c1702160216020e13c40de0b6b3a76400002c00161703160316020f13c40de0b6b3a76400002c00161704160216032a16042a0200000202011616000c2f7a4c041816010c307a4b0a1816000c307a4c041816010c2f0200000202010b16001601334c05160016012b024a020c0200000202010916001601314c031600024a021601020000020401402016011312314c0b130a131216012b831702160016022c024a1116011312334c0b130a160113122b831703160016032d024a02160002",
+  "codeHash": "9633357d0e6f9e06df697295bdceccacc5fe839ec8ba82dad0b554347bec7464",
   "fieldsSig": {
     "names": [
       "diaOracleContractId",
@@ -13,7 +13,14 @@
       "baseTokenDecimals",
       "quoteTokenDecimals",
       "heartbeatInterval",
-      "scaleFactor"
+      "scaleFactor",
+      "upgradeDelay",
+      "owner",
+      "pendingOwner",
+      "upgradeInitiated",
+      "newCode",
+      "newImmFieldsEncoded",
+      "newMutFieldsEncoded"
     ],
     "types": [
       "ByteVec",
@@ -24,7 +31,14 @@
       "U256",
       "U256",
       "U256",
-      "U256"
+      "U256",
+      "U256",
+      "Address",
+      "Address",
+      "U256",
+      "ByteVec",
+      "ByteVec",
+      "ByteVec"
     ],
     "isMutable": [
       false,
@@ -35,10 +49,70 @@
       false,
       false,
       false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
       true
     ]
   },
-  "eventsSig": [],
+  "eventsSig": [
+    {
+      "name": "MigrateInitiated",
+      "fieldNames": [
+        "owner",
+        "changeCode"
+      ],
+      "fieldTypes": [
+        "Address",
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "MigrateApply",
+      "fieldNames": [
+        "owner",
+        "changeCode"
+      ],
+      "fieldTypes": [
+        "Address",
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "MigrateWithFieldsInitiated",
+      "fieldNames": [
+        "owner",
+        "changeCode",
+        "changeImmFieldsEncoded",
+        "changeMutFieldsEncoded"
+      ],
+      "fieldTypes": [
+        "Address",
+        "ByteVec",
+        "ByteVec",
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "MigrateWithFieldsApply",
+      "fieldNames": [
+        "owner",
+        "changeCode",
+        "changeImmFieldsEncoded",
+        "changeMutFieldsEncoded"
+      ],
+      "fieldTypes": [
+        "Address",
+        "ByteVec",
+        "ByteVec",
+        "ByteVec"
+      ]
+    }
+  ],
   "functions": [
     {
       "name": "price",
@@ -50,10 +124,171 @@
       ]
     },
     {
+      "name": "owner",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "Address"
+      ]
+    },
+    {
+      "name": "changeOwner",
+      "paramNames": [
+        "newOwner"
+      ],
+      "paramTypes": [
+        "Address"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "acceptOwnership",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": []
+    },
+    {
+      "name": "migrate",
+      "paramNames": [
+        "changeCode"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "migrateWithFields",
+      "paramNames": [
+        "changeCode",
+        "changeImmFieldsEncoded",
+        "changeMutFieldsEncoded"
+      ],
+      "paramTypes": [
+        "ByteVec",
+        "ByteVec",
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "migrateApply",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": []
+    },
+    {
+      "name": "migrateWithFieldsApply",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": []
+    },
+    {
+      "name": "resetUpgrade",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": []
+    },
+    {
       "name": "init",
       "paramNames": [],
       "paramTypes": [],
       "paramIsMutable": [],
+      "returnTypes": []
+    },
+    {
+      "name": "getUpgradeDelay",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "getUpgradeInitiated",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "getNewCode",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "getNewImmFieldsEncoded",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "getNewMutFieldsEncoded",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "resetFields",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": []
+    },
+    {
+      "name": "assertUpgradeNotPending",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": []
+    },
+    {
+      "name": "assertUpgradeDelayElapsed",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": []
+    },
+    {
+      "name": "onlyOwner",
+      "paramNames": [
+        "caller"
+      ],
+      "paramTypes": [
+        "Address"
+      ],
+      "paramIsMutable": [
+        false
+      ],
       "returnTypes": []
     },
     {
@@ -268,6 +503,65 @@
           "value": {
             "type": "U256",
             "value": "1"
+          }
+        }
+      ]
+    },
+    {
+      "name": "UpgradeErrorCodes",
+      "fields": [
+        {
+          "name": "UpgradePending",
+          "value": {
+            "type": "U256",
+            "value": "13000"
+          }
+        },
+        {
+          "name": "UpgradeNotPending",
+          "value": {
+            "type": "U256",
+            "value": "13001"
+          }
+        },
+        {
+          "name": "UpgradeDelayNotExpired",
+          "value": {
+            "type": "U256",
+            "value": "13002"
+          }
+        },
+        {
+          "name": "MigrateNotPending",
+          "value": {
+            "type": "U256",
+            "value": "13003"
+          }
+        },
+        {
+          "name": "MigrateWithFieldsNotPending",
+          "value": {
+            "type": "U256",
+            "value": "13004"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Error",
+      "fields": [
+        {
+          "name": "NotOwner",
+          "value": {
+            "type": "U256",
+            "value": "400"
+          }
+        },
+        {
+          "name": "NoPendingOwner",
+          "value": {
+            "type": "U256",
+            "value": "401"
           }
         }
       ]

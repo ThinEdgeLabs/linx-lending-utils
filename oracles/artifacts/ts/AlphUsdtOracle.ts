@@ -55,17 +55,117 @@ export namespace ALPHUSDTOracleTypes {
     quoteTokenDecimals: bigint;
     heartbeatInterval: bigint;
     scaleFactor: bigint;
+    upgradeDelay: bigint;
+    owner: Address;
+    pendingOwner: Address;
+    upgradeInitiated: bigint;
+    newCode: HexString;
+    newImmFieldsEncoded: HexString;
+    newMutFieldsEncoded: HexString;
   };
 
   export type State = ContractState<Fields>;
+
+  export type MigrateInitiatedEvent = ContractEvent<{
+    owner: Address;
+    changeCode: HexString;
+  }>;
+  export type MigrateApplyEvent = ContractEvent<{
+    owner: Address;
+    changeCode: HexString;
+  }>;
+  export type MigrateWithFieldsInitiatedEvent = ContractEvent<{
+    owner: Address;
+    changeCode: HexString;
+    changeImmFieldsEncoded: HexString;
+    changeMutFieldsEncoded: HexString;
+  }>;
+  export type MigrateWithFieldsApplyEvent = ContractEvent<{
+    owner: Address;
+    changeCode: HexString;
+    changeImmFieldsEncoded: HexString;
+    changeMutFieldsEncoded: HexString;
+  }>;
 
   export interface CallMethodTable {
     price: {
       params: Omit<CallContractParams<{}>, "args">;
       result: CallContractResult<bigint>;
     };
+    owner: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<Address>;
+    };
+    changeOwner: {
+      params: CallContractParams<{ newOwner: Address }>;
+      result: CallContractResult<null>;
+    };
+    acceptOwnership: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    migrate: {
+      params: CallContractParams<{ changeCode: HexString }>;
+      result: CallContractResult<null>;
+    };
+    migrateWithFields: {
+      params: CallContractParams<{
+        changeCode: HexString;
+        changeImmFieldsEncoded: HexString;
+        changeMutFieldsEncoded: HexString;
+      }>;
+      result: CallContractResult<null>;
+    };
+    migrateApply: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    migrateWithFieldsApply: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    resetUpgrade: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
     init: {
       params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    getUpgradeDelay: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<bigint>;
+    };
+    getUpgradeInitiated: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<bigint>;
+    };
+    getNewCode: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<HexString>;
+    };
+    getNewImmFieldsEncoded: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<HexString>;
+    };
+    getNewMutFieldsEncoded: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<HexString>;
+    };
+    resetFields: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    assertUpgradeNotPending: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    assertUpgradeDelayElapsed: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    onlyOwner: {
+      params: CallContractParams<{ caller: Address }>;
       result: CallContractResult<null>;
     };
     wMulDown: {
@@ -130,8 +230,80 @@ export namespace ALPHUSDTOracleTypes {
       params: Omit<SignExecuteContractMethodParams<{}>, "args">;
       result: SignExecuteScriptTxResult;
     };
+    owner: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    changeOwner: {
+      params: SignExecuteContractMethodParams<{ newOwner: Address }>;
+      result: SignExecuteScriptTxResult;
+    };
+    acceptOwnership: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    migrate: {
+      params: SignExecuteContractMethodParams<{ changeCode: HexString }>;
+      result: SignExecuteScriptTxResult;
+    };
+    migrateWithFields: {
+      params: SignExecuteContractMethodParams<{
+        changeCode: HexString;
+        changeImmFieldsEncoded: HexString;
+        changeMutFieldsEncoded: HexString;
+      }>;
+      result: SignExecuteScriptTxResult;
+    };
+    migrateApply: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    migrateWithFieldsApply: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    resetUpgrade: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
     init: {
       params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getUpgradeDelay: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getUpgradeInitiated: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getNewCode: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getNewImmFieldsEncoded: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getNewMutFieldsEncoded: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    resetFields: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    assertUpgradeNotPending: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    assertUpgradeDelayElapsed: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    onlyOwner: {
+      params: SignExecuteContractMethodParams<{ caller: Address }>;
       result: SignExecuteScriptTxResult;
     };
     wMulDown: {
@@ -204,9 +376,23 @@ class Factory extends ContractFactory<
     );
   }
 
+  eventIndex = {
+    MigrateInitiated: 0,
+    MigrateApply: 1,
+    MigrateWithFieldsInitiated: 2,
+    MigrateWithFieldsApply: 3,
+  };
   consts = {
     WAD: BigInt("1000000000000000000"),
     ErrorCodes: { StalePrice: BigInt("0"), NotInitialized: BigInt("1") },
+    UpgradeErrorCodes: {
+      UpgradePending: BigInt("13000"),
+      UpgradeNotPending: BigInt("13001"),
+      UpgradeDelayNotExpired: BigInt("13002"),
+      MigrateNotPending: BigInt("13003"),
+      MigrateWithFieldsNotPending: BigInt("13004"),
+    },
+    Error: { NotOwner: BigInt("400"), NoPendingOwner: BigInt("401") },
   };
 
   at(address: string): ALPHUSDTOracleInstance {
@@ -222,6 +408,84 @@ class Factory extends ContractFactory<
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(this, "price", params, getContractByCodeHash);
     },
+    owner: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<ALPHUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<Address>> => {
+      return testMethod(this, "owner", params, getContractByCodeHash);
+    },
+    changeOwner: async (
+      params: TestContractParamsWithoutMaps<
+        ALPHUSDTOracleTypes.Fields,
+        { newOwner: Address }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "changeOwner", params, getContractByCodeHash);
+    },
+    acceptOwnership: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<ALPHUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "acceptOwnership", params, getContractByCodeHash);
+    },
+    migrate: async (
+      params: TestContractParamsWithoutMaps<
+        ALPHUSDTOracleTypes.Fields,
+        { changeCode: HexString }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "migrate", params, getContractByCodeHash);
+    },
+    migrateWithFields: async (
+      params: TestContractParamsWithoutMaps<
+        ALPHUSDTOracleTypes.Fields,
+        {
+          changeCode: HexString;
+          changeImmFieldsEncoded: HexString;
+          changeMutFieldsEncoded: HexString;
+        }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(
+        this,
+        "migrateWithFields",
+        params,
+        getContractByCodeHash
+      );
+    },
+    migrateApply: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<ALPHUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "migrateApply", params, getContractByCodeHash);
+    },
+    migrateWithFieldsApply: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<ALPHUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(
+        this,
+        "migrateWithFieldsApply",
+        params,
+        getContractByCodeHash
+      );
+    },
+    resetUpgrade: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<ALPHUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "resetUpgrade", params, getContractByCodeHash);
+    },
     init: async (
       params: Omit<
         TestContractParamsWithoutMaps<ALPHUSDTOracleTypes.Fields, never>,
@@ -229,6 +493,103 @@ class Factory extends ContractFactory<
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "init", params, getContractByCodeHash);
+    },
+    getUpgradeDelay: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<ALPHUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<bigint>> => {
+      return testMethod(this, "getUpgradeDelay", params, getContractByCodeHash);
+    },
+    getUpgradeInitiated: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<ALPHUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<bigint>> => {
+      return testMethod(
+        this,
+        "getUpgradeInitiated",
+        params,
+        getContractByCodeHash
+      );
+    },
+    getNewCode: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<ALPHUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<HexString>> => {
+      return testMethod(this, "getNewCode", params, getContractByCodeHash);
+    },
+    getNewImmFieldsEncoded: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<ALPHUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<HexString>> => {
+      return testMethod(
+        this,
+        "getNewImmFieldsEncoded",
+        params,
+        getContractByCodeHash
+      );
+    },
+    getNewMutFieldsEncoded: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<ALPHUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<HexString>> => {
+      return testMethod(
+        this,
+        "getNewMutFieldsEncoded",
+        params,
+        getContractByCodeHash
+      );
+    },
+    resetFields: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<ALPHUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "resetFields", params, getContractByCodeHash);
+    },
+    assertUpgradeNotPending: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<ALPHUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(
+        this,
+        "assertUpgradeNotPending",
+        params,
+        getContractByCodeHash
+      );
+    },
+    assertUpgradeDelayElapsed: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<ALPHUSDTOracleTypes.Fields, never>,
+        "args"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(
+        this,
+        "assertUpgradeDelayElapsed",
+        params,
+        getContractByCodeHash
+      );
+    },
+    onlyOwner: async (
+      params: TestContractParamsWithoutMaps<
+        ALPHUSDTOracleTypes.Fields,
+        { caller: Address }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "onlyOwner", params, getContractByCodeHash);
     },
     wMulDown: async (
       params: TestContractParamsWithoutMaps<
@@ -331,7 +692,7 @@ export const ALPHUSDTOracle = new Factory(
   Contract.fromJson(
     ALPHUSDTOracleContractJson,
     "",
-    "8a3eb1223b39d37b94435a8d0cddcf757eb5c62cbefa726a0c4a14752ea0d3ff",
+    "9633357d0e6f9e06df697295bdceccacc5fe839ec8ba82dad0b554347bec7464",
     AllStructs
   )
 );
@@ -347,6 +708,79 @@ export class ALPHUSDTOracleInstance extends ContractInstance {
     return fetchContractState(ALPHUSDTOracle, this);
   }
 
+  async getContractEventsCurrentCount(): Promise<number> {
+    return getContractEventsCurrentCount(this.address);
+  }
+
+  subscribeMigrateInitiatedEvent(
+    options: EventSubscribeOptions<ALPHUSDTOracleTypes.MigrateInitiatedEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      ALPHUSDTOracle.contract,
+      this,
+      options,
+      "MigrateInitiated",
+      fromCount
+    );
+  }
+
+  subscribeMigrateApplyEvent(
+    options: EventSubscribeOptions<ALPHUSDTOracleTypes.MigrateApplyEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      ALPHUSDTOracle.contract,
+      this,
+      options,
+      "MigrateApply",
+      fromCount
+    );
+  }
+
+  subscribeMigrateWithFieldsInitiatedEvent(
+    options: EventSubscribeOptions<ALPHUSDTOracleTypes.MigrateWithFieldsInitiatedEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      ALPHUSDTOracle.contract,
+      this,
+      options,
+      "MigrateWithFieldsInitiated",
+      fromCount
+    );
+  }
+
+  subscribeMigrateWithFieldsApplyEvent(
+    options: EventSubscribeOptions<ALPHUSDTOracleTypes.MigrateWithFieldsApplyEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      ALPHUSDTOracle.contract,
+      this,
+      options,
+      "MigrateWithFieldsApply",
+      fromCount
+    );
+  }
+
+  subscribeAllEvents(
+    options: EventSubscribeOptions<
+      | ALPHUSDTOracleTypes.MigrateInitiatedEvent
+      | ALPHUSDTOracleTypes.MigrateApplyEvent
+      | ALPHUSDTOracleTypes.MigrateWithFieldsInitiatedEvent
+      | ALPHUSDTOracleTypes.MigrateWithFieldsApplyEvent
+    >,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvents(
+      ALPHUSDTOracle.contract,
+      this,
+      options,
+      fromCount
+    );
+  }
+
   view = {
     price: async (
       params?: ALPHUSDTOracleTypes.CallMethodParams<"price">
@@ -359,6 +793,96 @@ export class ALPHUSDTOracleInstance extends ContractInstance {
         getContractByCodeHash
       );
     },
+    owner: async (
+      params?: ALPHUSDTOracleTypes.CallMethodParams<"owner">
+    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"owner">> => {
+      return callMethod(
+        ALPHUSDTOracle,
+        this,
+        "owner",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    changeOwner: async (
+      params: ALPHUSDTOracleTypes.CallMethodParams<"changeOwner">
+    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"changeOwner">> => {
+      return callMethod(
+        ALPHUSDTOracle,
+        this,
+        "changeOwner",
+        params,
+        getContractByCodeHash
+      );
+    },
+    acceptOwnership: async (
+      params?: ALPHUSDTOracleTypes.CallMethodParams<"acceptOwnership">
+    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"acceptOwnership">> => {
+      return callMethod(
+        ALPHUSDTOracle,
+        this,
+        "acceptOwnership",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    migrate: async (
+      params: ALPHUSDTOracleTypes.CallMethodParams<"migrate">
+    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"migrate">> => {
+      return callMethod(
+        ALPHUSDTOracle,
+        this,
+        "migrate",
+        params,
+        getContractByCodeHash
+      );
+    },
+    migrateWithFields: async (
+      params: ALPHUSDTOracleTypes.CallMethodParams<"migrateWithFields">
+    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"migrateWithFields">> => {
+      return callMethod(
+        ALPHUSDTOracle,
+        this,
+        "migrateWithFields",
+        params,
+        getContractByCodeHash
+      );
+    },
+    migrateApply: async (
+      params?: ALPHUSDTOracleTypes.CallMethodParams<"migrateApply">
+    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"migrateApply">> => {
+      return callMethod(
+        ALPHUSDTOracle,
+        this,
+        "migrateApply",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    migrateWithFieldsApply: async (
+      params?: ALPHUSDTOracleTypes.CallMethodParams<"migrateWithFieldsApply">
+    ): Promise<
+      ALPHUSDTOracleTypes.CallMethodResult<"migrateWithFieldsApply">
+    > => {
+      return callMethod(
+        ALPHUSDTOracle,
+        this,
+        "migrateWithFieldsApply",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    resetUpgrade: async (
+      params?: ALPHUSDTOracleTypes.CallMethodParams<"resetUpgrade">
+    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"resetUpgrade">> => {
+      return callMethod(
+        ALPHUSDTOracle,
+        this,
+        "resetUpgrade",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
     init: async (
       params?: ALPHUSDTOracleTypes.CallMethodParams<"init">
     ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"init">> => {
@@ -367,6 +891,113 @@ export class ALPHUSDTOracleInstance extends ContractInstance {
         this,
         "init",
         params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getUpgradeDelay: async (
+      params?: ALPHUSDTOracleTypes.CallMethodParams<"getUpgradeDelay">
+    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"getUpgradeDelay">> => {
+      return callMethod(
+        ALPHUSDTOracle,
+        this,
+        "getUpgradeDelay",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getUpgradeInitiated: async (
+      params?: ALPHUSDTOracleTypes.CallMethodParams<"getUpgradeInitiated">
+    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"getUpgradeInitiated">> => {
+      return callMethod(
+        ALPHUSDTOracle,
+        this,
+        "getUpgradeInitiated",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getNewCode: async (
+      params?: ALPHUSDTOracleTypes.CallMethodParams<"getNewCode">
+    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"getNewCode">> => {
+      return callMethod(
+        ALPHUSDTOracle,
+        this,
+        "getNewCode",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getNewImmFieldsEncoded: async (
+      params?: ALPHUSDTOracleTypes.CallMethodParams<"getNewImmFieldsEncoded">
+    ): Promise<
+      ALPHUSDTOracleTypes.CallMethodResult<"getNewImmFieldsEncoded">
+    > => {
+      return callMethod(
+        ALPHUSDTOracle,
+        this,
+        "getNewImmFieldsEncoded",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getNewMutFieldsEncoded: async (
+      params?: ALPHUSDTOracleTypes.CallMethodParams<"getNewMutFieldsEncoded">
+    ): Promise<
+      ALPHUSDTOracleTypes.CallMethodResult<"getNewMutFieldsEncoded">
+    > => {
+      return callMethod(
+        ALPHUSDTOracle,
+        this,
+        "getNewMutFieldsEncoded",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    resetFields: async (
+      params?: ALPHUSDTOracleTypes.CallMethodParams<"resetFields">
+    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"resetFields">> => {
+      return callMethod(
+        ALPHUSDTOracle,
+        this,
+        "resetFields",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    assertUpgradeNotPending: async (
+      params?: ALPHUSDTOracleTypes.CallMethodParams<"assertUpgradeNotPending">
+    ): Promise<
+      ALPHUSDTOracleTypes.CallMethodResult<"assertUpgradeNotPending">
+    > => {
+      return callMethod(
+        ALPHUSDTOracle,
+        this,
+        "assertUpgradeNotPending",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    assertUpgradeDelayElapsed: async (
+      params?: ALPHUSDTOracleTypes.CallMethodParams<"assertUpgradeDelayElapsed">
+    ): Promise<
+      ALPHUSDTOracleTypes.CallMethodResult<"assertUpgradeDelayElapsed">
+    > => {
+      return callMethod(
+        ALPHUSDTOracle,
+        this,
+        "assertUpgradeDelayElapsed",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    onlyOwner: async (
+      params: ALPHUSDTOracleTypes.CallMethodParams<"onlyOwner">
+    ): Promise<ALPHUSDTOracleTypes.CallMethodResult<"onlyOwner">> => {
+      return callMethod(
+        ALPHUSDTOracle,
+        this,
+        "onlyOwner",
+        params,
         getContractByCodeHash
       );
     },
@@ -488,10 +1119,148 @@ export class ALPHUSDTOracleInstance extends ContractInstance {
     ): Promise<ALPHUSDTOracleTypes.SignExecuteMethodResult<"price">> => {
       return signExecuteMethod(ALPHUSDTOracle, this, "price", params);
     },
+    owner: async (
+      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"owner">
+    ): Promise<ALPHUSDTOracleTypes.SignExecuteMethodResult<"owner">> => {
+      return signExecuteMethod(ALPHUSDTOracle, this, "owner", params);
+    },
+    changeOwner: async (
+      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"changeOwner">
+    ): Promise<ALPHUSDTOracleTypes.SignExecuteMethodResult<"changeOwner">> => {
+      return signExecuteMethod(ALPHUSDTOracle, this, "changeOwner", params);
+    },
+    acceptOwnership: async (
+      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"acceptOwnership">
+    ): Promise<
+      ALPHUSDTOracleTypes.SignExecuteMethodResult<"acceptOwnership">
+    > => {
+      return signExecuteMethod(ALPHUSDTOracle, this, "acceptOwnership", params);
+    },
+    migrate: async (
+      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"migrate">
+    ): Promise<ALPHUSDTOracleTypes.SignExecuteMethodResult<"migrate">> => {
+      return signExecuteMethod(ALPHUSDTOracle, this, "migrate", params);
+    },
+    migrateWithFields: async (
+      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"migrateWithFields">
+    ): Promise<
+      ALPHUSDTOracleTypes.SignExecuteMethodResult<"migrateWithFields">
+    > => {
+      return signExecuteMethod(
+        ALPHUSDTOracle,
+        this,
+        "migrateWithFields",
+        params
+      );
+    },
+    migrateApply: async (
+      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"migrateApply">
+    ): Promise<ALPHUSDTOracleTypes.SignExecuteMethodResult<"migrateApply">> => {
+      return signExecuteMethod(ALPHUSDTOracle, this, "migrateApply", params);
+    },
+    migrateWithFieldsApply: async (
+      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"migrateWithFieldsApply">
+    ): Promise<
+      ALPHUSDTOracleTypes.SignExecuteMethodResult<"migrateWithFieldsApply">
+    > => {
+      return signExecuteMethod(
+        ALPHUSDTOracle,
+        this,
+        "migrateWithFieldsApply",
+        params
+      );
+    },
+    resetUpgrade: async (
+      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"resetUpgrade">
+    ): Promise<ALPHUSDTOracleTypes.SignExecuteMethodResult<"resetUpgrade">> => {
+      return signExecuteMethod(ALPHUSDTOracle, this, "resetUpgrade", params);
+    },
     init: async (
       params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"init">
     ): Promise<ALPHUSDTOracleTypes.SignExecuteMethodResult<"init">> => {
       return signExecuteMethod(ALPHUSDTOracle, this, "init", params);
+    },
+    getUpgradeDelay: async (
+      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"getUpgradeDelay">
+    ): Promise<
+      ALPHUSDTOracleTypes.SignExecuteMethodResult<"getUpgradeDelay">
+    > => {
+      return signExecuteMethod(ALPHUSDTOracle, this, "getUpgradeDelay", params);
+    },
+    getUpgradeInitiated: async (
+      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"getUpgradeInitiated">
+    ): Promise<
+      ALPHUSDTOracleTypes.SignExecuteMethodResult<"getUpgradeInitiated">
+    > => {
+      return signExecuteMethod(
+        ALPHUSDTOracle,
+        this,
+        "getUpgradeInitiated",
+        params
+      );
+    },
+    getNewCode: async (
+      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"getNewCode">
+    ): Promise<ALPHUSDTOracleTypes.SignExecuteMethodResult<"getNewCode">> => {
+      return signExecuteMethod(ALPHUSDTOracle, this, "getNewCode", params);
+    },
+    getNewImmFieldsEncoded: async (
+      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"getNewImmFieldsEncoded">
+    ): Promise<
+      ALPHUSDTOracleTypes.SignExecuteMethodResult<"getNewImmFieldsEncoded">
+    > => {
+      return signExecuteMethod(
+        ALPHUSDTOracle,
+        this,
+        "getNewImmFieldsEncoded",
+        params
+      );
+    },
+    getNewMutFieldsEncoded: async (
+      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"getNewMutFieldsEncoded">
+    ): Promise<
+      ALPHUSDTOracleTypes.SignExecuteMethodResult<"getNewMutFieldsEncoded">
+    > => {
+      return signExecuteMethod(
+        ALPHUSDTOracle,
+        this,
+        "getNewMutFieldsEncoded",
+        params
+      );
+    },
+    resetFields: async (
+      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"resetFields">
+    ): Promise<ALPHUSDTOracleTypes.SignExecuteMethodResult<"resetFields">> => {
+      return signExecuteMethod(ALPHUSDTOracle, this, "resetFields", params);
+    },
+    assertUpgradeNotPending: async (
+      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"assertUpgradeNotPending">
+    ): Promise<
+      ALPHUSDTOracleTypes.SignExecuteMethodResult<"assertUpgradeNotPending">
+    > => {
+      return signExecuteMethod(
+        ALPHUSDTOracle,
+        this,
+        "assertUpgradeNotPending",
+        params
+      );
+    },
+    assertUpgradeDelayElapsed: async (
+      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"assertUpgradeDelayElapsed">
+    ): Promise<
+      ALPHUSDTOracleTypes.SignExecuteMethodResult<"assertUpgradeDelayElapsed">
+    > => {
+      return signExecuteMethod(
+        ALPHUSDTOracle,
+        this,
+        "assertUpgradeDelayElapsed",
+        params
+      );
+    },
+    onlyOwner: async (
+      params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"onlyOwner">
+    ): Promise<ALPHUSDTOracleTypes.SignExecuteMethodResult<"onlyOwner">> => {
+      return signExecuteMethod(ALPHUSDTOracle, this, "onlyOwner", params);
     },
     wMulDown: async (
       params: ALPHUSDTOracleTypes.SignExecuteMethodParams<"wMulDown">

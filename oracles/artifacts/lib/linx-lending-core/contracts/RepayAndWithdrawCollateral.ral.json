@@ -1,0 +1,31 @@
+{
+  "version": "v4.3.0",
+  "name": "RepayAndWithdrawCollateral",
+  "bytecodeTemplate": "010103000a004041{1}{2}{3}{4}{5}17041703170217011700b4170516001601160216031604110d{0}01361706160616050e0f{0}010317091708170716057a1600{6}a313c3038d7ea4c68000a2160016011602160316040c1608160513080c{0}0110160513c3038d7ea4c68000a21600160116021603160416091605160513080c{0}010e",
+  "fieldsSig": {
+    "names": [
+      "linx",
+      "marketParams",
+      "repayAssets"
+    ],
+    "types": [
+      "Linx",
+      "MarketParams",
+      "U256"
+    ],
+    "isMutable": [
+      false,
+      false,
+      false
+    ]
+  },
+  "functions": [
+    {
+      "name": "main",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": []
+    }
+  ]
+}
