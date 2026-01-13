@@ -1,4 +1,4 @@
-import { web3, stringToHex, MINIMAL_CONTRACT_DEPOSIT } from '@alephium/web3'
+import { web3, stringToHex, MINIMAL_CONTRACT_DEPOSIT, NULL_CONTRACT_ADDRESS } from '@alephium/web3'
 import { PrivateKeyWallet } from '@alephium/web3-wallet'
 import { OracleExample, OracleExampleInstance, MockOracle, MockOracleInstance } from '../../artifacts/ts'
 import { getSigner, expectAssertionError } from '@alephium/web3-test'
@@ -34,7 +34,14 @@ describe('LinxDIAOracle', () => {
           baseTokenDecimals,
           quoteTokenDecimals,
           heartbeatInterval: BigInt(heartbeatInterval),
-          scaleFactor: 0n
+          scaleFactor: 0n,
+          owner: signer.address,
+          pendingOwner: NULL_CONTRACT_ADDRESS,
+          upgradeDelay: BigInt(7 * 86400), // 7 days
+          upgradeInitiated: BigInt(0),
+          newCode: '',
+          newImmFieldsEncoded: '',
+          newMutFieldsEncoded: ''
         }
       })
     ).contractInstance

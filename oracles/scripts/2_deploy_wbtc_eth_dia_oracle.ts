@@ -1,7 +1,7 @@
 import { Deployer, DeployFunction, Network } from '@alephium/cli'
 import { Settings } from '../alephium.config'
 import { WBTCETHOracle } from '../artifacts/ts'
-import { stringToHex } from '@alephium/web3'
+import { NULL_CONTRACT_ADDRESS, stringToHex, waitForTxConfirmation } from '@alephium/web3'
 import { PrivateKeyWallet } from '@alephium/web3-wallet'
 
 const deployOracle: DeployFunction<Settings> = async (
@@ -33,7 +33,14 @@ const deployOracle: DeployFunction<Settings> = async (
       baseMarketDecimals: oracleSettings.baseMarketDecimals,
       quoteMarketDecimals: oracleSettings.quoteMarketDecimals,
       baseTokenDecimals: oracleSettings.baseTokenDecimals,
-      quoteTokenDecimals: oracleSettings.quoteTokenDecimals
+      quoteTokenDecimals: oracleSettings.quoteTokenDecimals,
+      owner: deployer.account.address,
+      pendingOwner: NULL_CONTRACT_ADDRESS,
+      upgradeDelay: BigInt(7 * 86400), // 7 days
+      upgradeInitiated: BigInt(0),
+      newCode: '',
+      newImmFieldsEncoded: '',
+      newMutFieldsEncoded: ''
     }
   })
   console.log(`${oracleSettings.baseMarketId} oracle contract id: ${result.contractInstance.contractId}`)
@@ -42,9 +49,13 @@ const deployOracle: DeployFunction<Settings> = async (
   const privateKey = network.privateKeys[0]
   const signer = new PrivateKeyWallet({ privateKey })
 
-  WBTCETHOracle.at(result.contractInstance.address).transact.init({
+  await waitForTxConfirmation(result.txId, 1, 3)
+
+  const initResult = await WBTCETHOracle.at(result.contractInstance.address).transact.init({
     signer
   })
+
+  await waitForTxConfirmation(initResult.txId, 1, 3)
 
   console.log(
     `Initialized ${oracleSettings.baseMarketId} oracle contract at address: ${result.contractInstance.address}`

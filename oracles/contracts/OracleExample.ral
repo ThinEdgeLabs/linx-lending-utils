@@ -1,11 +1,18 @@
 Contract OracleExample(
-  diaOracleContractId: ByteVec, // The address of the DIA Oracle contract to query
-  baseMarketId: ByteVec,        // The base asset market identifier (e.g., "BTC/USD")
-  quoteMarketId: ByteVec,       // The quote asset market identifier (e.g., "USDT/USD")
-  baseMarketDecimals: U256,     // The number of decimals for the base asset price (e.g., 6 for BTC/USD)
-  quoteMarketDecimals: U256,    // The number of decimals for the quote asset price (e.g., 6 for USDT/USD)
-  baseTokenDecimals: U256,      // The number of decimals for the base token (e.g., 18 for WBTC)
-  quoteTokenDecimals: U256,     // The number of decimals for the quote token (e.g., 6 for USDT)
-  heartbeatInterval: U256,      // Interval in milliseconds to consider the price data fresh
-  mut scaleFactor: U256         // The scaling factor
-) extends LinxDiaOracle(diaOracleContractId, baseMarketId, quoteMarketId, baseMarketDecimals, quoteMarketDecimals, baseTokenDecimals, quoteTokenDecimals, heartbeatInterval, scaleFactor  ) {}
+  diaOracleContractId: ByteVec,       // The address of the DIA Oracle contract to query
+  baseMarketId: ByteVec,              // The base asset market identifier (e.g., "BTC/USD")
+  quoteMarketId: ByteVec,             // The quote asset market identifier (e.g., "USDT/USD")
+  baseMarketDecimals: U256,           // The number of decimals for the base asset price (e.g., 6 for BTC/USD)
+  quoteMarketDecimals: U256,          // The number of decimals for the quote asset price (e.g., 6 for USDT/USD)
+  baseTokenDecimals: U256,              // The number of decimals for the base token (e.g., 18 for WBTC)
+  quoteTokenDecimals: U256,           // The number of decimals for the quote token (e.g., 6 for USDT)
+  heartbeatInterval: U256,            // Interval in milliseconds to consider the price data fresh
+  mut scaleFactor: U256,              // The scaling factor
+  upgradeDelay: U256,                 // The delay period required between initiating and applying an upgrade.
+  mut owner: Address,                 // Current owner's address of the contract.
+  mut pendingOwner: Address,          // Address of the new owner, set during ownership transfer process.
+  mut upgradeInitiated: U256,         // Timestamp marking the start of an upgrade process.
+  mut newCode: ByteVec,               // New contract code to be migrated to.
+  mut newImmFieldsEncoded: ByteVec,   // Encoded immutable fields for the new contract.
+  mut newMutFieldsEncoded: ByteVec    // Encoded mutable fields for the new contract.
+) extends LinxDiaOracle(diaOracleContractId, baseMarketId, quoteMarketId, baseMarketDecimals, quoteMarketDecimals, baseTokenDecimals, quoteTokenDecimals, heartbeatInterval, scaleFactor, upgradeDelay, owner, pendingOwner, upgradeInitiated, newCode, newImmFieldsEncoded, newMutFieldsEncoded) {}

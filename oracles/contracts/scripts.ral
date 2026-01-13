@@ -4,3 +4,9 @@ TxScript GetRawOraclePrice(oracle: IDIAOracle, key: ByteVec) {
         return price
     }
 }
+
+TxScript GetRawOraclePriceWithTimestamp(oracle: IDIAOracle, key: ByteVec) {
+    pub fn main() -> (U256, U256) {
+        return oracle.getValue(key)
+    }
+}
